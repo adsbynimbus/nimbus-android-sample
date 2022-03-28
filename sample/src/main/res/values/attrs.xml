@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SampleAppHeader">
+        <attr name="titleText" format="string" />
+        <attr name="subtitleText" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SampleSwitchPreference">
+        <attr name="titleContentDescription" format="string" />
+        <attr name="switchWidgetContentDescription" format="string" />
+    </declare-styleable>
+</resources>

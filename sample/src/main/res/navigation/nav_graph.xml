@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.adsbynimbus.android.sample.MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/to_adDemoFragment"
+            app:destination="@id/adDemoFragment"
+            app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/to_mediationPlatformsFragment"
+            app:destination="@id/mediationFragment"
+            app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/to_testRenderFragment"
+            app:destination="@id/testRenderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adDemoFragment"
+        android:name="com.adsbynimbus.android.sample.admanager.AdDemoFragment"
+        tools:layout="@layout/fragment_ad_demo">
+        <action
+            android:id="@+id/to_adManagerFragment"
+            app:destination="@id/adManagerFragment"
+            app:popUpTo="@id/adDemoFragment" />
+        <action
+            android:id="@+id/to_FANDemoFragment"
+            app:destination="@id/FANDemoFragment"
+            app:popUpTo="@id/adDemoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adManagerFragment"
+        android:name="com.adsbynimbus.android.sample.admanager.AdManagerFragment"
+        tools:layout="@layout/fragment_ad_manager">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.admanager.AdItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/FANDemoFragment"
+        android:name="com.adsbynimbus.android.sample.admanager.FANDemoFragment"
+        tools:layout="@layout/fragment_fan_demo">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.admanager.FANAdItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mediationFragment"
+        android:name="com.adsbynimbus.android.sample.mediation.MediationPlatformsFragment"
+        tools:layout="@layout/fragment_mediation_platforms">
+        <action
+            android:id="@+id/to_moPubFragment"
+            app:destination="@id/moPubFragment"
+            app:popUpTo="@id/mediationFragment" />
+        <action
+            android:id="@+id/to_GAMDemoFragment"
+            app:destination="@id/GAMDemoFragment"
+            app:popUpTo="@id/mediationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moPubFragment"
+        android:name="com.adsbynimbus.android.sample.mediation.MoPubDemoFragment">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.mediation.MediationItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/GAMDemoFragment"
+        android:name="com.adsbynimbus.android.sample.mediation.GAMDemoFragment"
+        tools:layout="@layout/fragment_gam_demo">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.mediation.MediationItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.adsbynimbus.android.sample.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/testRenderFragment"
+        android:name="com.adsbynimbus.android.sample.test.TestRenderFragment"
+        tools:layout="@layout/fragment_test_render" />
+    <fragment
+        android:id="@+id/scrollingDemoFragment"
+        android:name="com.adsbynimbus.android.sample.admanager.ScrollingDemoFragment"
+        tools:layout="@layout/fragment_scrolling_demo">
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+</navigation>

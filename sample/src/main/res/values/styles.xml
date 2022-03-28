@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.NimbusSample" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="colorAccent">@android:color/white</item>
+        <item name="colorPrimary">@color/raisin_black</item>
+        <item name="colorPrimaryVariant">@color/raisin_black</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+
+        <item name="toolbarStyle">@style/Toolbar</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+    
+    <style name="SwitchStyle">
+        <item name="colorControlActivated">@color/turquoise</item>
+    </style>
+
+</resources>

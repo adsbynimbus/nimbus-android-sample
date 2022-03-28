@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference android:layout="@layout/layout_settings_preference" />
+
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
+        app:defaultValue="true"
+        app:key="test_mode"
+        app:switchWidgetContentDescription="nimbusTestModePreferenceSwitch"
+        app:title="@string/settings_test_mode"
+        app:titleContentDescription="nimbusTestModePreferenceTextView" />
+
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
+        app:defaultValue="false"
+        app:switchWidgetContentDescription="coppaPreferenceSwitch"
+        app:key="coppa"
+        app:title="@string/settings_coppa"
+        app:titleContentDescription="coppaPreferenceTextView"/>
+
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
+        app:defaultValue="false"
+        app:switchWidgetContentDescription="forceNoFillPreferenceSwitch"
+        app:key="force_no_fill"
+        app:title="@string/settings_force_no_fill"
+        app:titleContentDescription="forceNoFillPreferenceTextView"/>
+
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
+        app:defaultValue="false"
+        app:switchWidgetContentDescription="enableViewabilityPreferenceSwitch"
+        app:key="enable_viewability"
+        app:title="@string/settings_enable_viewability"
+        app:titleContentDescription="enableViewabilityPreferenceTextView"/>
+
+    <PreferenceCategory
+        android:layout="@layout/layout_settings_switch_preference"
+        app:layout="@layout/adapter_sample_app_section"
+        app:title="@string/settings_user_details">
+
+        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+            android:layout="@layout/layout_settings_switch_preference"
+            android:selectable="false"
+            app:defaultValue="false"
+            app:key="user_did_consent"
+            app:switchWidgetContentDescription="gdprConsentPreferenceSwitch"
+            app:title="@string/settings_user_did_consent"
+            app:titleContentDescription="gdprConsentPreferenceTextView"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

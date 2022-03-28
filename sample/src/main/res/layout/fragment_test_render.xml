@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".test.TestRenderFragment">
+
+    <com.adsbynimbus.android.sample.common.SampleAppHeader
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:titleText="Test Render Fragment" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/markup_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/text_input_border"
+        android:contentDescription="testRenderMarkupEditText"
+        android:fontFamily="@font/proxima_nova_regular"
+        android:gravity="start|top"
+        android:imeOptions="actionSend"
+        android:padding="5dp"
+        android:textColor="@color/turquoise"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/test_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_view"
+        app:layout_constraintVertical_bias="0"
+        tools:ignore="HardcodedText"
+        tools:text="Markup" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/test_button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="45dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/round_button"
+        android:contentDescription="testRenderTestButton"
+        android:fontFamily="@font/proxima_nova_bold"
+        android:text="@string/test_render_button"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/markup_edit_text"
+        tools:ignore="HardcodedText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

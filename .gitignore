@@ -1,0 +1,49 @@
+.gradle
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+local.properties
+
+bin/
+gen/
+classes/
+gen-external-apklibs/
+build/
+schemas/
+
+*.iml
+.idea/
+
+# IDEA/Android Studio Ignore exceptions
+!/.idea/fileTemplates/
+!/.idea/inspectionProfiles/
+!/.idea/scopes/
+!/.idea/codeStyles/Project
+
+# Android build files
+*.apk
+*.aab
+*.aar
+*.keystore
+
+# Google Services
+**/google-services.json
+
+# Log Files
+*.log
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# External native build folder generated in Android Studio 2.2 and later
+.cxx/
+
+# Version control
+vcs.xml
+
+# lint
+lint/

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Nimbus Sample</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+
+    <string name="main_title">INTEGRATION ASSIST</string>
+    <string name="main_subtitle">Ad Call Demos and Render Testing</string>
+
+    <string name="ad_demo_title">Show Ad Demo</string>
+    <string name="ad_demo_subtitle">Select to see Nimbus\' request and render flow</string>
+
+    <string name="mediation_title">Mediation Platforms</string>
+    <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
+
+    <string name="om_title">OM</string>
+    <string name="om_subtitle">SDK integration for MOAT visibility score</string>
+
+    <string name="test_render_title">Test Render</string>
+    <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
+    <string name="test_render_button">Test</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Configure your test app experience</string>
+    <string name="settings_user_details">User Details</string>
+    <string name="settings_test_mode">Nimbus Test Mode</string>
+    <string name="settings_coppa">Set COPPA On</string>
+    <string name="settings_force_no_fill">Force No Fill</string>
+    <string name="settings_enable_viewability">Send OMID Viewability Flag</string>
+    <string name="settings_user_did_consent">GDPR Consent</string>
+
+    <string name="google">Google</string>
+    <string name="mopub">MoPub</string>
+
+    <string name="custom_dialog_title">Attention</string>
+    <string name="custom_dialog_button">OK</string>
+    <string name="custom_dialog_message">"%1$s is not set in gradle.properties"</string>
+</resources>

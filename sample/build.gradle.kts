@@ -1,10 +1,14 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs") version("2.4.1")
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
     compileSdk = 31
 
     defaultConfig {

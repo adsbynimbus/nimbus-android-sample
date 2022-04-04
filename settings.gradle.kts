@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         google()
@@ -9,7 +11,6 @@ pluginManagement {
         id("com.android.application") version(androidGradleVersion)
         id("com.android.library") version(androidGradleVersion)
         kotlin("android") version("1.6.10")
-        id("androidx.navigation.safeargs") version("2.4.1")
     }
 }
 

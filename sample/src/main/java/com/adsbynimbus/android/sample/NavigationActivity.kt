@@ -9,12 +9,16 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 
+// This variable is top level to avoid creating a companion object on NavigationActivity
+var navGraphId: Int = R.navigation.nav_graph
+
 class NavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityNavigationBinding.inflate(layoutInflater).also { setContentView(it.root) }.apply {
             with(supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment) {
+                navController.graph = navController.navInflater.inflate(navGraphId)
                 toolbar.setupWithNavController(navController)
                 (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).let {
                     navController.addOnDestinationChangedListener { _, _, _ ->

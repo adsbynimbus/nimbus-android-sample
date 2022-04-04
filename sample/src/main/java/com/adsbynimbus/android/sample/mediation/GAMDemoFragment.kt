@@ -29,7 +29,7 @@ import timber.log.Timber
 
 class GAMDemoFragment : Fragment() {
 
-    private val args: MoPubDemoFragmentArgs by navArgs()
+    private val args: GAMDemoFragmentArgs by navArgs()
     private lateinit var adView: AdManagerAdView
 
     override fun onCreateView(
@@ -54,19 +54,20 @@ class GAMDemoFragment : Fragment() {
     }.root
 
     private fun FrameLayout.requestBannerAd(isDynamicPrice: Boolean = false) {
-        adView = AdManagerAdView(requireContext())
-        addView(adView)
-        adView.adUnitId = BuildConfig.GAM_PLACEMENT_ID
-        adView.setAdSizes(AdSize.BANNER)
-        adView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                Timber.v("Banner ad loaded")
-            }
+        adView = AdManagerAdView(requireContext()).apply {
+            adUnitId = BuildConfig.GAM_PLACEMENT_ID
+            setAdSizes(AdSize.BANNER)
+            adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    Timber.v("Banner ad loaded")
+                }
 
-            override fun onAdFailedToLoad(p0: LoadAdError) {
-                Timber.w("Error loading banner ad %s", p0.message)
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    Timber.w("Error loading banner ad %s", p0.message)
+                }
             }
         }
+        addView(adView)
 
         val requestBuilder = AdManagerAdRequest.Builder()
         adManager.makeRequest(

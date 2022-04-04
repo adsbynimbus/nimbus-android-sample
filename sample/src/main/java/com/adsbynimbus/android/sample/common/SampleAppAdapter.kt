@@ -27,8 +27,8 @@ class SampleAppAdapter<T>(
             itemContainer.setOnClickListener {
                 onClick(data)
             }
+            root.contentDescription = "$prefix${dataSet[position].identifier}AdapterItem"
         }
-        holder.itemView.contentDescription = "$prefix${dataSet[position].identifier}AdapterItem"
     }
 
     override fun getItemCount() = dataSet.size

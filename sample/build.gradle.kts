@@ -1,10 +1,14 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs") version("2.4.1")
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
     compileSdk = 31
 
     defaultConfig {
@@ -42,10 +46,12 @@ android {
     }
 }
 
-val nimbusVersion = "1.11.3"
-
 dependencies {
+    // Startup
+    api("androidx.startup:startup-runtime:1.1.1")
+
     // Nimbus
+    val nimbusVersion = "1.11.3"
     implementation("com.adsbynimbus.android:nimbus:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-aps:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-exoplayer:$nimbusVersion")
@@ -87,9 +93,6 @@ dependencies {
 
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.2.1")
-
-    // Startup
-    implementation("androidx.startup:startup-runtime:1.1.1")
 
     // Material
     implementation("com.google.android.material:material:1.5.0")

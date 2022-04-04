@@ -17,7 +17,7 @@ import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.*
 import timber.log.Timber
 
-class AdManagerFragment : Fragment(), DemandProvider {
+class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
     private var adController: AdController? = null
     private val args: AdManagerFragmentArgs by navArgs()
@@ -126,12 +126,12 @@ class AdManagerFragment : Fragment(), DemandProvider {
 
     override fun onStart() {
         super.onStart()
-        DemandProvider.install(this)
+        RequestManager.interceptors.add(this)
     }
 
     override fun onStop() {
         super.onStop()
-        DemandProvider.remove(this)
+        RequestManager.interceptors.remove(this)
     }
 
     override fun onDestroyView() {
@@ -144,7 +144,7 @@ class AdManagerFragment : Fragment(), DemandProvider {
         if (args.item == AdItem.REWARDED_VIDEO_UNITY) {
             request.request.imp[0].ext.facebook_app_id = ""
         }
-        request.request.user?.apply {
+        request.request.user = request.request.user?.apply {
             if (!FANDemandProvider.forceTestAd) buyeruid = null
             if (args.item != AdItem.REWARDED_VIDEO_UNITY) ext?.unity_buyeruid = null
         }

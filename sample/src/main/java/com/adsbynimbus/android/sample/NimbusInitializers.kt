@@ -40,7 +40,7 @@ class NimbusInitializer : Initializer<Nimbus> {
                 .build())
 
         // APS Demand Provider
-        val apsAdUnits = buildList {
+        val apsAdUnits = mutableListOf<DTBAdSize>().apply {
             if (BuildConfig.APS_BANNER.isNotEmpty()) {
                 add(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
             }

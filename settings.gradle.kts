@@ -10,7 +10,7 @@ pluginManagement {
         val androidGradleVersion = "7.1.2"
         id("com.android.application") version(androidGradleVersion)
         id("com.android.library") version(androidGradleVersion)
-        kotlin("android") version("1.6.10")
+        kotlin("android") version("1.6.20")
     }
 }
 
@@ -31,7 +31,6 @@ dependencyResolutionManagement {
         }
     }
 }
-
 
 rootProject.name = "nimbus-android-sample"
 

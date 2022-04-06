@@ -14,6 +14,7 @@ import com.adsbynimbus.android.sample.common.SampleAppAdapter
 import com.adsbynimbus.android.sample.common.SampleAppSectionAdapter
 import com.adsbynimbus.android.sample.common.showCustomDialog
 import com.adsbynimbus.android.sample.databinding.FragmentMediationPlatformsBinding
+import com.adsbynimbus.android.sample.mediation.MediationPlatformsFragmentDirections.toGAMDemoFragment
 
 class MediationPlatformsFragment : Fragment() {
 
@@ -36,57 +37,13 @@ class MediationPlatformsFragment : Fragment() {
         val googleAdapter =
             SampleAppAdapter("mediationPlatforms", enumValues<MediationItem>()) { item ->
                 if (BuildConfig.GAM_PLACEMENT_ID.isEmpty()) {
-                    showCustomDialog(
-                        "GAM_PLACEMENT_ID",
-                        inflater,
-                        this@MediationPlatformsFragment.context
-                    ).show()
-                } else {
-                    val action =
-                        MediationPlatformsFragmentDirections.toGAMDemoFragment(
-                            item,
-                            item.description,
-                            "Google - $titleText"
-                        )
-                    findNavController().navigate(action)
-                }
+                    showCustomDialog("GAM_PLACEMENT_ID", inflater, root.context).show()
+                } else findNavController().navigate(
+                    toGAMDemoFragment(item, item.description, "Google - $titleText")
+                )
             }
 
-        val mopubSectionAdapter = SampleAppSectionAdapter(
-            "mediationPlatforms",
-            "Mopub",
-            resources.getString(R.string.mopub),
-        )
-        val mopubAdapter =
-            SampleAppAdapter("mediationPlatforms", enumValues<MediationItem>()) { item ->
-                if (
-                    (item == MediationItem.BANNER || item == MediationItem.DYNAMIC_PRICE_BANNER) &&
-                    BuildConfig.MOPUB_BANNER_ID.isEmpty()
-                ) {
-                    showCustomDialog("MOPUB_BANNER_ID", inflater, context).show()
-                } else if (
-                    (item == MediationItem.INTERSTITIAL || item == MediationItem.DYNAMIC_PRICE_INTERSTITIAL) &&
-                    BuildConfig.MOPUB_INTERSTITIAL_ID.isEmpty()
-                ) {
-                    showCustomDialog("MOPUB_INTERSTITIAL_ID", inflater, context).show()
-                } else {
-                    val action =
-                        MediationPlatformsFragmentDirections.toMoPubFragment(
-                            item,
-                            item.description,
-                            "MoPub - $titleText"
-                        )
-                    findNavController().navigate(action)
-                }
-            }
-
-        val concatAdapter = ConcatAdapter(
-            googleSectionAdapter,
-            googleAdapter,
-            mopubSectionAdapter,
-            mopubAdapter,
-        )
-        recyclerView.adapter = concatAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this@MediationPlatformsFragment.context)
+        recyclerView.adapter = ConcatAdapter(googleSectionAdapter, googleAdapter)
+        recyclerView.layoutManager = LinearLayoutManager(root.context)
     }.root
 }

@@ -25,9 +25,6 @@ android {
         buildConfigField("String", "FAN_INTERSTITIAL_ID", "\"${property("sample_fan_interstitial")}\"")
         buildConfigField("String", "FAN_BANNER_320_ID", "\"${property("sample_fan_banner_320")}\"")
         buildConfigField("String", "FAN_NATIVE_320_ID", "\"${property("sample_fan_native_320")}\"")
-        buildConfigField("String", "MOPUB_BANNER_ID", "\"${property("sample_mopub_banner_id")}\"")
-        buildConfigField("String", "MOPUB_MREC_ID", "\"${property("sample_mopub_mrec_id")}\"")
-        buildConfigField("String", "MOPUB_INTERSTITIAL_ID", "\"${property("sample_mopub_interstitial_id")}\"")
         buildConfigField("String", "GAM_PLACEMENT_ID", "\"${property("sample_gam_placement_id")}\"")
         buildConfigField("String", "UNITY_GAME_ID", "\"${property("sample_unity_game_id")}\"")
     }
@@ -57,7 +54,6 @@ dependencies {
     implementation("com.adsbynimbus.android:extension-exoplayer:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    implementation("com.adsbynimbus.android:extension-mopub:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-okhttp:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-viewability:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-unity:$nimbusVersion")
@@ -70,10 +66,6 @@ dependencies {
 
     // Google
     implementation("com.google.android.gms:play-services-ads:20.6.0")
-
-    // MoPub
-    implementation("com.mopub:mopub-sdk-banner:5.18.0")
-    implementation("com.mopub:mopub-sdk-fullscreen:5.18.0")
 
     // Core, Fragment, AppCompat
     implementation("androidx.appcompat:appcompat:1.4.1")

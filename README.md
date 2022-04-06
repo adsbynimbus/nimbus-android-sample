@@ -21,7 +21,7 @@ root project gradle.properties file. If you would like to use your production ke
 
 ### Optional IDs
 
-In order to see APS/FAN/MoPub/GAM/Unity examples you must also supply it's IDs. You can do so by
+In order to see APS/FAN/GAM/Unity examples you must also supply it's IDs. You can do so by
 adding the IDs in the predefined fields in the root project `gradle.properties` file or by replacing
 the buildConfigFields in `sammple/build.gradle.kts`
 
@@ -37,13 +37,13 @@ After installing all dependencies and setting up the required keys you're good t
 You will be able to see several examples categorized by specific sections, such as:
 
 - Examples of different types of Ads
-- Ads by mediation platforms (Google, MoPub)
+- Ads by mediation platforms (Google)
 - Ads with MOAT viewability integration
 - Ad Markup Renderer
 
 ## Need help?
 
-You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.10.10/index.html)
+You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.11.3/index.html)
 
 ## License
 

@@ -57,7 +57,6 @@ dependencies {
     implementation("com.adsbynimbus.android:extension-exoplayer:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    implementation("com.adsbynimbus.android:extension-mopub:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-okhttp:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-viewability:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-unity:$nimbusVersion")
@@ -70,10 +69,6 @@ dependencies {
 
     // Google
     implementation("com.google.android.gms:play-services-ads:20.6.0")
-
-    // MoPub
-    implementation("com.mopub:mopub-sdk-banner:5.18.0")
-    implementation("com.mopub:mopub-sdk-fullscreen:5.18.0")
 
     // Core, Fragment, AppCompat
     implementation("androidx.appcompat:appcompat:1.4.1")

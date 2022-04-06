@@ -29,7 +29,6 @@
     <string name="settings_user_did_consent">GDPR Consent</string>
 
     <string name="google">Google</string>
-    <string name="mopub">MoPub</string>
 
     <string name="custom_dialog_title">Attention</string>
     <string name="custom_dialog_button">OK</string>

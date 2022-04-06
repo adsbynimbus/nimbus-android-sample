@@ -70,26 +70,9 @@
         android:name="com.adsbynimbus.android.sample.mediation.MediationPlatformsFragment"
         tools:layout="@layout/fragment_mediation_platforms">
         <action
-            android:id="@+id/to_moPubFragment"
-            app:destination="@id/moPubFragment"
-            app:popUpTo="@id/mediationFragment" />
-        <action
             android:id="@+id/to_GAMDemoFragment"
             app:destination="@id/GAMDemoFragment"
             app:popUpTo="@id/mediationFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/moPubFragment"
-        android:name="com.adsbynimbus.android.sample.mediation.MoPubDemoFragment">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.mediation.MediationItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/GAMDemoFragment"

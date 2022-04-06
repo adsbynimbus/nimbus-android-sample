@@ -6,12 +6,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-    plugins {
-        val androidGradleVersion = "7.1.2"
-        id("com.android.application") version(androidGradleVersion)
-        id("com.android.library") version(androidGradleVersion)
-        kotlin("android") version("1.6.20")
-    }
 }
 
 dependencyResolutionManagement {

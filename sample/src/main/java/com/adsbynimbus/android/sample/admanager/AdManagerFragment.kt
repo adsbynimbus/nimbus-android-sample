@@ -27,6 +27,8 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentAdManagerBinding.inflate(inflater, container, false).apply {
+        RequestManager.interceptors.add(this@AdManagerFragment)
+
         headerView.setTitleText(args.titleText)
         headerView.setSubtitleText(args.subtitleText)
 
@@ -124,19 +126,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         }
     }.root
 
-    override fun onStart() {
-        super.onStart()
-        RequestManager.interceptors.add(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        RequestManager.interceptors.remove(this)
-    }
-
     override fun onDestroyView() {
         adController?.destroy()
         adController = null
+        RequestManager.interceptors.remove(this)
         super.onDestroyView()
     }
 

@@ -25,9 +25,6 @@ android {
         buildConfigField("String", "FAN_INTERSTITIAL_ID", "\"${property("sample_fan_interstitial")}\"")
         buildConfigField("String", "FAN_BANNER_320_ID", "\"${property("sample_fan_banner_320")}\"")
         buildConfigField("String", "FAN_NATIVE_320_ID", "\"${property("sample_fan_native_320")}\"")
-        buildConfigField("String", "MOPUB_BANNER_ID", "\"${property("sample_mopub_banner_id")}\"")
-        buildConfigField("String", "MOPUB_MREC_ID", "\"${property("sample_mopub_mrec_id")}\"")
-        buildConfigField("String", "MOPUB_INTERSTITIAL_ID", "\"${property("sample_mopub_interstitial_id")}\"")
         buildConfigField("String", "GAM_PLACEMENT_ID", "\"${property("sample_gam_placement_id")}\"")
         buildConfigField("String", "UNITY_GAME_ID", "\"${property("sample_unity_game_id")}\"")
     }

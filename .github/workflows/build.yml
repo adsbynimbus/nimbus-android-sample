@@ -1,0 +1,47 @@
+name: Sample App Build
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '**'
+
+  pull_request:
+    branches:
+      - main
+
+env:
+  ORG_GRADLE_PROJECT_openrtbUsername: ${{ github.actor }}
+  ORG_GRADLE_PROJECT_openrtbPassword: ${{ github.token }}
+
+jobs:
+  build:
+    name: Sample App Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+         lfs: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ./.gradle/configuration-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
+            ${{ runner.os }}-gradle-
+
+      - name: Run Gradle Build
+        run: ./gradlew build check --no-daemon --stacktrace

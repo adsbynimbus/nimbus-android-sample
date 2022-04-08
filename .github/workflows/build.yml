@@ -83,7 +83,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Setup Firebase Key
-        run: echo ${{ secrets.FIREBASE_SERVICE_KEY_JSON }} | base64 --decode > ./firebase.json
+        run: echo ${{ secrets.FIREBASE_DEPLOY_JSON }} | base64 --decode > ./firebase.json
 
       - name: Build and Deploy to Firebase
         env:

@@ -89,4 +89,4 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
           ORG_GRADLE_PROJECT_releaseDescription: ${{ github.event.pull_request.body || github.event.head_commit.message }}
-        run: ./gradlew appDistributionUploadDebug --stacktrace
+        run: ./gradlew :app:build appDistributionUploadDebug --stacktrace

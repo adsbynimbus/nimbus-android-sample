@@ -49,6 +49,7 @@ jobs:
   next-build:
     name: Internal App Build
     if: ${{ github.event_name == 'pull_request' }}
+    environment: internal
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Internal code
@@ -89,4 +90,13 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
           ORG_GRADLE_PROJECT_releaseDescription: ${{ github.event.pull_request.body || github.event.head_commit.message }}
+          ORG_GRADLE_PROJECT_sample_aps_banner: ${{ secrets.SAMPLE_APS_BANNER }}
+          ORG_GRADLE_PROJECT_sample_aps_static: ${{ secrets.SAMPLE_APS_STATIC }}
+          ORG_GRADLE_PROJECT_sample_aps_video: ${{ secrets.SAMPLE_APS_VIDEO }}
+          ORG_GRADLE_PROJECT_sample_fan_native_id: ${{ secrets.SAMPLE_FAN_NATIVE_ID }}
+          ORG_GRADLE_PROJECT_sample_fan_native_320_id: ${{ secrets.SAMPLE_FAN_NATIVE_320_ID }}
+          ORG_GRADLE_PROJECT_sample_fan_banner_320_id: ${{ secrets.SAMPLE_FAN_BANNER_320_ID }}
+          ORG_GRADLE_PROJECT_sample_fan_interstitial_id: ${{ secrets.SAMPLE_FAN_INTERSTITIAL_ID }}
+          ORG_GRADLE_PROJECT_sample_gam_placement_id: ${{ secrets.SAMPLE_GAM_PLACEMENT_ID }}
+          ORG_GRADLE_PROJECT_sample_unity_game_id: ${{ secrets.SAMPLE_UNITY_GAME_ID }}
         run: ./gradlew :app:build appDistributionUploadDebug --stacktrace

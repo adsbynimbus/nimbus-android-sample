@@ -1,7 +1,16 @@
+import com.android.build.api.dsl.LibraryDefaultConfig
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.toUpperCaseAsciiOnly
+
 plugins {
     id("com.android.library")
     kotlin("android")
     id("androidx.navigation.safeargs") version("2.4.1")
+}
+
+// Demonstrates the usage of extension functions and gradle providers to add a buildConfigField
+fun LibraryDefaultConfig.addSampleBuildConfigField(name: String) {
+    buildConfigField("String", name.substringAfter("_").toUpperCaseAsciiOnly(),
+        "\"${providers.gradleProperty(name).getOrElse("")}\"")
 }
 
 android {
@@ -15,18 +24,21 @@ android {
         minSdk = 21
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // This is one example of adding keys to the application using buildConfigField
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
         buildConfigField("String", "API_KEY", "\"${property("sample_api_key")}\"")
-        buildConfigField("String", "APS_APP_KEY", "\"${property("sample_aps_app_key")}\"")
-        buildConfigField("String", "APS_BANNER", "\"${property("sample_aps_banner")}\"")
-        buildConfigField("String", "APS_STATIC", "\"${property("sample_aps_static")}\"")
-        buildConfigField("String", "APS_VIDEO", "\"${property("sample_aps_video")}\"")
-        buildConfigField("String", "FAN_NATIVE_ID", "\"${property("sample_fan_native")}\"")
-        buildConfigField("String", "FAN_INTERSTITIAL_ID", "\"${property("sample_fan_interstitial")}\"")
-        buildConfigField("String", "FAN_BANNER_320_ID", "\"${property("sample_fan_banner_320")}\"")
-        buildConfigField("String", "FAN_NATIVE_320_ID", "\"${property("sample_fan_native_320")}\"")
-        buildConfigField("String", "GAM_PLACEMENT_ID", "\"${property("sample_gam_placement_id")}\"")
-        buildConfigField("String", "UNITY_GAME_ID", "\"${property("sample_unity_game_id")}\"")
+
+        // The following uses buildConfigField and gradle property providers to add keys
+        addSampleBuildConfigField("sample_aps_app_key")
+        addSampleBuildConfigField("sample_aps_banner")
+        addSampleBuildConfigField("sample_aps_static")
+        addSampleBuildConfigField("sample_aps_video")
+        addSampleBuildConfigField("sample_fan_native_id")
+        addSampleBuildConfigField("sample_fan_interstitial_id")
+        addSampleBuildConfigField("sample_fan_banner_320_id")
+        addSampleBuildConfigField("sample_fan_native_320_id")
+        addSampleBuildConfigField("sample_gam_placement_id")
+        addSampleBuildConfigField("sample_unity_game_id")
     }
 
     compileOptions {
@@ -59,7 +71,7 @@ dependencies {
     implementation("com.adsbynimbus.android:extension-unity:$nimbusVersion")
 
     // Aps
-    implementation("com.amazon.android:aps-sdk:9.4.2")
+    implementation("com.amazon.android:aps-sdk:9.4.3")
 
     // Facebook
     implementation("com.facebook.android:audience-network-sdk:6.8.0")
@@ -73,9 +85,9 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.4.1")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.1")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.4.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
 
     // Preferences
     implementation("androidx.preference:preference-ktx:1.2.0")

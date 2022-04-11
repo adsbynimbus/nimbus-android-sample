@@ -71,7 +71,7 @@ dependencies {
     implementation("com.adsbynimbus.android:extension-unity:$nimbusVersion")
 
     // Aps
-    implementation("com.amazon.android:aps-sdk:9.4.2")
+    implementation("com.amazon.android:aps-sdk:9.4.3")
 
     // Facebook
     implementation("com.facebook.android:audience-network-sdk:6.8.0")
@@ -85,9 +85,9 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.4.1")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.1")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.4.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
 
     // Preferences
     implementation("androidx.preference:preference-ktx:1.2.0")

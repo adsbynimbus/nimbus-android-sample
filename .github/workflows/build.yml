@@ -58,6 +58,7 @@ jobs:
           repository: 'timehop/nimbus-android'
           ssh-key: ${{ secrets.NIMBUS_ANDROID_KEY }}
           lfs: true
+          ref: integration/1.11.4
 
       - name: Checkout Sample code
         uses: actions/checkout@v3

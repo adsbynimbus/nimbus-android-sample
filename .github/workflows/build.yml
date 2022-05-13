@@ -11,6 +11,8 @@ on:
     branches:
       - main
 
+permissions: read-all
+
 env:
   ORG_GRADLE_PROJECT_openrtbUsername: ${{ github.actor }}
   ORG_GRADLE_PROJECT_openrtbPassword: ${{ github.token }}

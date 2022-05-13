@@ -19,6 +19,15 @@ class NimbusInitializer : Initializer<Nimbus> {
         initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY)
         testMode = true
 
+        // The Timber.DebugTree proxies all calls to Timber.log to the logcat console
+        Timber.plant(Timber.DebugTree())
+
+        /*
+            Attaches a logger for SDK events that are sent to Timber.
+            This is the equivalent of calling Nimbus.addLogger()
+         */
+        addLogger { level, message -> Timber.log(level, message)}
+
         /*
             The following line of code demonstrates how to change the endpoint the SDK points to
             for advanced use cases such as using a proxy server.

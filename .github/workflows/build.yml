@@ -11,6 +11,8 @@ on:
     branches:
       - main
 
+permissions: read-all
+
 env:
   ORG_GRADLE_PROJECT_openrtbUsername: ${{ github.actor }}
   ORG_GRADLE_PROJECT_openrtbPassword: ${{ github.token }}
@@ -58,7 +60,6 @@ jobs:
           repository: 'timehop/nimbus-android'
           ssh-key: ${{ secrets.NIMBUS_ANDROID_KEY }}
           lfs: true
-          ref: integration/1.11.4
 
       - name: Checkout Sample code
         uses: actions/checkout@v3

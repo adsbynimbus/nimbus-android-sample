@@ -1,16 +1,9 @@
-import com.android.build.api.dsl.LibraryDefaultConfig
-import org.jetbrains.kotlin.util.capitalizeDecapitalize.toUpperCaseAsciiOnly
+import com.android.build.api.variant.BuildConfigField
 
 plugins {
     id("com.android.library")
     kotlin("android")
     id("androidx.navigation.safeargs") version("2.4.1")
-}
-
-// Demonstrates the usage of extension functions and gradle providers to add a buildConfigField
-fun LibraryDefaultConfig.addSampleBuildConfigField(name: String) {
-    buildConfigField("String", name.substringAfter("_").toUpperCaseAsciiOnly(),
-        "\"${providers.gradleProperty(name).getOrElse("")}\"")
 }
 
 android {
@@ -27,18 +20,6 @@ android {
         // This is one example of adding keys to the application using buildConfigField
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
         buildConfigField("String", "API_KEY", "\"${property("sample_api_key")}\"")
-
-        // The following uses buildConfigField and gradle property providers to add keys
-        addSampleBuildConfigField("sample_aps_app_key")
-        addSampleBuildConfigField("sample_aps_banner")
-        addSampleBuildConfigField("sample_aps_static")
-        addSampleBuildConfigField("sample_aps_video")
-        addSampleBuildConfigField("sample_fan_native_id")
-        addSampleBuildConfigField("sample_fan_interstitial_id")
-        addSampleBuildConfigField("sample_fan_banner_320_id")
-        addSampleBuildConfigField("sample_fan_native_320_id")
-        addSampleBuildConfigField("sample_gam_placement_id")
-        addSampleBuildConfigField("sample_unity_game_id")
     }
 
     compileOptions {
@@ -55,12 +36,49 @@ android {
     }
 }
 
+/* The following shows how to make keys configured by the build accessible in the sample app */
+androidComponents.onVariants { variant ->
+    variant.buildConfigFields.put(
+        "PUBLISHER_KEY", providers.gradleProperty("sample_publisher_key").map { key ->
+            BuildConfigField(
+                "String",
+                "\"$key\"",
+                "Publisher key required to initialize Nimbus"
+            )
+        }
+    )
+    variant.buildConfigFields.put(
+        "API_KEY", providers.gradleProperty("sample_api_key").map { key ->
+            BuildConfigField("String", "\"$key\"", "Api key required to initialize Nimbus")
+        }
+    )
+    // Other keys that can be configured in the sample app
+    listOf(
+        "sample_aps_app_key",
+        "sample_aps_banner",
+        "sample_aps_static",
+        "sample_aps_video",
+        "sample_fan_native_id",
+        "sample_fan_interstitial_id",
+        "sample_fan_banner_320_id",
+        "sample_fan_native_320_id",
+        "sample_gam_placement_id",
+        "sample_unity_game_id",
+    ).forEach {
+        variant.buildConfigFields.put(
+            it.substringAfter("sample_").toUpperCase(),
+            providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
+        )
+    }
+}
+
+
 dependencies {
     // Startup
     api("androidx.startup:startup-runtime:1.1.1")
 
     // Nimbus
-    val nimbusVersion = "1.11.3"
+    val nimbusVersion = "1.11.4"
     implementation("com.adsbynimbus.android:nimbus:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-aps:$nimbusVersion")
     implementation("com.adsbynimbus.android:extension-exoplayer:$nimbusVersion")

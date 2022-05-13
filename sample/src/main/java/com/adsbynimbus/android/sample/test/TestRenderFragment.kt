@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.FragmentTestRenderBinding
+import com.adsbynimbus.android.sample.unescape
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer
 
@@ -37,7 +38,7 @@ class TestRenderFragment : Fragment() {
             Renderer.loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type
 
-                override fun markup(): String = markupEditText.text.toString()
+                override fun markup(): String = markupEditText.text.toString().unescape()
 
                 override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
             }, requireActivity())?.start()

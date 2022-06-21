@@ -67,6 +67,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             }
             AdItem.BANNER -> adManager.showAd(
                 NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER),
+                20,
                 adFrame,
             ) {
                 adController = it.apply { addListener("Banner Controller") }

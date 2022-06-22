@@ -119,7 +119,6 @@ dependencies {
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
@@ -127,7 +126,7 @@ dependencies {
     constraints {
         api("androidx.activity:activity:1.4.0")
         api("androidx.activity:activity-ktx:1.4.0")
-        api("androidx.annotation:annotation:1.3.0")
+        api("androidx.annotation:annotation:1.4.0")
         api("androidx.annotation:annotation-experimental:1.2.0")
         api("androidx.browser:browser:1.4.0")
         api("androidx.collection:collection:1.2.0")
@@ -145,7 +144,7 @@ dependencies {
         api("androidx.transition:transition:1.4.1")
         api("androidx.work:work-runtime:2.7.1")
         api("com.google.android.gms:play-services-ads-identifier:18.0.1")
-        api("com.google.ads.interactivemedia.v3:interactivemedia:3.27.0")
+        api("com.google.ads.interactivemedia.v3:interactivemedia:3.27.1")
         api("com.squareup.okio:okio:3.1.0")
         api("org.jetbrains:annotations:23.0.0")
     }

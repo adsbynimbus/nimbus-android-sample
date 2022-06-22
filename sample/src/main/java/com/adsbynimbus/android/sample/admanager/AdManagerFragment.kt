@@ -104,7 +104,9 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 it.addListener("Blocking Interstitial Controller")
             }
             AdItem.REWARDED_STATIC -> adManager.showRewardedAd(
-                NimbusRequest.forInterstitialAd("test_rewarded_static"),
+                NimbusRequest.forInterstitialAd("test_rewarded_static").apply {
+                    request.imp[0].video = null
+                },
                 5,
                 requireActivity(),
             ) {

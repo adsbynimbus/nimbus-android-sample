@@ -11,7 +11,7 @@ android {
         buildConfig = true
         viewBinding = true
     }
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         minSdk = 21
@@ -89,17 +89,17 @@ dependencies {
     implementation("com.adsbynimbus.android:extension-unity:$nimbusVersion")
 
     // Aps
-    implementation("com.amazon.android:aps-sdk:9.5.1")
+    implementation("com.amazon.android:aps-sdk:9.5.3")
 
     // Facebook
     implementation("com.facebook.android:audience-network-sdk:6.11.0")
 
     // Google
-    implementation("com.google.android.gms:play-services-ads:20.6.0")
+    implementation("com.google.android.gms:play-services-ads:21.0.0")
 
     // Core, Fragment, AppCompat
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.fragment:fragment-ktx:1.4.1")
 
     // Navigation
@@ -114,11 +114,12 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
     // Material
-    implementation("com.google.android.material:material:1.6.0")
+    implementation("com.google.android.material:material:1.6.1")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")

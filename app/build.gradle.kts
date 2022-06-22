@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "com.adsbynimbus.android.sample.app"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 1
-        versionName = "1.11.3"
+        versionName = "1.11.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }

@@ -13,6 +13,7 @@ import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.FANAdRenderer
 import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import timber.log.Timber
 
 /**
@@ -55,7 +56,7 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
             FANAdItem.BANNER, FANAdItem.NATIVE ->
                 Renderer.loadAd(nimbusAd, adLayout, this@FANDemoFragment)
             FANAdItem.INTERSTITIAL ->
-                Renderer.loadBlockingAd(nimbusAd, requireActivity())?.apply {
+                requireActivity().loadBlockingAd(nimbusAd)?.apply {
                     listeners().add(this@FANDemoFragment)
                 } ?: run { Timber.i("No placement id for that ad type") }
         }

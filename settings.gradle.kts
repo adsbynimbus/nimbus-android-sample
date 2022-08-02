@@ -6,6 +6,13 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    plugins {
+        val androidVersion: String by settings
+        val kotlinVersion: String by settings
+        id("com.android.application") version(androidVersion)
+        id("com.android.library") version(androidVersion)
+        kotlin("android") version(kotlinVersion)
+    }
 }
 
 dependencyResolutionManagement {

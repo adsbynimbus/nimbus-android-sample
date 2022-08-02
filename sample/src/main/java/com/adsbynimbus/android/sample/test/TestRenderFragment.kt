@@ -10,7 +10,7 @@ import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.FragmentTestRenderBinding
 import com.adsbynimbus.android.sample.unescape
 import com.adsbynimbus.render.CompanionAd
-import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 
 class TestRenderFragment : Fragment() {
 
@@ -35,13 +35,13 @@ class TestRenderFragment : Fragment() {
                 else -> return@setOnClickListener
             }
 
-            Renderer.loadBlockingAd(object : NimbusAd {
+            requireContext().loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type
 
                 override fun markup(): String = markupEditText.text.toString().unescape()
 
                 override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
-            }, requireActivity())?.start()
+            })?.start()
         }
     }.root
 }

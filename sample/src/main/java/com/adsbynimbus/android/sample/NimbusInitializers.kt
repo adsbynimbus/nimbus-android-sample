@@ -86,13 +86,6 @@ class NimbusInitializer : Initializer<Nimbus> {
         if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
             UnityDemandProvider.initializeTestMode(context, BuildConfig.UNITY_GAME_ID)
         }
-
-        BlockingAdRenderer.setMuteButton(
-            AppCompatResources.getDrawable(context, R.drawable.ic_volume)
-        )
-        BlockingAdRenderer.setDismissDrawable(
-            AppCompatResources.getDrawable(context, R.drawable.ic_close)
-        )
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()

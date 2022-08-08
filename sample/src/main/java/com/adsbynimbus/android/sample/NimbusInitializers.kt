@@ -35,18 +35,18 @@ class NimbusInitializer : Initializer<Nimbus> {
         RequestManager.setRequestUrl("https://dev-sdk.adsbynimbus.com/rta/test")
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        OkHttpNimbusClient.setOkHttpClient(
-            OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor {
-                    Timber.tag("Nimbus Request")
-                    Timber.v(it)
-                }.setLevel(HttpLoggingInterceptor.Level.BODY))
-                .addInterceptor {
-                    if (preferences.forceAdRequestError) it.proceed(
-                        it.request().newBuilder().addHeader("Nimbus-Test-No-Fill", "true").build()
-                    ) else it.proceed(it.request())
-                }
-                .build())
+
+        RequestManager.setClient(OkHttpNimbusClient(OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor {
+                Timber.tag("Nimbus Request")
+                Timber.v(it)
+            }.setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor {
+                if (preferences.forceAdRequestError) it.proceed(
+                    it.request().newBuilder().addHeader("Nimbus-Test-No-Fill", "true").build()
+                ) else it.proceed(it.request())
+            }))
+
 
         // APS Demand Provider
         val apsAdUnits = mutableListOf<DTBAdSize>().apply {

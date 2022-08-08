@@ -69,7 +69,6 @@ dependencies {
     api("com.adsbynimbus.android:extension-exoplayer:$version")
     api("com.adsbynimbus.android:extension-facebook:$version")
     api("com.adsbynimbus.android:extension-google:$version")
-    api("com.adsbynimbus.android:extension-okhttp:$version")
     api("com.adsbynimbus.android:extension-viewability:$version")
     api("com.adsbynimbus.android:extension-unity:$version")
 

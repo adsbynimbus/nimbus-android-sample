@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
-import com.adsbynimbus.android.sample.admanager.AdDemoFragmentDirections.*
 import com.adsbynimbus.android.sample.common.SampleAppAdapter
 import com.adsbynimbus.android.sample.common.showCustomDialog
 import com.adsbynimbus.android.sample.databinding.FragmentAdDemoBinding
@@ -30,7 +30,11 @@ class AdDemoFragment : Fragment() {
             if (item == AdItem.REWARDED_VIDEO_UNITY && BuildConfig.UNITY_GAME_ID.isEmpty()) {
                 showCustomDialog("UNITY_GAME_ID", inflater, root.context).show()
             } else {
-                findNavController().navigate(toAdManagerFragment(item, item.description, titleText))
+                findNavController().navigate(R.id.to_adManagerFragment, bundleOf(
+                    "item" to item,
+                    "titleText" to item.description,
+                    "subtitleText" to titleText,
+                ))
             }
         }
 
@@ -44,7 +48,11 @@ class AdDemoFragment : Fragment() {
             if (adUnitId.isEmpty()) {
                 showCustomDialog(item.gradlePropertyName, inflater, root.context).show()
             } else {
-                findNavController().navigate(toFANDemoFragment(item, item.description, titleText))
+                findNavController().navigate(R.id.to_FANDemoFragment, bundleOf(
+                    "item" to item,
+                    "titleText" to item.description,
+                    "subtitleText" to titleText,
+                ))
             }
         }
         recyclerView.adapter = ConcatAdapter(adItemAdapter, fanAdItemAdapter)

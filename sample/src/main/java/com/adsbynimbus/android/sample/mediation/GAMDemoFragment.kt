@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.adManager
@@ -29,7 +28,7 @@ import timber.log.Timber
 
 class GAMDemoFragment : Fragment() {
 
-    private val args: GAMDemoFragmentArgs by navArgs()
+
     private var adView: AdManagerAdView? = null
 
     override fun onCreateView(
@@ -37,10 +36,12 @@ class GAMDemoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentGamDemoBinding.inflate(inflater, container, false).apply {
-        headerView.setTitleText(args.titleText)
-        headerView.setSubtitleText(args.subtitleText)
+        val bundle = requireArguments()
+        headerView.setTitleText(bundle.getString("titleText", ""))
+        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
+        val item = bundle.getSerializable("item") as MediationItem
 
-        when (args.item) {
+        when (item) {
             MediationItem.BANNER -> banner.requestBannerAd()
             MediationItem.DYNAMIC_PRICE_BANNER -> banner.requestBannerAd(isDynamicPrice = true)
             MediationItem.INTERSTITIAL -> root.context.requestInterstitialAd()

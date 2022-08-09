@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
@@ -20,7 +19,7 @@ import timber.log.Timber
 class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
     private var adController: AdController? = null
-    private val args: AdManagerFragmentArgs by navArgs()
+    lateinit var item: AdItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +27,11 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = FragmentAdManagerBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
-
-        headerView.setTitleText(args.titleText)
-        headerView.setSubtitleText(args.subtitleText)
-
-        when (args.item) {
+        val bundle = requireArguments()
+        headerView.setTitleText(bundle.getString("titleText", ""))
+        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
+        item = bundle.getSerializable("item") as AdItem
+        when (item) {
             AdItem.MANUAL_REQUEST_RENDER_AD -> {
                 // Manual Request Ad
                 val request = NimbusRequest.forBannerAd(
@@ -137,12 +136,12 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     override fun modifyRequest(request: NimbusRequest) {
-        if (args.item == AdItem.REWARDED_VIDEO_UNITY) {
+        if (item == AdItem.REWARDED_VIDEO_UNITY) {
             request.request.imp[0].ext.facebook_app_id = ""
         }
         request.request.user = request.request.user?.apply {
             if (!FANDemandProvider.forceTestAd) buyeruid = null
-            if (args.item != AdItem.REWARDED_VIDEO_UNITY) ext?.unity_buyeruid = null
+            if (item != AdItem.REWARDED_VIDEO_UNITY) ext?.unity_buyeruid = null
         }
     }
 

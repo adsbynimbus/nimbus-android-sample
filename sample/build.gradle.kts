@@ -5,7 +5,6 @@ import com.android.build.api.variant.BuildConfigField
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("androidx.navigation.safeargs") version("2.5.1")
 }
 
 version = "1.12.0"

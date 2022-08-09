@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
@@ -23,15 +22,14 @@ import com.adsbynimbus.request.RequestManager
 
 class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
 
-    private val args: ScrollingDemoFragmentArgs by navArgs()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentScrollingDemoBinding.inflate(inflater, container, false).apply {
-        headerView.setTitleText(args.titleText)
-        headerView.setSubtitleText(args.subtitleText)
+        val bundle = requireArguments()
+        headerView.setTitleText(bundle.getString("titleText", ""))
+        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
 
         recyclerView.adapter = ScrollingAdapter()
         recyclerView.addItemDecoration(marginDecoration)

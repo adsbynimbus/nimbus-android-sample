@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.databinding.FragmentFanDemoBinding
@@ -24,35 +23,36 @@ import timber.log.Timber
 class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
 
     private var adController: AdController? = null
-    private val args: FANDemoFragmentArgs by navArgs()
+    lateinit var item: FANAdItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentFanDemoBinding.inflate(inflater, container, false).apply {
-        headerView.setTitleText(args.titleText)
-        headerView.setSubtitleText(args.subtitleText)
+        val bundle = requireArguments()
+        headerView.setTitleText(bundle.getString("titleText", ""))
+        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
+        item = bundle.getSerializable("item") as FANAdItem
 
         val nimbusAd = object : NimbusAd {
-            override fun placementId(): String =
-                args.item.placementId(args.item.testAdTypes.random())
+            override fun placementId(): String = item.placementId(item.testAdTypes.random())
 
-            override fun type(): String = args.item.adType
+            override fun type(): String = item.adType
 
             override fun network(): String = FANAdRenderer.FACEBOOK
 
-            override fun isInterstitial(): Boolean = args.item.isInterstitial
+            override fun isInterstitial(): Boolean = item.isInterstitial
 
             override fun markup(): String = ""
 
-            override fun width(): Int = if (args.item == FANAdItem.BANNER) 320 else 0
+            override fun width(): Int = if (item == FANAdItem.BANNER) 320 else 0
 
-            override fun height(): Int = if (args.item == FANAdItem.BANNER) 50 else 0
+            override fun height(): Int = if (item == FANAdItem.BANNER) 50 else 0
 
             override fun trackersForEvent(event: AdEvent): Collection<String> = emptyList()
         }
-        when (args.item) {
+        when (item) {
             FANAdItem.BANNER, FANAdItem.NATIVE ->
                 Renderer.loadAd(nimbusAd, adLayout, this@FANDemoFragment)
             FANAdItem.INTERSTITIAL ->
@@ -69,7 +69,7 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
     }
 
     override fun onAdEvent(adEvent: AdEvent) {
-        Timber.i("${args.item.description}: %s", adEvent.name)
+        Timber.i("${item.description}: %s", adEvent.name)
     }
 
     override fun onAdRendered(controller: AdController) {
@@ -80,6 +80,6 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
     }
 
     override fun onError(error: NimbusError) {
-        Timber.e("${args.item.description}: %s", error.message)
+        Timber.e("${item.description}: %s", error.message)
     }
 }

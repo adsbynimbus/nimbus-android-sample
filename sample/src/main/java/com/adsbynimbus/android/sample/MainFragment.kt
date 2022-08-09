@@ -29,10 +29,10 @@ class MainFragment : Fragment() {
     ): View = FragmentMainBinding.inflate(inflater, container, false).apply {
         recyclerView.adapter = SampleAppAdapter("main", enumValues<Item>()) { item ->
             val action = when (item) {
-                Item.SHOW_AD_DEMO -> MainFragmentDirections.toAdDemoFragment()
-                Item.MEDIATION_PLATFORMS -> MainFragmentDirections.toMediationPlatformsFragment()
-                Item.TEST_RENDER -> MainFragmentDirections.toTestRenderFragment()
-                Item.SETTINGS -> MainFragmentDirections.toSettingsFragment()
+                Item.SHOW_AD_DEMO -> R.id.to_adDemoFragment
+                Item.MEDIATION_PLATFORMS -> R.id.to_mediationPlatformsFragment
+                Item.TEST_RENDER -> R.id.to_testRenderFragment
+                Item.SETTINGS -> R.id.to_settingsFragment
             }
             findNavController().navigate(action)
         }

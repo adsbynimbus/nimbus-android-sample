@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -14,7 +15,6 @@ import com.adsbynimbus.android.sample.common.SampleAppAdapter
 import com.adsbynimbus.android.sample.common.SampleAppSectionAdapter
 import com.adsbynimbus.android.sample.common.showCustomDialog
 import com.adsbynimbus.android.sample.databinding.FragmentMediationPlatformsBinding
-import com.adsbynimbus.android.sample.mediation.MediationPlatformsFragmentDirections.toGAMDemoFragment
 
 class MediationPlatformsFragment : Fragment() {
 
@@ -39,7 +39,11 @@ class MediationPlatformsFragment : Fragment() {
                 if (BuildConfig.GAM_PLACEMENT_ID.isEmpty()) {
                     showCustomDialog("GAM_PLACEMENT_ID", inflater, root.context).show()
                 } else findNavController().navigate(
-                    toGAMDemoFragment(item, item.description, "Google - $titleText")
+                    R.id.to_GAMDemoFragment, bundleOf(
+                        "item" to item,
+                        "titleText" to item.description,
+                        "subtitleText" to titleText,
+                    )
                 )
             }
 

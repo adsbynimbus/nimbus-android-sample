@@ -5,6 +5,8 @@ plugins {
     kotlin("android")
 }
 
+val nimbusVersion = providers.gradleProperty("nimbusVersion")
+
 android {
     compileSdk = 32
 
@@ -13,7 +15,6 @@ android {
         minSdk = 21
         targetSdk = 32
         versionCode = 1
-        versionName = "${project(":sample").version}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
@@ -27,4 +28,10 @@ dependencies {
     implementation(project(":sample"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+}
+
+androidComponents.onVariants { variant ->
+    variant.outputs.single {
+        it.outputType == com.android.build.api.variant.VariantOutputConfiguration.OutputType.SINGLE
+    }.versionName.set(nimbusVersion)
 }

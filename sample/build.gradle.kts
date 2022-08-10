@@ -7,8 +7,6 @@ plugins {
     kotlin("android")
 }
 
-version = "1.12.0"
-
 android {
     buildFeatures {
         buildConfig = true
@@ -62,16 +60,17 @@ androidComponents.onVariants { variant ->
     }
 }
 
+val nimbusVersion = providers.gradleProperty("nimbusVersion").orNull
+
 dependencies {
     // Nimbus (Version is defined by the project version above)
-    api("com.adsbynimbus.android:nimbus:$version")
-    api("com.adsbynimbus.android:extension-aps:$version")
-    api("com.adsbynimbus.android:extension-exoplayer:$version")
-    api("com.adsbynimbus.android:extension-facebook:$version")
-    api("com.adsbynimbus.android:extension-google:$version")
-    api("com.adsbynimbus.android:extension-okhttp:$version")
-    api("com.adsbynimbus.android:extension-viewability:$version")
-    api("com.adsbynimbus.android:extension-unity:$version")
+    api("com.adsbynimbus.android:nimbus:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-exoplayer:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-google:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-viewability:$nimbusVersion")
+    api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
 
     // Aps
     api("com.amazon.android:aps-sdk:9.5.5")

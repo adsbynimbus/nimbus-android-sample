@@ -30,6 +30,8 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
+
+    findProject(":internal")?.let { dynamicFeatures += setOf(":internal") }
 }
 
 androidComponents.onVariants { variant ->

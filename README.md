@@ -6,7 +6,7 @@ Welcome to Nimbus Sample App - ads by publishers, for publishers.
 
 ### Requirements
 
-- Android 12 SDK (API Level 31)
+- Android 13 SDK (API Level 33)
 
 ### Installation
 
@@ -81,7 +81,7 @@ that matches the size defined in the VAST markup.
 
 ## Need help?
 
-You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.11.5/index.html)
+You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.12.1/index.html)
 
 ## License
 

@@ -1,12 +1,14 @@
 package com.adsbynimbus.android.sample
 
 import android.content.Context
+import android.content.pm.PackageManager.GET_META_DATA
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.request.*
 import com.amazon.device.ads.AdRegistration
 import com.amazon.device.ads.DTBAdSize
+import com.google.android.gms.ads.MobileAds
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber

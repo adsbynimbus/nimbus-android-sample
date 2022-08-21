@@ -1,24 +1,15 @@
 import com.android.build.api.variant.BuildConfigField
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    id("nimbus.app")
 }
 
 val nimbusVersion = "1.12.1"
 
+/* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
-    compileSdk = 33
-
-    buildFeatures {
-        buildConfig = true
-        viewBinding = true
-        resValues = true
-    }
-
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
+        applicationId = "com.adsbynimbus.android.sample"
         versionCode = 1
         versionName = nimbusVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -30,14 +21,12 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
-
-    findProject(":internal")?.let { dynamicFeatures += setOf(":internal") }
 }
 
 androidComponents.onVariants { variant ->
-    variant.outputs.single {
-        it.outputType == com.android.build.api.variant.VariantOutputConfiguration.OutputType.SINGLE
-    }.versionName.set(nimbusVersion)
+    variant.manifestPlaceholders.put("gamAppId",
+        providers.gradleProperty("sample_gam_app_id")
+            .orElse("ca-app-pub-3940256099942544~3347511713"))
 
     // Other keys that can be configured in the sample app
     listOf(

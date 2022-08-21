@@ -1,14 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-    }
-    plugins {
-        id("com.android.application") version("7.2.2")
-        kotlin("android") version("1.7.10")
     }
 }
 

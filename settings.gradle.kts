@@ -7,11 +7,8 @@ pluginManagement {
         gradlePluginPortal()
     }
     plugins {
-        val androidVersion: String by settings
-        val kotlinVersion: String by settings
-        id("com.android.application") version(androidVersion)
-        id("com.android.library") version(androidVersion)
-        kotlin("android") version(kotlinVersion)
+        id("com.android.application") version("7.2.2")
+        kotlin("android") version("1.7.10")
     }
 }
 
@@ -47,4 +44,3 @@ dependencyResolutionManagement {
 rootProject.name = "nimbus-android-sample"
 
 include("app")
-include("sample")

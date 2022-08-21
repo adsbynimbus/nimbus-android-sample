@@ -1,11 +1,9 @@
 package com.adsbynimbus.android.sample
 
 import android.content.Context
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.render.BlockingAdRenderer
 import com.adsbynimbus.request.*
 import com.amazon.device.ads.AdRegistration
 import com.amazon.device.ads.DTBAdSize

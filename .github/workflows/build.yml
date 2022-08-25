@@ -41,7 +41,7 @@ jobs:
 
   next-build:
     name: Internal App Build
-    if: ${{ github.event_name == 'pull_request' && !startsWith(github.ref_name, 'arch')}}
+    if: ${{ github.event_name == 'pull_request' && !startsWith(github.head_ref, 'arch')}}
     environment: internal
     runs-on: ubuntu-latest
     steps:

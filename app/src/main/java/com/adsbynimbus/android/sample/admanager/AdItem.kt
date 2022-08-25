@@ -14,4 +14,5 @@ enum class AdItem(
     REWARDED_STATIC("Rewarded Static (5 sec)"),
     REWARDED_VIDEO("Rewarded Video (5 sec)"),
     REWARDED_VIDEO_UNITY("Rewarded Video Unity (5 sec)"),
+    ADS_IN_LIST("Ads in ScrollView")
 }

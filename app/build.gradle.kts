@@ -4,7 +4,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "1.12.1"
+val nimbusVersion = "1.12.2"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {

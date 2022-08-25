@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
+import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -124,6 +125,35 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 requireActivity(),
             ) {
                 it.addListener("Rewarded Video Controller (Unity)")
+            }
+            AdItem.ADS_IN_LIST -> {
+                LayoutAdsInListBinding.inflate(inflater, adFrame, true).apply {
+                    adManager.showAd(
+                        NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER),
+                        20,
+                        adFrameBanner,
+                    ) {
+                        adController = it.apply { addListener("Scrolling Banner Controller") }
+                    }
+                    adManager.showAd(
+                        NimbusRequest.forInterstitialAd("test_interstitial_static").apply {
+                            request.imp[0].video = null
+                        },
+                        20,
+                        adFrameImage,
+                    ) {
+                        adController = it.apply { addListener("Scrolling Static Controller") }
+                    }
+                    adManager.showAd(
+                        NimbusRequest.forInterstitialAd("test_interstitial_video").apply {
+                            request.imp[0].banner = null
+                        },
+                        20,
+                        adFrameVideo,
+                    ) {
+                        adController = it.apply { addListener("Scrolling Video Controller") }
+                    }
+                }
             }
         }
     }.root

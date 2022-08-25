@@ -17,6 +17,8 @@ import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.NimbusResponse
 import com.adsbynimbus.request.RequestManager
+import com.amazon.device.ads.DTBAdRequest
+import com.amazon.device.ads.DTBAdSize
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
@@ -30,6 +32,11 @@ class GAMDemoFragment : Fragment() {
 
 
     private var adView: AdManagerAdView? = null
+
+    val bannerBidders = listOf(
+        NimbusBidder { NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER) },
+        ApsBidder { DTBAdRequest(requireContext()).apply { setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER)) } }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,22 +79,21 @@ class GAMDemoFragment : Fragment() {
                     Timber.w("Error loading banner ad %s", p0.message)
                 }
             }
-        }
-        addView(adView)
 
-        val requestBuilder = AdManagerAdRequest.Builder()
-        adManager.makeRequest(
-            requireContext(),
-            NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER),
-            object : RequestManager.Listener {
-                override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                    if (isDynamicPrice) {
-                        requestBuilder.applyDynamicPrice(nimbusResponse) { "10" }
-                    }
-                    adView?.loadAd(requestBuilder.build())
+            this@requestBannerAd.addView(this)
+
+            if (!isDynamicPrice) loadAd(AdManagerAdRequest.Builder().build()) else {
+                dynamicPriceAuction(
+                    bidders = bannerBidders,
+                    refreshEvery = 5,
+                    onBidReceived = { Timber.i("Received Bid ${it.response}")}
+                ) { adManagerRequestBuilder ->
+                    loadAd(adManagerRequestBuilder.build().also {
+                        Timber.i("DynamicPriceKeys ${it.customTargeting.keySet().joinToString()}")
+                    })
                 }
             }
-        )
+        }
     }
 
     private fun Context.requestDynamicInterstitialAd() {

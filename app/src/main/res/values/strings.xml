@@ -33,4 +33,5 @@
     <string name="custom_dialog_title">Attention</string>
     <string name="custom_dialog_button">OK</string>
     <string name="custom_dialog_message">"%1$s is not set in gradle.properties"</string>
+    <string name="title_internal">Internal</string>
 </resources>

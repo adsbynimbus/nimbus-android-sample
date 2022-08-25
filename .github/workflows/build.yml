@@ -33,24 +33,15 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ./.gradle/configuration-cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Run Gradle Build
         run: ./gradlew build check --stacktrace
 
   next-build:
     name: Internal App Build
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' && !startsWith(github.head_ref, 'arch')}}
     environment: internal
     runs-on: ubuntu-latest
     steps:
@@ -64,7 +55,7 @@ jobs:
       - name: Checkout Sample code
         uses: actions/checkout@v3
         with:
-          path: 'shared'
+          path: 'sample'
           lfs: true
 
       - name: Setup Java
@@ -73,17 +64,8 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ./.gradle/configuration-cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Setup Firebase Key
         run: echo ${{ secrets.FIREBASE_DEPLOY_JSON }} | base64 --decode > ./firebase.json

@@ -6,7 +6,7 @@ Welcome to Nimbus Sample App - ads by publishers, for publishers.
 
 ### Requirements
 
-- Android 12 SDK (API Level 31)
+- Android 13 SDK (API Level 33)
 
 ### Installation
 
@@ -17,13 +17,13 @@ After cloning this repo, open it in Android Studio wait for the Gradle sync to f
 The sample application is bundled with keys pointing to a development environment defined in the 
 root project gradle.properties file. If you would like to use your production keys, replace the 
 `sample_publisher_key` and `sample_api_key` in that file or locate the `PUBLISHER_KEY` and 
-`API_KEY` buildConfigFields in `sample/build.gradle.kts`
+`API_KEY` buildConfigFields in `app/build.gradle.kts`
 
 ### Optional IDs
 
 In order to see APS/FAN/GAM/Unity examples you must also supply it's IDs. You can do so by
 adding the IDs in the predefined fields in the root project `gradle.properties` file or by replacing
-the buildConfigFields in `sample/build.gradle.kts`
+the buildConfigFields in `app/build.gradle.kts`
 
 ## How to run
 
@@ -81,7 +81,7 @@ that matches the size defined in the VAST markup.
 
 ## Need help?
 
-You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.11.5/index.html)
+You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.12.2/index.html)
 
 ## License
 

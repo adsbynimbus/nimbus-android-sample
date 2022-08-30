@@ -28,3 +28,5 @@ fun String.unescape(): String = replace(Regex("\\s+"), " ")
     .replace("""\ """, "")
     .trim()
 
+const val tcfString =
+    "CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"

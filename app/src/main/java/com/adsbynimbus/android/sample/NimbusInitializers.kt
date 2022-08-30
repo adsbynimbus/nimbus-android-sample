@@ -1,14 +1,12 @@
 package com.adsbynimbus.android.sample
 
 import android.content.Context
-import android.content.pm.PackageManager.GET_META_DATA
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.request.*
 import com.amazon.device.ads.AdRegistration
 import com.amazon.device.ads.DTBAdSize
-import com.google.android.gms.ads.MobileAds
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -19,7 +17,7 @@ class NimbusInitializer : Initializer<Nimbus> {
         initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY)
         testMode = true
 
-        // The Timber.DebugTree proxies all calls to Timber.log to the logcat console
+        /* The Timber.DebugTree proxies all calls to Timber.log to the logcat console */
         Timber.plant(Timber.DebugTree())
 
         /*
@@ -48,7 +46,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             }))
 
 
-        // APS Demand Provider
+        /* APS Demand Provider */
         val apsAdUnits = mutableListOf<DTBAdSize>().apply {
             if (BuildConfig.APS_BANNER.isNotEmpty()) {
                 add(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
@@ -61,7 +59,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             }
         }
         if (apsAdUnits.isNotEmpty()) {
-            // The following initialize function is a vararg function unwrapping the above list
+            /* The following initialize function is a vararg function unwrapping the above list */
             ApsDemandProvider.initialize(
                 context,
                 BuildConfig.APS_APP_KEY,
@@ -76,13 +74,13 @@ class NimbusInitializer : Initializer<Nimbus> {
             BuildConfig.FAN_BANNER_320_ID,
             BuildConfig.FAN_INTERSTITIAL_ID,
         )
-        // Initializes the FANDemandProvider if any of the keys have been defined
+        /* Initializes the FANDemandProvider if any of the keys have been defined */
         facebookAdUnitIds.firstOrNull { it.isNotEmpty() }?.let {
             FANDemandProvider.initialize(context, it.substringBefore("_"))
             //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
         }
 
-        // Unity
+        /* Unity */
         if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
             UnityDemandProvider.initializeTestMode(context, BuildConfig.UNITY_GAME_ID)
         }

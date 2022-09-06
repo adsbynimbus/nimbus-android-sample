@@ -7,6 +7,7 @@
     <com.adsbynimbus.android.sample.common.SampleSwitchPreference
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerBelow="true"
         app:defaultValue="true"
         app:key="test_mode"
         app:switchWidgetContentDescription="nimbusTestModePreferenceSwitch"
@@ -16,24 +17,30 @@
     <com.adsbynimbus.android.sample.common.SampleSwitchPreference
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         app:defaultValue="false"
         app:switchWidgetContentDescription="coppaPreferenceSwitch"
         app:key="coppa"
         app:title="@string/settings_coppa"
-        app:titleContentDescription="coppaPreferenceTextView"/>
+        app:titleContentDescription="coppaPreferenceTextView" />
 
     <com.adsbynimbus.android.sample.common.SampleSwitchPreference
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         app:defaultValue="false"
         app:switchWidgetContentDescription="forceNoFillPreferenceSwitch"
         app:key="force_no_fill"
         app:title="@string/settings_force_no_fill"
-        app:titleContentDescription="forceNoFillPreferenceTextView"/>
+        app:titleContentDescription="forceNoFillPreferenceTextView" />
 
     <com.adsbynimbus.android.sample.common.SampleSwitchPreference
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         app:defaultValue="false"
         app:switchWidgetContentDescription="enableViewabilityPreferenceSwitch"
         app:key="enable_viewability"
@@ -48,6 +55,7 @@
         <com.adsbynimbus.android.sample.common.SampleSwitchPreference
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="user_did_consent"
             app:switchWidgetContentDescription="gdprConsentPreferenceSwitch"

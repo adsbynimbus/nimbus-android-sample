@@ -2,40 +2,28 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="75dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="15dp">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp">
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:fontFamily="@font/proxima_nova_bold"
+        android:textColor="@color/turquoise"
+        android:textSize="18sp"
+        tools:text="Name" />
 
-        <TextView
-            android:id="@android:id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/proxima_nova_bold"
-            android:textColor="@color/turquoise"
-            android:textSize="18sp"
-            tools:text="Name" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchWidget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/turquoise"
-            android:theme="@style/SwitchStyle"
-            tools:checked="true" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#D8D8D8" />
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/turquoise"
+        android:theme="@style/SwitchStyle"
+        tools:checked="true" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

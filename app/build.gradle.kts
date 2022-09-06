@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.android.build.api.variant.BuildConfigField
 
 plugins {
@@ -25,8 +27,8 @@ android {
 
 androidComponents.onVariants { variant ->
     variant.manifestPlaceholders.put("gamAppId",
-        providers.gradleProperty("sample_gam_app_id")
-            .orElse("ca-app-pub-3940256099942544~3347511713"))
+        providers.gradleProperty("sample_gam_app_id").orElse("ca-app-pub-3940256099942544~3347511713")
+    )
 
     // Other keys that can be configured in the sample app
     listOf(
@@ -49,7 +51,7 @@ androidComponents.onVariants { variant ->
 }
 
 dependencies {
-    // Nimbus (Version is defined by the project version above)
+    /* Nimbus (Version is defined by the project version above) */
     api("com.adsbynimbus.android:nimbus:$nimbusVersion")
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
@@ -59,49 +61,33 @@ dependencies {
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
-    // Aps
-    api("com.amazon.android:aps-sdk:9.5.5")
-
-    // Facebook
-    api("com.facebook.android:audience-network-sdk:6.11.0")
-
-    // Google
-    api("com.google.android.gms:play-services-ads:21.1.0")
-
-    // Core, Fragment, AppCompat
+    /* Androidx Libraries */
+    api("androidx.activity:activity-ktx:1.5.1")
+    api("androidx.annotation:annotation:1.4.0")
+    api("androidx.annotation:annotation-experimental:1.2.0")
     api("androidx.appcompat:appcompat:1.5.0")
     api("androidx.core:core-ktx:1.8.0")
     api("androidx.fragment:fragment-ktx:1.5.2")
-
-    // Navigation
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     api("androidx.navigation:navigation-fragment-ktx:2.5.1")
     api("androidx.navigation:navigation-runtime-ktx:2.5.1")
     api("androidx.navigation:navigation-ui-ktx:2.5.1")
-
-    // Preferences
     api("androidx.preference:preference-ktx:1.2.0")
-
-    // RecyclerView
     api("androidx.recyclerview:recyclerview:1.2.1")
-
-    // Startup
     api("androidx.startup:startup-runtime:1.1.1")
 
-    // Material
+    /* Material */
     api("com.google.android.material:material:1.6.1")
 
-    // OkHttp
+    /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.10.0")
     api("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-    // Timber
+    /* Logging */
     api("com.jakewharton.timber:timber:5.0.1")
 
     constraints {
         api("androidx.activity:activity:1.5.1")
-        api("androidx.activity:activity-ktx:1.5.1")
-        api("androidx.annotation:annotation:1.4.0")
-        api("androidx.annotation:annotation-experimental:1.2.0")
         api("androidx.browser:browser:1.4.0")
         api("androidx.collection:collection:1.2.0")
         api("androidx.collection:collection-ktx:1.2.0")
@@ -110,15 +96,14 @@ dependencies {
         api("androidx.lifecycle:lifecycle-livedata:2.5.1")
         api("androidx.lifecycle:lifecycle-runtime:2.5.1")
         api("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-        api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
         api("androidx.media2:media2-player:1.2.1")
         api("androidx.media2:media2-widget:1.2.1")
         api("androidx.media:media:1.6.0")
         api("androidx.room:room-runtime:2.4.3")
         api("androidx.transition:transition:1.4.1")
         api("androidx.work:work-runtime:2.7.1")
-        api("com.google.android.gms:play-services-ads-identifier:18.0.1")
-        api("com.google.ads.interactivemedia.v3:interactivemedia:3.27.1")
+        api("com.google.ads.interactivemedia.v3:interactivemedia:3.28.1")
+        api("com.google.android.gms:play-services-ads:21.1.0")
         api("com.squareup.okio:okio:3.2.0")
         api("org.jetbrains:annotations:23.0.0")
     }

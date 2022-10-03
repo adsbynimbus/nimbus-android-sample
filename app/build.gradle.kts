@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "1.12.2"
+val nimbusVersion = "2.0.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -17,7 +17,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
 
-        // This is one example of adding keys to the application using buildConfigField
+        /* This is one example of adding keys to the application using buildConfigField */
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
         buildConfigField("String", "API_KEY", "\"${property("sample_api_key")}\"")
     }
@@ -30,7 +30,7 @@ androidComponents.onVariants { variant ->
         providers.gradleProperty("sample_gam_app_id").orElse("ca-app-pub-3940256099942544~3347511713")
     )
 
-    // Other keys that can be configured in the sample app
+    /* Other keys that can be configured in the sample app */
     listOf(
             "sample_aps_app_key",
             "sample_aps_banner",
@@ -62,16 +62,16 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.5.1")
-    api("androidx.annotation:annotation:1.4.0")
-    api("androidx.annotation:annotation-experimental:1.2.0")
-    api("androidx.appcompat:appcompat:1.5.0")
-    api("androidx.core:core-ktx:1.8.0")
-    api("androidx.fragment:fragment-ktx:1.5.2")
+    api("androidx.activity:activity-ktx:1.6.0")
+    api("androidx.annotation:annotation:1.5.0")
+    api("androidx.annotation:annotation-experimental:1.3.0")
+    api("androidx.appcompat:appcompat:1.5.1")
+    api("androidx.core:core-ktx:1.9.0")
+    api("androidx.fragment:fragment-ktx:1.5.3")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    api("androidx.navigation:navigation-fragment-ktx:2.5.1")
-    api("androidx.navigation:navigation-runtime-ktx:2.5.1")
-    api("androidx.navigation:navigation-ui-ktx:2.5.1")
+    api("androidx.navigation:navigation-fragment-ktx:2.5.2")
+    api("androidx.navigation:navigation-runtime-ktx:2.5.2")
+    api("androidx.navigation:navigation-ui-ktx:2.5.2")
     api("androidx.preference:preference-ktx:1.2.0")
     api("androidx.recyclerview:recyclerview:1.2.1")
     api("androidx.startup:startup-runtime:1.1.1")
@@ -87,7 +87,7 @@ dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
 
     constraints {
-        api("androidx.activity:activity:1.5.1")
+        api("androidx.activity:activity:1.6.0")
         api("androidx.browser:browser:1.4.0")
         api("androidx.collection:collection:1.2.0")
         api("androidx.collection:collection-ktx:1.2.0")
@@ -102,8 +102,8 @@ dependencies {
         api("androidx.room:room-runtime:2.4.3")
         api("androidx.transition:transition:1.4.1")
         api("androidx.work:work-runtime:2.7.1")
-        api("com.google.ads.interactivemedia.v3:interactivemedia:3.28.1")
-        api("com.google.android.gms:play-services-ads:21.1.0")
+        api("com.google.ads.interactivemedia.v3:interactivemedia:3.28.2")
+        api("com.google.android.gms:play-services-ads:21.2.0")
         api("com.squareup.okio:okio:3.2.0")
         api("org.jetbrains:annotations:23.0.0")
     }

@@ -1,0 +1,19 @@
+name: Build Apps
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions: read-all
+
+jobs:
+  sample:
+    name: Build Sample App
+    uses: ./.github/workflows/build.yml
+
+  internal:
+    name: Build Internal App
+    if: ${{ !startsWith(github.head_ref, 'arch') }}
+    uses: ./.github/workflows/internal.yml
+    secrets: inherit

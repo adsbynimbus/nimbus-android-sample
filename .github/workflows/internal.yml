@@ -50,7 +50,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: :app:build
-        working-directory: nimbus-android
+          build-root-directory: nimbus-android
 
       - name: Upload to Firebase
         if: ${{ github.event_name == 'workflow_dispatch' }}

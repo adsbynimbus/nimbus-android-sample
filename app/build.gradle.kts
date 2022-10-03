@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "1.12.2"
+val nimbusVersion = "2.0.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -17,7 +17,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
 
-        // This is one example of adding keys to the application using buildConfigField
+        /* This is one example of adding keys to the application using buildConfigField */
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
         buildConfigField("String", "API_KEY", "\"${property("sample_api_key")}\"")
     }
@@ -30,7 +30,7 @@ androidComponents.onVariants { variant ->
         providers.gradleProperty("sample_gam_app_id").orElse("ca-app-pub-3940256099942544~3347511713")
     )
 
-    // Other keys that can be configured in the sample app
+    /* Other keys that can be configured in the sample app */
     listOf(
             "sample_aps_app_key",
             "sample_aps_banner",

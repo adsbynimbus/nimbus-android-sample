@@ -1,4 +1,4 @@
-name: Sample App Build
+name: Sample App
 
 on:
   push:
@@ -6,9 +6,7 @@ on:
       - main
     tags-ignore:
       - '**'
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 permissions: read-all
 

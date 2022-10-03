@@ -1,9 +1,7 @@
-name: Internal App Build
+name: Internal App
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
     inputs:
       build_notes:
@@ -19,21 +17,28 @@ env:
 
 jobs:
   build:
-    if: ${{ !startsWith(github.head_ref, 'arch') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Internal code
         uses: actions/checkout@v3
         with:
           repository: 'timehop/nimbus-android'
+          path: 'nimbus-android'
           ssh-key: ${{ secrets.NIMBUS_ANDROID_KEY }}
           lfs: true
 
       - name: Checkout Sample code
         uses: actions/checkout@v3
         with:
-          path: 'sample'
+          path: 'nimbus-android/sample'
           lfs: true
+
+      - name: Checkout Nimbus Android Extensions
+        uses: actions/checkout@v3
+        with:
+          repository: 'timehop/nimbus-android-extensions'
+          path: 'nimbus-android-extensions'
+          ssh-key: ${{ secrets.EXTENSIONS_DEPLOY_KEY }}
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -45,6 +50,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: :app:build
+        working-directory: nimbus-android
 
       - name: Upload to Firebase
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -54,3 +60,4 @@ jobs:
         run: |
           echo ${{ secrets.FIREBASE_DEPLOY_JSON }} | base64 --decode > ./firebase.json
           ./gradlew appDistributionUploadDebug
+        working-directory: nimbus-android

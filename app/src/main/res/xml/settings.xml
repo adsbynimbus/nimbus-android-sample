@@ -62,6 +62,16 @@
             app:title="@string/settings_user_did_consent"
             app:titleContentDescription="gdprConsentPreferenceTextView"/>
 
+        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+            android:layout="@layout/layout_settings_switch_preference"
+            android:selectable="false"
+            app:allowDividerBelow="true"
+            app:defaultValue="false"
+            app:key="ccpa_consent"
+            app:switchWidgetContentDescription="ccpaConsentPreferenceSwitch"
+            app:title="@string/settings_user_ccpa_consent"
+            app:titleContentDescription="ccpaConsentPreferenceTextView"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

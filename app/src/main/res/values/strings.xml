@@ -27,6 +27,7 @@
     <string name="settings_force_no_fill">Force No Fill</string>
     <string name="settings_enable_viewability">Send OMID Viewability Flag</string>
     <string name="settings_user_did_consent">GDPR Consent</string>
+    <string name="settings_user_ccpa_consent">CCPA Consent</string>
 
     <string name="google">Google</string>
 

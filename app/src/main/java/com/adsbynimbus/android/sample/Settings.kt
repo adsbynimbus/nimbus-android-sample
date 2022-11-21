@@ -30,6 +30,7 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                     if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString")
                 }.apply()
             }
+            "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf {_ -> getBoolean(it, false) }
             "enable_viewability" -> ViewabilityProvider.thirdPartyViewabilityEnabled = getBoolean(it, false)
         }
     }

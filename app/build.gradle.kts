@@ -62,22 +62,22 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.6.0")
+    api("androidx.activity:activity-ktx:1.6.1")
     api("androidx.annotation:annotation:1.5.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.5.1")
     api("androidx.core:core-ktx:1.9.0")
-    api("androidx.fragment:fragment-ktx:1.5.3")
+    api("androidx.fragment:fragment-ktx:1.5.4")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    api("androidx.navigation:navigation-fragment-ktx:2.5.2")
-    api("androidx.navigation:navigation-runtime-ktx:2.5.2")
-    api("androidx.navigation:navigation-ui-ktx:2.5.2")
+    api("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    api("androidx.navigation:navigation-runtime-ktx:2.5.3")
+    api("androidx.navigation:navigation-ui-ktx:2.5.3")
     api("androidx.preference:preference-ktx:1.2.0")
     api("androidx.recyclerview:recyclerview:1.2.1")
     api("androidx.startup:startup-runtime:1.1.1")
 
     /* Material */
-    api("com.google.android.material:material:1.6.1")
+    api("com.google.android.material:material:1.7.0")
 
     /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.10.0")
@@ -87,7 +87,7 @@ dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
 
     constraints {
-        api("androidx.activity:activity:1.6.0")
+        api("androidx.activity:activity:1.6.1")
         api("androidx.browser:browser:1.4.0")
         api("androidx.collection:collection:1.2.0")
         api("androidx.collection:collection-ktx:1.2.0")
@@ -103,7 +103,7 @@ dependencies {
         api("androidx.transition:transition:1.4.1")
         api("androidx.work:work-runtime:2.7.1")
         api("com.google.ads.interactivemedia.v3:interactivemedia:3.28.2")
-        api("com.google.android.gms:play-services-ads:21.2.0")
+        api("com.google.android.gms:play-services-ads:21.3.0")
         api("com.squareup.okio:okio:3.2.0")
         api("org.jetbrains:annotations:23.0.0")
     }

@@ -21,6 +21,10 @@ object SettingsListener : SharedPreferences.OnSharedPreferenceChangeListener {
 }
 
 fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
+    val gppTestString =
+        "DBABMA~CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
+    val gppTestSids = "2"
+
     features.forEach {
         when (it) {
             "test_mode" -> Nimbus.setTestMode(getBoolean(it, true))
@@ -30,8 +34,15 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                     if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString")
                 }.apply()
             }
-            "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf {_ -> getBoolean(it, false) }
+            "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
             "enable_viewability" -> ViewabilityProvider.thirdPartyViewabilityEnabled = getBoolean(it, false)
+            "enabled_gpp" -> getBoolean(it, false).let { testEnabled ->
+                edit().apply {
+                    if (testEnabled) putString("IABGPP_HDR_GppString",
+                        gppTestString) else remove("IABGPP_HDR_GppString")
+                    if (testEnabled) putString("IABGPP_GppSID", gppTestSids) else remove("IABGPP_GppSID")
+                }.apply()
+            }
         }
     }
 }

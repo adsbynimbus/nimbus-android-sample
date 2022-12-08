@@ -22,12 +22,14 @@
     <string name="settings_title">Settings</string>
     <string name="settings_subtitle">Configure your test app experience</string>
     <string name="settings_user_details">User Details</string>
+    <string name="settings_regs_details">Regs Details</string>
     <string name="settings_test_mode">Nimbus Test Mode</string>
     <string name="settings_coppa">Set COPPA On</string>
     <string name="settings_force_no_fill">Force No Fill</string>
     <string name="settings_enable_viewability">Send OMID Viewability Flag</string>
     <string name="settings_user_did_consent">GDPR Consent</string>
     <string name="settings_user_ccpa_consent">CCPA Consent</string>
+    <string name="settings_regs_gpp_consent">Send GPP Consent String</string>
 
     <string name="google">Google</string>
 

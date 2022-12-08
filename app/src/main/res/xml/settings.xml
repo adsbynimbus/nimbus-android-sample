@@ -74,4 +74,21 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/layout_settings_switch_preference"
+        app:layout="@layout/adapter_sample_app_section"
+        app:title="@string/settings_regs_details">
+
+        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+            android:layout="@layout/layout_settings_switch_preference"
+            android:selectable="false"
+            app:allowDividerBelow="true"
+            app:defaultValue="false"
+            app:key="enabled_gpp"
+            app:switchWidgetContentDescription="enabledGppPreferenceSwitch"
+            app:title="@string/settings_regs_gpp_consent"
+            app:titleContentDescription="enableGppPreferenceTextView"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

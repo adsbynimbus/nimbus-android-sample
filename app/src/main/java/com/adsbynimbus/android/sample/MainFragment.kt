@@ -18,6 +18,7 @@ class MainFragment : Fragment() {
     ) : Describable {
         SHOW_AD_DEMO("Show Ad Demo"),
         MEDIATION_PLATFORMS("Mediation Platforms"),
+        LOCK_SCREEN("Lock Screen"),
         TEST_RENDER("Test Render"),
         SETTINGS("Settings"),
     }
@@ -31,6 +32,7 @@ class MainFragment : Fragment() {
             val action = when (item) {
                 Item.SHOW_AD_DEMO -> R.id.to_adDemoFragment
                 Item.MEDIATION_PLATFORMS -> R.id.to_mediationPlatformsFragment
+                Item.LOCK_SCREEN -> R.id.to_lockScreen
                 Item.TEST_RENDER -> R.id.to_testRenderFragment
                 Item.SETTINGS -> R.id.to_settingsFragment
             }

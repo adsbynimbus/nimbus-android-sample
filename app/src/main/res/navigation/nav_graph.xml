@@ -23,6 +23,9 @@
         <action
             android:id="@+id/to_testRenderFragment"
             app:destination="@id/testRenderFragment" />
+        <action
+            android:id="@+id/to_lockScreen"
+            app:destination="@id/lockScreenActivity" />
     </fragment>
     <fragment
         android:id="@+id/adDemoFragment"
@@ -107,4 +110,7 @@
             android:name="subtitleText"
             app:argType="string" />
     </fragment>
+    <activity
+        android:id="@+id/lockScreenActivity"
+        android:name="com.adsbynimbus.android.sample.lockscreen.LockScreenActivity" />
 </navigation>

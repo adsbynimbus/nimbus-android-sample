@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -24,6 +26,15 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.adsbynimbus.android.sample.lockscreen.LockScreenActivity"
+            android:screenOrientation="fullSensor"
+            android:showOnLockScreen="true"/>
+
+        <service
+            android:name="com.adsbynimbus.android.sample.lockscreen.LockScreenService"
+            android:label="AdsByNimbus" />
 
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"

@@ -58,7 +58,7 @@ If the container shows a blank white screen (a potential bad ad) or further veri
 1. Ensure the Sample app is running using an Emulator or a physical device with USB Debugging enabled.
 2. Open Chrome and navigate to `chrome://inspect`. A list of active WebViews in com.adsbynimbus.android.sample will be  
 displayed.
-3. Click the `inspect` button on the WebView named `about:blank about:blank` that matches the size of the screen.
+3. Click the `inspect` button on the WebView named `about:blank` that matches the size of the screen.
 4. In the DevTools window, select the Console tab and inspect the output for any errors. 
 
 ##### Any errors that appear in the DevTools console can be ignored if the ad renders properly and there are minimal reporting discrepancies between Nimbus and the network serving the creative.
@@ -81,7 +81,7 @@ that matches the size defined in the VAST markup.
 
 ## Need help?
 
-You can check out [Nimbus Android Quick Start Guide](https://adsbynimbus-public.s3.amazonaws.com/android/docs/1.12.2/index.html)
+You can check out [Nimbus Android Documentation](https://docs.adsbynimbus.com/docs/sdk/android/integration)
 
 ## License
 

@@ -10,4 +10,9 @@ android {
         minSdk = 21
         targetSdk = 33
     }
+
+    compileOptions {
+        sourceCompatibility(11)
+        targetCompatibility(11)
+    }
 }

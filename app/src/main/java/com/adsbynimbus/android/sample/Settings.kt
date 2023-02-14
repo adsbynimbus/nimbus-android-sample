@@ -35,7 +35,7 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                 }.apply()
             }
             "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
-            "enable_viewability" -> ViewabilityProvider.thirdPartyViewabilityEnabled = getBoolean(it, false)
+            "enable_viewability" -> ViewabilityProvider.thirdPartyViewabilityEnabled = getBoolean(it, true)
             "enabled_gpp" -> getBoolean(it, false).let { testEnabled ->
                 edit().apply {
                     if (testEnabled) putString("IABGPP_HDR_GppString",

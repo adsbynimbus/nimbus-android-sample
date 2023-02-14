@@ -44,8 +44,8 @@ androidComponents.onVariants { variant ->
             "sample_unity_game_id",
     ).forEach {
         variant.buildConfigFields.put(
-                it.substringAfter("sample_").toUpperCase(),
-                providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
+            it.substringAfter("sample_").toUpperCase(),
+            providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
     }
 }
@@ -65,7 +65,7 @@ dependencies {
     api("androidx.activity:activity-ktx:1.6.1")
     api("androidx.annotation:annotation:1.5.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
-    api("androidx.appcompat:appcompat:1.6.0")
+    api("androidx.appcompat:appcompat:1.6.1")
     api("androidx.core:core-ktx:1.9.0")
     api("androidx.fragment:fragment-ktx:1.5.5")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
@@ -88,7 +88,7 @@ dependencies {
 
     constraints {
         api("androidx.activity:activity:1.6.1")
-        api("androidx.browser:browser:1.4.0")
+        api("androidx.browser:browser:1.5.0")
         api("androidx.collection:collection:1.2.0")
         api("androidx.collection:collection-ktx:1.2.0")
         api("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -101,9 +101,9 @@ dependencies {
         api("androidx.media:media:1.6.0")
         api("androidx.room:room-runtime:2.5.0")
         api("androidx.transition:transition:1.4.1")
-        api("androidx.work:work-runtime:2.7.1")
+        api("androidx.work:work-runtime:2.8.0")
         api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
-        api("com.google.android.gms:play-services-ads:21.4.0")
+        api("com.google.android.gms:play-services-ads:21.5.0")
         api("com.squareup.okio:okio:3.3.0")
         api("org.jetbrains:annotations:24.0.0")
     }

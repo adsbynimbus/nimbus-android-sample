@@ -23,7 +23,37 @@ import timber.log.Timber
 class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
 
     private var adController: AdController? = null
+        set(controller) { field = controller?.apply { listeners.add(this@FANDemoFragment) } }
+
     lateinit var item: FANAdItem
+
+    private val FANAdItem.nimbusAd get() = object : NimbusAd {
+        override fun placementId(): String = placementId(testAdTypes.random())
+
+        override fun type(): String = adType
+
+        override fun network(): String = FANAdRenderer.FACEBOOK
+
+        override fun isInterstitial(): Boolean = isInterstitial
+
+        override fun markup(): String = ""
+
+        override fun width(): Int = width
+
+        override fun height(): Int = height
+
+        override fun trackersForEvent(event: AdEvent): Collection<String> = emptyList()
+    }
+
+    private fun ViewGroup.loadAd(item: FANAdItem) = when (item) {
+        FANAdItem.BANNER,
+        FANAdItem.NATIVE -> Renderer.loadAd(item.nimbusAd, this, this@FANDemoFragment)
+        FANAdItem.INTERSTITIAL -> {
+            adController = context.loadBlockingAd(item.nimbusAd).also {
+                if (it == null) Timber.i("No placement id for that ad type")
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,32 +64,7 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
         headerView.setTitleText(bundle.getString("titleText", ""))
         headerView.setSubtitleText(bundle.getString("subtitleText", ""))
         item = bundle.getSerializable("item") as FANAdItem
-
-        val nimbusAd = object : NimbusAd {
-            override fun placementId(): String = item.placementId(item.testAdTypes.random())
-
-            override fun type(): String = item.adType
-
-            override fun network(): String = FANAdRenderer.FACEBOOK
-
-            override fun isInterstitial(): Boolean = item.isInterstitial
-
-            override fun markup(): String = ""
-
-            override fun width(): Int = if (item == FANAdItem.BANNER) 320 else 0
-
-            override fun height(): Int = if (item == FANAdItem.BANNER) 50 else 0
-
-            override fun trackersForEvent(event: AdEvent): Collection<String> = emptyList()
-        }
-        when (item) {
-            FANAdItem.BANNER, FANAdItem.NATIVE ->
-                Renderer.loadAd(nimbusAd, adLayout, this@FANDemoFragment)
-            FANAdItem.INTERSTITIAL ->
-                requireActivity().loadBlockingAd(nimbusAd)?.apply {
-                    listeners().add(this@FANDemoFragment)
-                } ?: run { Timber.i("No placement id for that ad type") }
-        }
+        adLayout.loadAd(item)
     }.root
 
     override fun onDestroyView() {

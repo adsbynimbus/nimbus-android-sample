@@ -9,13 +9,17 @@ enum class FANAdItem(
     val adType: String,
     val testAdTypes: Array<TestAdType>,
     val gradlePropertyName: String,
-    override val description: String
+    override val description: String,
+    val width: Int = 0,
+    val height: Int = 0,
 ) : Describable {
     BANNER(
         "static",
         arrayOf(TestAdType.IMG_16_9_APP_INSTALL, TestAdType.IMG_16_9_LINK),
         "FAN_BANNER_320_ID",
         "Facebook Banner",
+        width = 320,
+        height = 50,
     ),
 
     INTERSTITIAL(

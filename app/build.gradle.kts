@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.3.0"
+val nimbusVersion = "2.4.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -56,7 +56,6 @@ dependencies {
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    api("com.adsbynimbus.android:extension-viewability:$nimbusVersion")
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

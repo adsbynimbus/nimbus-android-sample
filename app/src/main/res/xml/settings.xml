@@ -41,7 +41,7 @@
         android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
-        app:defaultValue="false"
+        app:defaultValue="true"
         app:switchWidgetContentDescription="enableViewabilityPreferenceSwitch"
         app:key="enable_viewability"
         app:title="@string/settings_enable_viewability"

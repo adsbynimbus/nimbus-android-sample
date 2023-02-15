@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.ViewabilityProvider
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -35,7 +34,7 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                 }.apply()
             }
             "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
-            "enable_viewability" -> ViewabilityProvider.thirdPartyViewabilityEnabled = getBoolean(it, true)
+            "enable_viewability" -> Nimbus.thirdPartyViewabilityEnabled = getBoolean(it, true)
             "enabled_gpp" -> getBoolean(it, false).let { testEnabled ->
                 edit().apply {
                     if (testEnabled) putString("IABGPP_HDR_GppString",

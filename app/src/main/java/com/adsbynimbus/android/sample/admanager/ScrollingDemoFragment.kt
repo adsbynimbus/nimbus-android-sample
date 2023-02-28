@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentScrollingDemoBinding
-import com.adsbynimbus.android.sample.forVideoAd
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
@@ -87,7 +86,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
                 3 -> NimbusRequest.forBannerAd("test_banner_interstitial_land",
                     Format.INTERSTITIAL_LAND,
                     0)
-                4 -> forVideoAd()
+                4 -> NimbusRequest.forVideoAd("test_video")
                 else -> {
                     forFacebookNative().let {
                         Renderer.loadAd(it, holder.view, object : NimbusAdManager.Listener {

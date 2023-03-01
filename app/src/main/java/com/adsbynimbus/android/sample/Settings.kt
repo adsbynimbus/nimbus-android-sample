@@ -2,6 +2,7 @@ package com.adsbynimbus.android.sample
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
 
@@ -19,29 +20,27 @@ object SettingsListener : SharedPreferences.OnSharedPreferenceChangeListener {
     }
 }
 
-fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
-    val gppTestString =
-        "DBABMA~CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
-    val gppTestSids = "2"
+const val gppTestString =
+    "DBABMA~CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
+const val gppTestSids = "2"
 
+fun SharedPreferences.setGppInSharedPrefs(enabled: Boolean) = edit {
+    if (enabled) putString("IABGPP_HDR_GppString", gppTestString) else remove("IABGPP_HDR_GppString")
+    if (enabled) putString("IABGPP_GppSID", gppTestSids) else remove("IABGPP_GppSID")
+}
+
+
+fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
     features.forEach {
         when (it) {
-            "test_mode" -> Nimbus.setTestMode(getBoolean(it, true))
-            "coppa_on" -> Nimbus.setCOPPA(getBoolean(it, false))
+            "test_mode" -> Nimbus.testMode = getBoolean(it, true)
+            "coppa" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
-                edit().apply {
-                    if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString")
-                }.apply()
+                edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
             }
             "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
             "enable_viewability" -> Nimbus.thirdPartyViewabilityEnabled = getBoolean(it, true)
-            "enabled_gpp" -> getBoolean(it, false).let { testEnabled ->
-                edit().apply {
-                    if (testEnabled) putString("IABGPP_HDR_GppString",
-                        gppTestString) else remove("IABGPP_HDR_GppString")
-                    if (testEnabled) putString("IABGPP_GppSID", gppTestSids) else remove("IABGPP_GppSID")
-                }.apply()
-            }
+            "enabled_gpp" -> setGppInSharedPrefs(enabled = getBoolean(it, false))
         }
     }
 }

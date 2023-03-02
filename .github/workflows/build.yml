@@ -33,3 +33,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
+
+      - name: Upload Nimbus Sample App
+        uses: actions/upload-artifact@v3
+        with:
+          name: nimbus-android-sample
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          retention-days: 5

@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.4.0"
+val nimbusVersion = "2.4.1"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -62,7 +62,7 @@ dependencies {
 
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.6.1")
-    api("androidx.annotation:annotation:1.5.0")
+    api("androidx.annotation:annotation:1.6.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("androidx.core:core-ktx:1.9.0")

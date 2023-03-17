@@ -22,6 +22,7 @@ import com.amazon.device.ads.DTBAdSize
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
@@ -34,7 +35,11 @@ class GAMDemoFragment : Fragment() {
     private var adView: AdManagerAdView? = null
 
     val bannerBidders = listOf(
-        NimbusBidder { NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER) },
+        NimbusBidder {
+            NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER).apply {
+                configureViewability(partnerName = "Google", partnerVersion = MobileAds.getVersion().toString())
+            }
+        },
         ApsBidder { DTBAdRequest(requireContext()).apply { setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER)) } }
     )
 

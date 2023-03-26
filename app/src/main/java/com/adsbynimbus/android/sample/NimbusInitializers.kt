@@ -5,8 +5,6 @@ import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.request.*
-import com.amazon.device.ads.AdRegistration
-import com.amazon.device.ads.DTBAdSize
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -44,29 +42,6 @@ class NimbusInitializer : Initializer<Nimbus> {
                     it.request().newBuilder().addHeader("Nimbus-Test-No-Fill", "true").build()
                 ) else it.proceed(it.request())
             }))
-
-
-        /* APS Demand Provider */
-        val apsAdUnits = mutableListOf<DTBAdSize>().apply {
-            if (BuildConfig.APS_BANNER.isNotEmpty()) {
-                add(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
-            }
-            if (BuildConfig.APS_STATIC.isNotEmpty()) {
-                add(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
-            }
-            if (BuildConfig.APS_VIDEO.isNotEmpty()) with(context.resources.displayMetrics) {
-                add(DTBAdSize.DTBVideo(widthPixels, heightPixels, BuildConfig.APS_VIDEO))
-            }
-        }
-        if (apsAdUnits.isNotEmpty()) {
-            /* The following initialize function is a vararg function unwrapping the above list */
-            ApsDemandProvider.initialize(
-                context,
-                BuildConfig.APS_APP_KEY,
-                *apsAdUnits.toTypedArray()
-            )
-            AdRegistration.enableTesting(true)
-        }
 
         val facebookAdUnitIds = listOf(
             BuildConfig.FAN_NATIVE_ID,

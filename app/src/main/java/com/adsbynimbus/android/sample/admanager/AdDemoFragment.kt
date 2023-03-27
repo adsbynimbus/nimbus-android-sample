@@ -14,6 +14,7 @@ import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.common.SampleAppAdapter
 import com.adsbynimbus.android.sample.common.showCustomDialog
 import com.adsbynimbus.android.sample.databinding.FragmentAdDemoBinding
+import com.amazon.aps.ads.ApsAd
 
 class AdDemoFragment : Fragment() {
 
@@ -38,6 +39,27 @@ class AdDemoFragment : Fragment() {
             }
         }
 
+        val apsItemAdapter = SampleAppAdapter("showAdDemo", enumValues<APSAdItem>()) {
+            when (it) {
+                APSAdItem.BANNER -> if (BuildConfig.APS_BANNER.isEmpty()) {
+                    showCustomDialog("sample_aps_banner", inflater, root.context).show()
+                    return@SampleAppAdapter
+                }
+                APSAdItem.INTERSTITIAL_HYBRID -> {
+                    val keysNotConfigured = BuildConfig.APS_STATIC.isEmpty().also { empty ->
+                        if (empty) showCustomDialog("sample_aps_static", inflater, root.context).show()
+                    } and BuildConfig.APS_VIDEO.isEmpty().also { empty ->
+                        if (empty) showCustomDialog("sample_aps_video", inflater, root.context).show()
+                    }
+                    if (keysNotConfigured) return@SampleAppAdapter
+                }
+            }
+            findNavController().navigate(R.id.to_apsDemoFragment, bundleOf(
+                "item" to it,
+                "titleText" to it.description,
+                "subtitleText" to titleText,
+            ))
+        }
 
         val fanAdItemAdapter = SampleAppAdapter("showAdDemo", enumValues<FANAdItem>()) { item ->
             val adUnitId = when (item) {
@@ -55,7 +77,7 @@ class AdDemoFragment : Fragment() {
                 ))
             }
         }
-        recyclerView.adapter = ConcatAdapter(adItemAdapter, fanAdItemAdapter)
+        recyclerView.adapter = ConcatAdapter(adItemAdapter, apsItemAdapter, fanAdItemAdapter)
         recyclerView.layoutManager = LinearLayoutManager(root.context)
     }.root
 }

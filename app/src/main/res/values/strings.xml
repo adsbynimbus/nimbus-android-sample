@@ -30,6 +30,7 @@
     <string name="settings_user_did_consent">GDPR Consent</string>
     <string name="settings_user_ccpa_consent">CCPA Consent</string>
     <string name="settings_regs_gpp_consent">Send GPP Consent String</string>
+    <string name="settings_tradedesk">Send Trade Desk Identity</string>
 
     <string name="google">Google</string>
 

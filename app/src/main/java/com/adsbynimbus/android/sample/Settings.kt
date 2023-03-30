@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
+import com.adsbynimbus.NimbusAdManager
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -33,8 +34,19 @@ fun SharedPreferences.setGppInSharedPrefs(enabled: Boolean) = edit {
 fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
     features.forEach {
         when (it) {
-            "test_mode" -> Nimbus.testMode = getBoolean(it, true)
-            "coppa" -> Nimbus.COPPA = getBoolean(it, false)
+            "test_mode" -> getBoolean(it, false).let { enabled ->
+                Nimbus.testMode = enabled
+                if (!enabled) {
+                    disableTradedeskId()
+                    edit { putBoolean("send_tradedesk_id", false) }
+                }
+            }
+            "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
+                if (enabled && Nimbus.testMode)
+                NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
+                else disableTradedeskId()
+            }
+            "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
                 edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
             }
@@ -44,5 +56,7 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
         }
     }
 }
+
+private fun disableTradedeskId() = NimbusAdManager.extendedIds.removeAll { eid -> eid.source == "tradedesk.com" }
 
 val SharedPreferences.forceAdRequestError get() = getBoolean("force_no_fill", false)

@@ -17,6 +17,18 @@
     <com.adsbynimbus.android.sample.common.SampleSwitchPreference
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerBelow="true"
+        app:defaultValue="false"
+        app:dependency="test_mode"
+        app:key="send_tradedesk_id"
+        app:switchWidgetContentDescription="nimbusTradedeskPreferenceSwitch"
+        app:title="@string/settings_tradedesk"
+        app:titleContentDescription="nimbusTradedeskPreferenceTextView" />
+
+
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"

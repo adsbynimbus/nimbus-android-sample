@@ -30,9 +30,7 @@ dependencyResolutionManagement {
                 username = "*"
             }
             content {
-                includeGroup("com.adsbynimbus.android")
-                includeGroup("com.adsbynimbus.openrtb")
-                includeGroup("com.iab.omid.library.adsbynimbus")
+                includeGroupByRegex(".*\\.adsbynimbus.*")
             }
         }
     }

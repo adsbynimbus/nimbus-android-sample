@@ -16,3 +16,10 @@ enum class AdItem(
     REWARDED_VIDEO_UNITY("Rewarded Video Unity (5 sec)"),
     ADS_IN_LIST("Ads in ScrollView")
 }
+
+enum class APSAdItem(
+    override val description: String
+)  : Describable {
+    BANNER("APS Banner"),
+    INTERSTITIAL_HYBRID("APS Interstitial Hybrid"),
+}

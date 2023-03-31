@@ -6,7 +6,9 @@ import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.request.*
 import com.amazon.device.ads.AdRegistration
-import com.amazon.device.ads.DTBAdSize
+import com.amazon.device.ads.DTBAdNetwork
+import com.amazon.device.ads.DTBAdNetworkInfo
+import com.amazon.device.ads.MRAIDPolicy
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -45,28 +47,8 @@ class NimbusInitializer : Initializer<Nimbus> {
                 ) else it.proceed(it.request())
             }))
 
-
-        /* APS Demand Provider */
-        val apsAdUnits = mutableListOf<DTBAdSize>().apply {
-            if (BuildConfig.APS_BANNER.isNotEmpty()) {
-                add(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
-            }
-            if (BuildConfig.APS_STATIC.isNotEmpty()) {
-                add(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
-            }
-            if (BuildConfig.APS_VIDEO.isNotEmpty()) with(context.resources.displayMetrics) {
-                add(DTBAdSize.DTBVideo(widthPixels, heightPixels, BuildConfig.APS_VIDEO))
-            }
-        }
-        if (apsAdUnits.isNotEmpty()) {
-            /* The following initialize function is a vararg function unwrapping the above list */
-            ApsDemandProvider.initialize(
-                context,
-                BuildConfig.APS_APP_KEY,
-                *apsAdUnits.toTypedArray()
-            )
-            AdRegistration.enableTesting(true)
-        }
+        /* APS Initialization is at the end of this file */
+        with(applicationContext) { initializeAPS(apiKey = BuildConfig.APS_APP_KEY) }
 
         val facebookAdUnitIds = listOf(
             BuildConfig.FAN_NATIVE_ID,
@@ -87,4 +69,24 @@ class NimbusInitializer : Initializer<Nimbus> {
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+}
+
+fun Context.initializeAPS(apiKey: String) {
+    /* Initialize APS SDK */
+    AdRegistration.getInstance(apiKey, this) // this is the application context
+
+    /* Set the MRAID Policy */
+    AdRegistration.setMRAIDSupportedVersions(arrayOf("1.0", "2.0", "3.0"))
+    AdRegistration.setMRAIDPolicy(MRAIDPolicy.CUSTOM)
+
+    /* Set Nimbus as the Mediator */
+    AdRegistration.setAdNetworkInfo(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS))
+
+    /* Set Nimbus as the Open Measurement Partner */
+    AdRegistration.addCustomAttribute("omidPartnerName", Nimbus.sdkName)
+    AdRegistration.addCustomAttribute("omidPartnerVersion", Nimbus.version)
+
+    /* Optional: Enable APS logging / test mode to verify the integration */
+    AdRegistration.enableLogging(true)
+    AdRegistration.enableTesting(true)
 }

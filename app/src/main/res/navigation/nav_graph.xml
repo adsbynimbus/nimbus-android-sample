@@ -33,6 +33,10 @@
             app:destination="@id/adManagerFragment"
             app:popUpTo="@id/adDemoFragment" />
         <action
+            android:id="@+id/to_apsDemoFragment"
+            app:destination="@id/apsDemoFragment"
+            app:popUpTo="@id/adDemoFragment" />
+        <action
             android:id="@+id/to_FANDemoFragment"
             app:destination="@id/FANDemoFragment"
             app:popUpTo="@id/adDemoFragment" />
@@ -44,6 +48,20 @@
         <argument
             android:name="item"
             app:argType="com.adsbynimbus.android.sample.admanager.AdItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/apsDemoFragment"
+        android:name="com.adsbynimbus.android.sample.admanager.APSDemoFragment"
+        tools:layout="@layout/fragment_ad_manager">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.admanager.APSAdItem" />
         <argument
             android:name="titleText"
             app:argType="string" />

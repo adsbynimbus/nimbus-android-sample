@@ -29,12 +29,8 @@ class MediationPlatformsFragment : Fragment() {
         headerView.setTitleText(titleText)
         headerView.setSubtitleText(subtitleText)
 
-        val googleSectionAdapter = SampleAppSectionAdapter(
-            "mediationPlatforms",
-            "Google",
-            resources.getString(R.string.google),
-        )
-        val googleAdapter =
+        recyclerView.adapter = ConcatAdapter(
+            SampleAppSectionAdapter("mediationPlatforms", "Google", resources.getString(R.string.google)),
             SampleAppAdapter("mediationPlatforms", enumValues<MediationItem>()) { item ->
                 if (BuildConfig.GAM_PLACEMENT_ID.isEmpty()) {
                     showCustomDialog("GAM_PLACEMENT_ID", inflater, root.context).show()
@@ -45,9 +41,18 @@ class MediationPlatformsFragment : Fragment() {
                         "subtitleText" to titleText,
                     )
                 )
-            }
-
-        recyclerView.adapter = ConcatAdapter(googleSectionAdapter, googleAdapter)
+            },
+            SampleAppSectionAdapter("mediationPlatforms", "Max Ads", resources.getString(R.string.max_ads)),
+            SampleAppAdapter("mediationPlatforms", arrayOf(MediationItem.DYNAMIC_PRICE_BANNER)) { item ->
+                findNavController().navigate(
+                    R.id.to_GAMDemoFragment, bundleOf(
+                        "item" to item,
+                        "titleText" to item.description,
+                        "subtitleText" to titleText,
+                    )
+                )
+            },
+        )
         recyclerView.layoutManager = LinearLayoutManager(root.context)
     }.root
 }

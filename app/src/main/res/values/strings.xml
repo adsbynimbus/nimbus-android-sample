@@ -34,6 +34,7 @@
     <string name="settings_tradedesk">Send Trade Desk Identity</string>
 
     <string name="google">Google</string>
+    <string name="max_ads">Max Ads</string>
 
     <string name="custom_dialog_title">Attention</string>
     <string name="custom_dialog_button">OK</string>

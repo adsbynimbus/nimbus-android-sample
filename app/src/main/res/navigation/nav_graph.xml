@@ -107,6 +107,20 @@
             app:argType="string" />
     </fragment>
     <fragment
+        android:id="@+id/MaxAdsFragment"
+        android:name="com.adsbynimbus.android.sample.mediation.GAMDemoFragment"
+        tools:layout="@layout/fragment_gam_demo">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.mediation.MediationItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.adsbynimbus.android.sample.SettingsFragment"
         tools:layout="@layout/fragment_settings" />

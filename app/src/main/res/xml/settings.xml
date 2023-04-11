@@ -59,6 +59,17 @@
         app:title="@string/settings_enable_viewability"
         app:titleContentDescription="enableViewabilityPreferenceTextView"/>
 
+    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        android:layout="@layout/layout_settings_switch_preference"
+        android:selectable="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
+        app:defaultValue="false"
+        app:switchWidgetContentDescription="showCountdownPreferenceSwitch"
+        app:key="show_countdown"
+        app:title="@string/settings_show_countdown"
+        app:titleContentDescription="showCountdownPreferenceTextView"/>
+
     <PreferenceCategory
         android:layout="@layout/layout_settings_switch_preference"
         app:layout="@layout/adapter_sample_app_section"

@@ -6,6 +6,9 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.VideoAdRenderer
+import com.google.ads.interactivemedia.v3.api.UiElement
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -45,6 +48,12 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                 if (enabled && Nimbus.testMode)
                 NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
                 else disableTradedeskId()
+            }
+            "show_countdown" -> getBoolean(it, false).let { enabled ->
+                val videoRenderer = Renderer.INLINE.get("video") as? VideoAdRenderer
+                videoRenderer?.renderingSettings?.apply {
+                    if (enabled) setUiElements(setOf(UiElement.COUNTDOWN, UiElement.AD_ATTRIBUTION)) else setUiElements(emptySet())
+                }
             }
             "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->

@@ -82,7 +82,7 @@ class GAMDemoFragment : Fragment() {
             object : RequestManager.Listener {
                 override fun onAdResponse(nimbusResponse: NimbusResponse) {
                     if (isDynamicPrice) {
-                        requestBuilder.applyDynamicPrice(nimbusResponse) { "10" }
+                        requestBuilder.applyDynamicPrice(nimbusResponse)
                     }
                     adView?.loadAd(requestBuilder.build())
                 }
@@ -96,9 +96,7 @@ class GAMDemoFragment : Fragment() {
                 override fun onAdResponse(nimbusResponse: NimbusResponse) {
                     AdManagerInterstitialAd.load(this@requestDynamicInterstitialAd,
                         BuildConfig.GAM_PLACEMENT_ID,
-                        AdManagerAdRequest.Builder().apply {
-                            nimbusResponse.applyDynamicPrice(this) { "10" }
-                        }.build(),
+                        AdManagerAdRequest.Builder().apply { nimbusResponse.applyDynamicPrice(this) }.build(),
                         object : AdManagerInterstitialAdLoadCallback() {
                             override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
                                 Timber.v("Interstitial ad loaded")
@@ -125,9 +123,7 @@ class GAMDemoFragment : Fragment() {
             override fun onAdResponse(nimbusResponse: NimbusResponse) {
                 AdManagerInterstitialAd.load(this@requestDynamicInterstitialBannerAd,
                     BuildConfig.GAM_PLACEMENT_ID,
-                    AdManagerAdRequest.Builder().apply {
-                        nimbusResponse.applyDynamicPrice(this) { "10" }
-                    }.build(),
+                    AdManagerAdRequest.Builder().apply { nimbusResponse.applyDynamicPrice(this) }.build(),
                     object : AdManagerInterstitialAdLoadCallback() {
                         override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
                             Timber.v("Interstitial ad loaded")
@@ -149,9 +145,7 @@ class GAMDemoFragment : Fragment() {
             override fun onAdResponse(nimbusResponse: NimbusResponse) {
                 AdManagerInterstitialAd.load(this@requestDynamicInterstitialVideoAd,
                     BuildConfig.GAM_PLACEMENT_ID,
-                    AdManagerAdRequest.Builder().apply {
-                        nimbusResponse.applyDynamicPrice(this) { "10" }
-                    }.build(),
+                    AdManagerAdRequest.Builder().apply { nimbusResponse.applyDynamicPrice(this) }.build(),
                     object : AdManagerInterstitialAdLoadCallback() {
                         override fun onAdLoaded(interstitialAd: AdManagerInterstitialAd) {
                             Timber.v("Interstitial ad loaded")

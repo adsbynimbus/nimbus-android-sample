@@ -104,7 +104,6 @@ dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
 
     /** Transitive Dependencies we want updated to the latest */
-    api("com.google.ads.interactivemedia.v3:interactivemedia:3.30.1")
     api("androidx.browser:browser:1.5.0")
     api("androidx.collection:collection-ktx:1.2.0")
     api("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -113,6 +112,9 @@ dependencies {
     api("androidx.transition:transition:1.4.1")
     api("androidx.work:work-runtime:2.8.1")
     api("com.squareup.okio:okio:3.3.0")
+
+    /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */
+    api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
     api("org.jetbrains:annotations:24.0.0")

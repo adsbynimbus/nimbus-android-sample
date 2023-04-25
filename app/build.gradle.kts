@@ -6,16 +6,21 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.5.0"
+val nimbusVersion = "2.6.1"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.adsbynimbus.android.sample"
         versionCode = 1
         versionName = nimbusVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
+        proguardFile("r8-rules.pro")
 
         /* This is one example of adding keys to the application using buildConfigField */
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
@@ -44,7 +49,7 @@ androidComponents.onVariants { variant ->
             "sample_unity_game_id",
     ).forEach {
         variant.buildConfigFields.put(
-            it.substringAfter("sample_").toUpperCase(),
+            it.substringAfter("sample_").uppercase(),
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
     }
@@ -59,27 +64,27 @@ dependencies {
 
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
-    api("com.amazon.android:aps-sdk:9.7.0")
+    api("com.amazon.android:aps-sdk:9.7.1")
 
     /* Meta Audience Network Demand */
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
-    api("com.facebook.android:audience-network-sdk:6.13.7")
+    api("com.facebook.android:audience-network-sdk:6.14.0")
 
     /* Google Mediation Adapters and Dynamic Price */
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    api("com.google.android.gms:play-services-ads:21.5.0")
+    api("com.google.android.gms:play-services-ads:22.0.0")
 
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
     api("com.unity3d.ads:unity-ads:4.6.1")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.7.0")
+    api("androidx.activity:activity-ktx:1.7.1")
     api("androidx.annotation:annotation:1.6.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.6.1")
-    api("androidx.core:core-ktx:1.9.0")
-    api("androidx.fragment:fragment-ktx:1.5.6")
+    api("androidx.core:core-ktx:1.10.0")
+    api("androidx.fragment:fragment-ktx:1.5.7")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     api("androidx.navigation:navigation-fragment:2.5.3")
     api("androidx.navigation:navigation-runtime:2.5.3")
@@ -99,7 +104,7 @@ dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
 
     /** Transitive Dependencies we want updated to the latest */
-    api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
+    api("com.google.ads.interactivemedia.v3:interactivemedia:3.30.1")
     api("androidx.browser:browser:1.5.0")
     api("androidx.collection:collection-ktx:1.2.0")
     api("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -109,6 +114,6 @@ dependencies {
     api("androidx.work:work-runtime:2.8.1")
     api("com.squareup.okio:okio:3.3.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-Beta")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
     api("org.jetbrains:annotations:24.0.0")
 }

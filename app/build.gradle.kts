@@ -20,6 +20,7 @@ android {
         versionName = nimbusVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
+        proguardFile("r8-rules.pro")
 
         /* This is one example of adding keys to the application using buildConfigField */
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")

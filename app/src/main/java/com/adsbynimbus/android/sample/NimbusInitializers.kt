@@ -35,6 +35,7 @@ class NimbusInitializer : Initializer<Nimbus> {
         RequestManager.setRequestUrl("https://dev-sdk.adsbynimbus.com/rta/test")
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        VungleDemandProvider.initialize(BuildConfig.VUNGLE_CONFIG_ID)
 
         RequestManager.setClient(OkHttpNimbusClient(OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor {

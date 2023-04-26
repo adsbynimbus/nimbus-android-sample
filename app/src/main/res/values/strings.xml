@@ -9,6 +9,9 @@
     <string name="ad_demo_title">Show Ad Demo</string>
     <string name="ad_demo_subtitle">Select to see Nimbus\' request and render flow</string>
 
+    <string name="third_party_demand_title">Third Party Demand Demo</string>
+    <string name="third_party_demand_subtitle">Select to see Nimbus\' integration with third party demand</string>
+
     <string name="mediation_title">Mediation Platforms</string>
     <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
 
@@ -34,6 +37,10 @@
     <string name="settings_tradedesk">Send Trade Desk Identity</string>
 
     <string name="google">Google</string>
+    <string name="unity">Unity</string>
+    <string name="fan">FAN</string>
+    <string name="aps">APS</string>
+    <string name="vungle">Vungle</string>
 
     <string name="custom_dialog_title">Attention</string>
     <string name="custom_dialog_button">OK</string>

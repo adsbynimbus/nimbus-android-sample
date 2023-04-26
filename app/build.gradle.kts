@@ -47,7 +47,6 @@ androidComponents.onVariants { variant ->
             "sample_fan_native_320_id",
             "sample_gam_placement_id",
             "sample_unity_game_id",
-            "sample_liveramp_config_id",
             "sample_vungle_config_id",
             "sample_vungle_interstitial_id",
             "sample_vungle_rewarded_id",

@@ -119,13 +119,6 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             ) {
                 it.addListener("Rewarded Video Controller")
             }
-            AdItem.REWARDED_VIDEO_UNITY -> adManager.showRewardedAd(
-                NimbusRequest.forRewardedVideo("Rewarded_Android"),
-                5,
-                requireActivity(),
-            ) {
-                it.addListener("Rewarded Video Controller (Unity)")
-            }
             AdItem.ADS_IN_LIST -> {
                 LayoutAdsInListBinding.inflate(inflater, adFrame, true).apply {
                     adManager.showAd(
@@ -166,12 +159,9 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     override fun modifyRequest(request: NimbusRequest) {
-        if (item == AdItem.REWARDED_VIDEO_UNITY) {
-            request.request.imp[0].ext.facebook_app_id = ""
-        }
         request.request.user = request.request.user?.apply {
             if (!FANDemandProvider.forceTestAd) buyeruid = null
-            if (item != AdItem.REWARDED_VIDEO_UNITY) ext?.unity_buyeruid = null
+            ext?.unity_buyeruid = null
         }
     }
 

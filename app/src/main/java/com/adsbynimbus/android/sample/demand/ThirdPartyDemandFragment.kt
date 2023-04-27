@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.admanager.APSAdItem
-import com.adsbynimbus.android.sample.admanager.AdItem
 import com.adsbynimbus.android.sample.admanager.FANAdItem
 import com.adsbynimbus.android.sample.admanager.VungleAdItem
 import com.adsbynimbus.android.sample.common.SampleAppAdapter
@@ -36,11 +35,11 @@ class ThirdPartyDemandFragment : Fragment() {
             "Unity",
             resources.getString(R.string.unity),
         )
-        val adItemAdapter = SampleAppAdapter("thirdPartyDemand", arrayOf(AdItem.REWARDED_VIDEO_UNITY)) { item ->
-            if (item == AdItem.REWARDED_VIDEO_UNITY && BuildConfig.UNITY_GAME_ID.isEmpty()) {
+        val adItemAdapter = SampleAppAdapter("thirdPartyDemand", enumValues<UnityAdItem>()) { item ->
+            if (BuildConfig.UNITY_GAME_ID.isEmpty()) {
                 showCustomDialog("UNITY_GAME_ID", inflater, root.context).show()
             } else {
-                findNavController().navigate(R.id.to_adManagerFragment, bundleOf(
+                findNavController().navigate(R.id.to_unityDemo, bundleOf(
                     "item" to item,
                     "titleText" to item.description,
                     "subtitleText" to titleText,

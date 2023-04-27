@@ -83,6 +83,10 @@ dependencies {
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
     api("com.unity3d.ads:unity-ads:4.6.1")
 
+    /* Vungle Demand */
+    api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
+    api("com.vungle:publisher-sdk-android:6.12.0")
+
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.7.1")
     api("androidx.annotation:annotation:1.6.0")

@@ -2,6 +2,8 @@ package com.adsbynimbus.android.sample
 
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.VungleDemandProvider
 
 /** A global instance of the NimbusAdManager */
 val adManager: NimbusAdManager = NimbusAdManager()
@@ -22,3 +24,9 @@ fun String.unescape(): String = replace(Regex("\\s+"), " ")
 
 const val tcfString =
     "CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
+
+var VungleDemandProvider.enabled: Boolean
+    get() = RequestManager.interceptors.contains(this)
+    set(enabled) = with(RequestManager.interceptors) {
+        if (enabled) add(VungleDemandProvider) else remove(VungleDemandProvider)
+    }

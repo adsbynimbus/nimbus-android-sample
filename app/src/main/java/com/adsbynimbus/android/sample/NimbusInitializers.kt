@@ -35,7 +35,6 @@ class NimbusInitializer : Initializer<Nimbus> {
         RequestManager.setRequestUrl("https://dev-sdk.adsbynimbus.com/rta/test")
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        VungleDemandProvider.initialize(BuildConfig.VUNGLE_CONFIG_ID)
 
         RequestManager.setClient(OkHttpNimbusClient(OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor {
@@ -67,6 +66,11 @@ class NimbusInitializer : Initializer<Nimbus> {
         if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
             UnityDemandProvider.initializeTestMode(context, BuildConfig.UNITY_GAME_ID)
         }
+
+        /* Vungle */
+        VungleDemandProvider.initialize(BuildConfig.VUNGLE_CONFIG_ID)
+        /** Disable Vungle demand until we are on the screen we want to show Vungle test ads */
+        VungleDemandProvider.enabled = false
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()

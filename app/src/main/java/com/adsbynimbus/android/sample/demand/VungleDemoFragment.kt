@@ -9,6 +9,7 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.admanager.VungleAdItem
 import com.adsbynimbus.android.sample.databinding.FragmentVungleDemoBinding
+import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
@@ -28,7 +29,7 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentVungleDemoBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(VungleDemandProvider)
+        VungleDemandProvider.enabled = true
         item = requireArguments().getSerializable("item") as VungleAdItem
         when (item) {
             VungleAdItem.BANNER ->
@@ -66,7 +67,7 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
     }.root
 
     override fun onDestroyView() {
-        RequestManager.interceptors.remove(VungleDemandProvider)
+        VungleDemandProvider.enabled = false
         adController?.destroy()
         adController = null
         super.onDestroyView()

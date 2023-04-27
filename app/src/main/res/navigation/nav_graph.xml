@@ -17,6 +17,10 @@
             app:destination="@id/mediationFragment"
             app:popUpTo="@id/mainFragment" />
         <action
+            android:id="@+id/to_thirdPartyDemand"
+            app:destination="@id/thirdPartyDemand"
+            app:popUpTo="@id/mainFragment" />
+        <action
             android:id="@+id/to_settingsFragment"
             app:destination="@id/settingsFragment"
             app:popUpTo="@id/mainFragment" />
@@ -31,14 +35,6 @@
         <action
             android:id="@+id/to_adManagerFragment"
             app:destination="@id/adManagerFragment"
-            app:popUpTo="@id/adDemoFragment" />
-        <action
-            android:id="@+id/to_apsDemoFragment"
-            app:destination="@id/apsDemoFragment"
-            app:popUpTo="@id/adDemoFragment" />
-        <action
-            android:id="@+id/to_FANDemoFragment"
-            app:destination="@id/FANDemoFragment"
             app:popUpTo="@id/adDemoFragment" />
     </fragment>
     <fragment
@@ -125,4 +121,54 @@
             android:name="subtitleText"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/unityAdDemo"
+        android:name="com.adsbynimbus.android.sample.demand.UnityDemoFragment">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.demand.UnityAdItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/vungleAdDemo"
+        android:name="com.adsbynimbus.android.sample.demand.VungleDemoFragment">
+        <argument
+            android:name="item"
+            app:argType="com.adsbynimbus.android.sample.admanager.VungleAdItem" />
+        <argument
+            android:name="titleText"
+            app:argType="string" />
+        <argument
+            android:name="subtitleText"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/thirdPartyDemand"
+        android:name="com.adsbynimbus.android.sample.demand.ThirdPartyDemandFragment">
+        <action
+            android:id="@+id/to_adManagerFragment"
+            app:destination="@id/adManagerFragment"
+            app:popUpTo="@id/adDemoFragment" />
+        <action
+            android:id="@+id/to_apsDemoFragment"
+            app:destination="@id/apsDemoFragment"
+            app:popUpTo="@id/adDemoFragment" />
+        <action
+            android:id="@+id/to_FANDemoFragment"
+            app:destination="@id/FANDemoFragment"
+            app:popUpTo="@id/adDemoFragment" />
+        <action
+            android:id="@+id/to_vungleDemo"
+            app:destination="@+id/vungleAdDemo" />
+        <action
+            android:id="@+id/to_unityDemo"
+            app:destination="@id/unityAdDemo" />
+    </fragment>
+
+
 </navigation>

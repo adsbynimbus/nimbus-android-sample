@@ -47,6 +47,11 @@ androidComponents.onVariants { variant ->
             "sample_fan_native_320_id",
             "sample_gam_placement_id",
             "sample_unity_game_id",
+            "sample_vungle_config_id",
+            "sample_vungle_interstitial_id",
+            "sample_vungle_rewarded_id",
+            "sample_vungle_banner_320_id",
+            "sample_vungle_mrec_id",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),
@@ -77,6 +82,10 @@ dependencies {
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
     api("com.unity3d.ads:unity-ads:4.6.1")
+
+    /* Vungle Demand */
+    api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
+    api("com.vungle:publisher-sdk-android:6.12.0")
 
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.7.1")

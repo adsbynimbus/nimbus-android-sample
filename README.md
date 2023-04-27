@@ -21,7 +21,7 @@ root project gradle.properties file. If you would like to use your production ke
 
 ### Optional IDs
 
-In order to see APS/FAN/GAM/Unity examples you must also supply it's IDs. You can do so by
+In order to see APS/FAN/GAM/Unity/Vungle examples you must also supply it's IDs. You can do so by
 adding the IDs in the predefined fields in the root project `gradle.properties` file or by replacing
 the buildConfigFields in `app/build.gradle.kts`
 

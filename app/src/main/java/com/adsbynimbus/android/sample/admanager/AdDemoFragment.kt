@@ -28,7 +28,7 @@ class AdDemoFragment : Fragment() {
         headerView.setSubtitleText(resources.getString(R.string.ad_demo_subtitle))
 
         val adItemAdapter = SampleAppAdapter("showAdDemo", enumValues<AdItem>()) { item ->
-            if (item == AdItem.REWARDED_VIDEO_UNITY && BuildConfig.UNITY_GAME_ID.isEmpty()) {
+            if (BuildConfig.UNITY_GAME_ID.isEmpty()) {
                 showCustomDialog("UNITY_GAME_ID", inflater, root.context).show()
             } else {
                 findNavController().navigate(R.id.to_adManagerFragment, bundleOf(
@@ -39,45 +39,7 @@ class AdDemoFragment : Fragment() {
             }
         }
 
-        val apsItemAdapter = SampleAppAdapter("showAdDemo", enumValues<APSAdItem>()) {
-            when (it) {
-                APSAdItem.BANNER -> if (BuildConfig.APS_BANNER.isEmpty()) {
-                    showCustomDialog("sample_aps_banner", inflater, root.context).show()
-                    return@SampleAppAdapter
-                }
-                APSAdItem.INTERSTITIAL_HYBRID -> {
-                    val keysNotConfigured = BuildConfig.APS_STATIC.isEmpty().also { empty ->
-                        if (empty) showCustomDialog("sample_aps_static", inflater, root.context).show()
-                    } and BuildConfig.APS_VIDEO.isEmpty().also { empty ->
-                        if (empty) showCustomDialog("sample_aps_video", inflater, root.context).show()
-                    }
-                    if (keysNotConfigured) return@SampleAppAdapter
-                }
-            }
-            findNavController().navigate(R.id.to_apsDemoFragment, bundleOf(
-                "item" to it,
-                "titleText" to it.description,
-                "subtitleText" to titleText,
-            ))
-        }
-
-        val fanAdItemAdapter = SampleAppAdapter("showAdDemo", enumValues<FANAdItem>()) { item ->
-            val adUnitId = when (item) {
-                FANAdItem.BANNER -> BuildConfig.FAN_BANNER_320_ID
-                FANAdItem.INTERSTITIAL -> BuildConfig.FAN_INTERSTITIAL_ID
-                FANAdItem.NATIVE -> BuildConfig.FAN_NATIVE_ID.ifEmpty { BuildConfig.FAN_NATIVE_320_ID }
-            }
-            if (adUnitId.isEmpty()) {
-                showCustomDialog(item.gradlePropertyName, inflater, root.context).show()
-            } else {
-                findNavController().navigate(R.id.to_FANDemoFragment, bundleOf(
-                    "item" to item,
-                    "titleText" to item.description,
-                    "subtitleText" to titleText,
-                ))
-            }
-        }
-        recyclerView.adapter = ConcatAdapter(adItemAdapter, apsItemAdapter, fanAdItemAdapter)
+        recyclerView.adapter = adItemAdapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
     }.root
 }

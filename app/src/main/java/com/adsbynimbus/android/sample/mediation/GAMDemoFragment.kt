@@ -47,8 +47,8 @@ class GAMDemoFragment : Fragment() {
             MediationItem.INTERSTITIAL -> root.context.requestInterstitialAd()
             MediationItem.DYNAMIC_PRICE_INTERSTITIAL ->
                 root.context.requestDynamicInterstitialAd()
-            MediationItem.DYNAMIC_PRICE_INTERSTITIAL_BANNER ->
-                root.context.requestDynamicInterstitialBannerAd()
+            MediationItem.DYNAMIC_PRICE_INTERSTITIAL_STATIC ->
+                root.context.requestDynamicInterstitialStaticAd()
             MediationItem.DYNAMIC_PRICE_INTERSTITIAL_VIDEO ->
                 root.context.requestDynamicInterstitialVideoAd()
         }
@@ -116,12 +116,12 @@ class GAMDemoFragment : Fragment() {
         )
     }
 
-    private fun Context.requestDynamicInterstitialBannerAd() {
+    private fun Context.requestDynamicInterstitialStaticAd() {
         adManager.makeRequest(this, NimbusRequest.forInterstitialAd("test_interstitial").apply {
             request.imp[0].video = null
         }, object : RequestManager.Listener {
             override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                AdManagerInterstitialAd.load(this@requestDynamicInterstitialBannerAd,
+                AdManagerInterstitialAd.load(this@requestDynamicInterstitialStaticAd,
                     BuildConfig.GAM_PLACEMENT_ID,
                     AdManagerAdRequest.Builder().apply { nimbusResponse.applyDynamicPrice(this) }.build(),
                     object : AdManagerInterstitialAdLoadCallback() {

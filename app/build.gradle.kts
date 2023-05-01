@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.6.1"
+val nimbusVersion = "2.7.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -69,7 +69,7 @@ dependencies {
 
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
-    api("com.amazon.android:aps-sdk:9.7.1")
+    api("com.amazon.android:aps-sdk:9.8.0")
 
     /* Meta Audience Network Demand */
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
@@ -85,7 +85,7 @@ dependencies {
 
     /* Vungle Demand */
     api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
-    api("com.vungle:publisher-sdk-android:6.12.0")
+    api("com.vungle:publisher-sdk-android:6.12.1")
 
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.7.1")
@@ -106,8 +106,8 @@ dependencies {
     api("com.google.android.material:material:1.8.0")
 
     /* Networking Client */
-    api("com.squareup.okhttp3:okhttp:4.10.0")
-    api("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    api("com.squareup.okhttp3:okhttp:4.11.0")
+    api("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     /* Logging */
     api("com.jakewharton.timber:timber:5.0.1")
@@ -126,5 +126,5 @@ dependencies {
     api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
-    api("org.jetbrains:annotations:24.0.0")
+    api("org.jetbrains:annotations:24.0.1")
 }

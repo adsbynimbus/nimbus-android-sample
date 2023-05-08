@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
 import com.adsbynimbus.render.AdController
@@ -35,6 +36,7 @@ class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
                 5,
                 requireActivity(),
             ) {
+                it.view?.id = R.id.nimbus_ad_view
                 it.addListener("Rewarded Video Controller (Unity)")
             }
         }
@@ -52,7 +54,7 @@ class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     private fun AdController.addListener(controllerName: String) {
-        listeners().add(object : AdController.Listener {
+        listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
                 Timber.i("$controllerName: %s", adEvent.name)
                 if (adEvent == AdEvent.DESTROYED) adController = null

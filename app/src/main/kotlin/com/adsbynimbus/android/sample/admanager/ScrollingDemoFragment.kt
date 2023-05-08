@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentScrollingDemoBinding
 import com.adsbynimbus.openrtb.request.Format
@@ -91,7 +92,9 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
                     forFacebookNative().let {
                         Renderer.loadAd(it, holder.view, object : NimbusAdManager.Listener {
                             override fun onAdRendered(controller: AdController) {
-                                holder.adController = controller
+                                holder.adController = controller.apply {
+                                    view?.id = R.id.nimbus_ad_view
+                                }
                             }
                         })
                     }
@@ -99,7 +102,10 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
                 }
             }.let {
                 adManager.showAd(it, holder.view) { controller ->
-                    holder.adController = controller.apply { volume = 100 }
+                    holder.adController = controller.apply {
+                        view?.id = R.id.nimbus_ad_view
+                        volume = 100
+                    }
                 }
             }
         }

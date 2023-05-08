@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.admanager.APSAdItem.BANNER
 import com.adsbynimbus.android.sample.admanager.APSAdItem.INTERSTITIAL_HYBRID
@@ -59,7 +60,10 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
                 adManager.showAd(nimbusRequest, refreshInterval = 30, viewGroup = adFrame) {
-                    adController = it.apply { addListener("Banner Controller") }
+                    adController = it.apply {
+                        view?.id = R.id.nimbus_ad_view
+                        addListener("Banner Controller")
+                    }
                 }
             }
             INTERSTITIAL_HYBRID -> lifecycleScope.launch {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusError
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.FragmentFanDemoBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
@@ -79,7 +80,8 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
 
     override fun onAdRendered(controller: AdController) {
         adController = controller.also {
-            it.listeners().add(this)
+            it.view?.id = R.id.nimbus_ad_view
+            it.listeners.add(this)
             it.start()
         }
     }

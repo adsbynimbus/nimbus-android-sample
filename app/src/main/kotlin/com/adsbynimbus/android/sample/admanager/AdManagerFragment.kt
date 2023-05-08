@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
@@ -49,6 +50,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                             object : Renderer.Listener, NimbusError.Listener {
                                 override fun onAdRendered(controller: AdController) {
                                     adController = controller.apply {
+                                        view?.id = R.id.nimbus_ad_view
                                         addListener("Manual Request/Render Controller")
                                     }
                                 }
@@ -70,7 +72,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 20,
                 adFrame,
             ) {
-                adController = it.apply { addListener("Banner Controller") }
+                adController = it.apply {
+                    view?.id = R.id.nimbus_ad_view
+                    addListener("Banner Controller")
+                }
             }
             AdItem.INTERSTITIAL_STATIC -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_static").apply {
@@ -79,7 +84,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 0,
                 requireActivity(),
             ) {
-                adController = it.apply { addListener("Interstitial Static Controller") }
+                adController = it.apply {
+                    view?.id = R.id.nimbus_ad_view
+                    addListener("Interstitial Static Controller")
+                }
             }
             AdItem.INTERSTITIAL_VIDEO -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_video").apply {
@@ -88,19 +96,26 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 0,
                 requireActivity(),
             ) {
-                adController = it.apply { addListener("Interstitial Video Controller") }
+                adController = it.apply {
+                    view?.id = R.id.nimbus_ad_view
+                    addListener("Interstitial Video Controller")
+                }
             }
             AdItem.INTERSTITIAL_HYBRID -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_video"),
                 0,
                 requireActivity(),
             ) {
-                adController = it.apply { addListener("Interstitial Hybrid Controller") }
+                adController = it.apply {
+                    view?.id = R.id.nimbus_ad_view
+                    addListener("Interstitial Hybrid Controller")
+                }
             }
             AdItem.BLOCKING_INTERSTITIAL -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_blocking_interstitial"),
                 requireActivity(),
             ) {
+                it.view?.id = R.id.nimbus_ad_view
                 it.addListener("Blocking Interstitial Controller")
             }
             AdItem.REWARDED_STATIC -> adManager.showRewardedAd(
@@ -110,6 +125,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 5,
                 requireActivity(),
             ) {
+                it.view?.id = R.id.nimbus_ad_view
                 it.addListener("Rewarded Static Controller")
             }
             AdItem.REWARDED_VIDEO -> adManager.showRewardedAd(
@@ -117,6 +133,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 5,
                 requireActivity(),
             ) {
+                it.view?.id = R.id.nimbus_ad_view
                 it.addListener("Rewarded Video Controller")
             }
             AdItem.ADS_IN_LIST -> {
@@ -126,7 +143,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         20,
                         adFrameBanner,
                     ) {
-                        adController = it.apply { addListener("Scrolling Banner Controller") }
+                        adController = it.apply {
+                            view?.id = R.id.nimbus_ad_view
+                            addListener("Scrolling Banner Controller")
+                        }
                     }
                     adManager.showAd(
                         NimbusRequest.forInterstitialAd("test_interstitial_static").apply {
@@ -135,7 +155,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         20,
                         adFrameImage,
                     ) {
-                        adController = it.apply { addListener("Scrolling Static Controller") }
+                        adController = it.apply {
+                            view?.id = R.id.nimbus_ad_view
+                            addListener("Scrolling Static Controller")
+                        }
                     }
                     adManager.showAd(
                         NimbusRequest.forInterstitialAd("test_interstitial_video").apply {
@@ -144,7 +167,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         20,
                         adFrameVideo,
                     ) {
-                        adController = it.apply { addListener("Scrolling Video Controller") }
+                        adController = it.apply {
+                            view?.id = R.id.nimbus_ad_view
+                            addListener("Scrolling Video Controller")
+                        }
                     }
                 }
             }
@@ -166,7 +192,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     private fun AdController.addListener(controllerName: String) {
-        listeners().add(object : AdController.Listener {
+        listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
                 Timber.i("$controllerName: %s", adEvent.name)
                 if (adEvent == AdEvent.DESTROYED) adController = null

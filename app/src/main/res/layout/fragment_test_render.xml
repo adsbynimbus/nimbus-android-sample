@@ -22,7 +22,6 @@
         android:layout_margin="16dp"
         android:background="@drawable/text_input_border"
         android:contentDescription="testRenderMarkupEditText"
-        android:fontFamily="@font/proxima_nova_regular"
         android:gravity="start|top"
         android:imeOptions="actionSend"
         android:padding="5dp"

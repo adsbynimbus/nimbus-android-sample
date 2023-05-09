@@ -24,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="15dp"
-        android:fontFamily="@font/proxima_nova_regular"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="20sp"

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
 import com.adsbynimbus.android.sample.demand.mockMetaNimbusAd
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -26,12 +25,12 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
-        recyclerView.adapter = ScrollingAdapter()
-        recyclerView.addItemDecoration(marginDecoration)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.setItemViewCacheSize(6)
-    }.root
+    ): View = RecyclerView(requireContext()).apply {
+        adapter = ScrollingAdapter()
+        addItemDecoration(marginDecoration)
+        layoutManager = LinearLayoutManager(context)
+        setItemViewCacheSize(6)
+    }
 
     override fun onStart() {
         super.onStart()

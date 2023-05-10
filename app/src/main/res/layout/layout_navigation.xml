@@ -8,5 +8,4 @@
     android:textColor="@color/pink"
     android:textSize="18sp"
     android:textStyle="bold"
-    app:drawableEndCompat="@drawable/ic_right_arrow"
-    app:drawableTint="@color/pink"/>
+    app:drawableEndCompat="@drawable/ic_right_arrow" />

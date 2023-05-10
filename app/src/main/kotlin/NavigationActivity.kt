@@ -27,11 +27,11 @@ class NavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ActivityNavigationBinding.inflate(layoutInflater).also { setContentView(it.root) }.apply {
             with(supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment) {
-                navController.graph = navController.nimbusGraph()
+                navController.graph = navController.appGraph()
                 toolbar.setupWithNavController(navController)
 
                 navController.addOnDestinationChangedListener { _, dest, _ ->
-                    val isMainNavDestination = dest.route == "Public"
+                    val isMainNavDestination = dest.route in arrayOf("Main", "Internal")
                     headerTitle.apply {
                         text = if (isMainNavDestination) title else dest.route
                         gravity = if (isMainNavDestination) BOTTOM or CENTER_HORIZONTAL else BOTTOM

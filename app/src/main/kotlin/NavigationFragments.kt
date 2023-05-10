@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.android.sample.databinding.NavigationPrimaryBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
 
 class MainFragment : Fragment() {
@@ -14,15 +14,15 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = NavigationPrimaryBinding.inflate(inflater, container, false).apply {
-        recyclerView.adapter = NavigationAdapter(items = listOf(
+    ): View = RecyclerView(requireContext()).apply {
+        adapter = NavigationAdapter(items = listOf(
             Destination("Show Ad Demo"),
             Destination("Mediation Platforms"),
             Destination("Third Party Demand"),
             Destination("Test Render"),
             Destination("Settings"),
         ))
-    }.root
+    }
 }
 
 class AdDemoFragment : Fragment() {
@@ -32,9 +32,6 @@ class AdDemoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
-        headerTitle.text = resources.getString(R.string.ad_demo_title)
-        headerSubtitle.text = resources.getString(R.string.ad_demo_subtitle)
-
         recyclerView.adapter = NavigationAdapter(items = listOf(
             Destination("Manual Request/Render Ad"),
             Destination("Banner"),
@@ -56,9 +53,6 @@ class ThirdPartyDemandFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
-        headerTitle.text = resources.getString(R.string.third_party_demand_title)
-        headerSubtitle.text = resources.getString(R.string.third_party_demand_subtitle)
-
         recyclerView.adapter = NavigationAdapter(items = listOf(
             Header("Unity"),
             Destination("Rewarded Video Unity (5 sec)"),
@@ -85,9 +79,6 @@ class MediationPlatformsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
-        headerTitle.text = resources.getString(R.string.mediation_title)
-        headerSubtitle.text = resources.getString(R.string.mediation_subtitle)
-
         recyclerView.adapter = NavigationAdapter(items = listOf(
             Header("Google"),
             Destination("Banner"),

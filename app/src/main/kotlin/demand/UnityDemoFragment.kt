@@ -22,12 +22,7 @@ class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@UnityDemoFragment)
-        val item = requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-            getString("item")
-        }
-        when (item) {
+        when (requireArguments().getString("item")) {
             "Rewarded Video Unity" -> adManager.showRewardedAd(
                 request = NimbusRequest.forRewardedVideo("Rewarded_Android"),
                 closeButtonDelaySeconds = 30,

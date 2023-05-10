@@ -28,12 +28,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
-        val item = requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
-            getString("item")
-        }
-        when (item) {
+        when (requireArguments().getString("item")) {
             "Manual Request/Render Ad" -> {
                 // Manual Request Ad
                 val request = NimbusRequest.forBannerAd(

@@ -27,11 +27,6 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
-        requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-        }
-
         recyclerView.adapter = ScrollingAdapter()
         recyclerView.addItemDecoration(marginDecoration)
         recyclerView.layoutManager = LinearLayoutManager(context)

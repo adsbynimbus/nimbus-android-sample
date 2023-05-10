@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Nimbus Sample</string>
-    <string name="title">Title</string>
-    <string name="subtitle">Subtitle</string>
 
     <string name="main_title">INTEGRATION ASSIST</string>
     <string name="main_subtitle">Ad Call Demos and Render Testing</string>
@@ -22,7 +20,6 @@
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
     <string name="test_render_button">Test</string>
 
-    <string name="settings_title">Settings</string>
     <string name="settings_subtitle">Configure your test app experience</string>
     <string name="settings_user_details">User Details</string>
     <string name="settings_regs_details">Regs Details</string>

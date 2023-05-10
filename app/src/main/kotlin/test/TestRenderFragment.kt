@@ -22,9 +22,6 @@ class TestRenderFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentTestRenderBinding.inflate(inflater, container, false).apply {
-        headerTitle.text = resources.getString(R.string.test_render_title)
-        headerSubtitle.text = resources.getString(R.string.test_render_subtitle)
-
         testButton.setOnClickListener {
             val type = when {
                 vastRegex.containsMatchIn(markupEditText.text!!) -> "video"

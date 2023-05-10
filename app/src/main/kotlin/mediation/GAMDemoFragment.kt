@@ -36,13 +36,7 @@ class GAMDemoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        val item = requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-            getString("item")
-        }
-
-        when (item) {
+        when (requireArguments().getString("item")) {
             "Banner" -> adFrame.requestBannerAd()
             "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
             "Interstitial" -> root.context.requestInterstitialAd()

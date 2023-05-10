@@ -32,12 +32,7 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@APSDemoFragment)
-        val item = requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-            getString("item")
-        }
-        when (item) {
+        when (requireArguments().getString("item")) {
             "APS Banner" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest().apply {

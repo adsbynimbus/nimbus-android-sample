@@ -18,18 +18,17 @@
         <item name="android:paddingRight">15dp</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
-
-    <style name="Header.Title">
-        <item name="android:paddingTop">20dp</item>
-        <item name="android:paddingBottom">2.5dp</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
+    
+    <style name="MainTitle">
+        <item name="android:gravity">bottom|center_horizontal</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:letterSpacing">0.192</item>
     </style>
-
-    <style name="Header.Subtitle">
-        <item name="android:paddingTop">2.5dp</item>
-        <item name="android:paddingBottom">20dp</item>
-        <item name="android:textSize">15sp</item>
+    
+    <style name="Title">
+        <item name="android:gravity">bottom</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">

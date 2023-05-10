@@ -2,8 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference android:layout="@layout/layout_settings_preference" />
-
     <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
@@ -15,12 +13,12 @@
     <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
+        app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
         app:dependency="test_mode"
         app:key="send_tradedesk_id"
         app:title="@string/settings_tradedesk" />
-
 
     <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
@@ -59,13 +57,14 @@
         app:title="@string/settings_show_countdown" />
 
     <PreferenceCategory
-        android:layout="@layout/layout_settings_switch_preference"
+        android:layout="@layout/layout_navigation_header"
         app:layout="@layout/layout_navigation_header"
         app:title="@string/settings_user_details">
 
         <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="user_did_consent"
@@ -74,6 +73,7 @@
         <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="ccpa_consent"
@@ -82,13 +82,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout="@layout/layout_settings_switch_preference"
+        android:layout="@layout/layout_navigation_header"
         app:layout="@layout/layout_navigation_header"
         app:title="@string/settings_regs_details">
 
         <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="enabled_gpp"

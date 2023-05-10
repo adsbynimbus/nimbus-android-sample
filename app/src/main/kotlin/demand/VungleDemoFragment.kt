@@ -30,12 +30,7 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         VungleDemandProvider.enabled = true
         logContainer.visibility = View.VISIBLE
-        item = requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-            getString("item", "")
-        }
-        when (item) {
+        when (requireArguments().getString("item", "").also { item = it }) {
             "Vungle Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50),
                 viewGroup = adFrame,

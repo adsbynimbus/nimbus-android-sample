@@ -31,13 +31,7 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        item = requireArguments().run {
-            headerTitle.text = getString("titleText")
-            headerSubtitle.text = getString("subtitleText")
-            getString("item", "")
-        }
-
-        when (item) {
+        when (requireArguments().getString("item", "").also { item = it }) {
             "Meta Banner",
             "Meta Native" -> Renderer.loadAd(mockMetaNimbusAd(item), adFrame, this@FANDemoFragment)
             "Meta Interstitial" -> requireActivity().loadBlockingAd(mockMetaNimbusAd(item))?.also {
@@ -100,6 +94,7 @@ fun mockMetaNimbusAd(type: String) = object : NimbusAd {
     override fun height(): Int = when(type) {
         "Meta Banner" -> 50
         "Meta Interstitial" -> 480
+        "Meta Native" -> 0
         else -> 0
     }
 }

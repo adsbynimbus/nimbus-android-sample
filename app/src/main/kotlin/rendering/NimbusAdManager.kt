@@ -1,9 +1,13 @@
 package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
@@ -46,6 +50,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                                     adController = controller.apply {
                                         view?.contentDescription = nimbusResponse.testDescription
                                         view?.id = nimbus_ad_view
+                                        controller.alignTop()
                                         controller.listeners.add(LoggingAdControllerListener(identifier = item))
                                     }
                                 }
@@ -68,6 +73,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                    controller.alignTop()
                 },
             )
             "Interstitial Static" -> adManager.showBlockingAd(

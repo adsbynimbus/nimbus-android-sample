@@ -21,7 +21,7 @@ import timber.log.Timber
  * indicative of normal usage as the Nimbus server determines which ad units to request based on the
  * request sent from the client.
  */
-class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
+class MetaFragment : Fragment(), Renderer.Listener, AdController.Listener {
 
     private var adController: AdController? = null
     lateinit var item: String
@@ -33,9 +33,9 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (requireArguments().getString("item", "").also { item = it }) {
             "Meta Banner",
-            "Meta Native" -> Renderer.loadAd(mockMetaNimbusAd(item), adFrame, this@FANDemoFragment)
+            "Meta Native" -> Renderer.loadAd(mockMetaNimbusAd(item), adFrame, this@MetaFragment)
             "Meta Interstitial" -> requireActivity().loadBlockingAd(mockMetaNimbusAd(item))?.also {
-                adController = it.apply { listeners.add(this@FANDemoFragment) }
+                adController = it.apply { listeners.add(this@MetaFragment) }
             }
         }
     }.root

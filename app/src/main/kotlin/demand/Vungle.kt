@@ -18,7 +18,16 @@ import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.VungleDemandProvider
 import timber.log.Timber
 
-class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener, NimbusAdManager.Listener {
+fun initializeVungle() {
+}
+/**
+ *
+ */
+fun ViewGroup.showBannerAd() {
+
+}
+
+class VungleFragment : Fragment(), AdController.Listener, Renderer.Listener, NimbusAdManager.Listener {
 
     var adController: AdController? = null
     lateinit var item: String
@@ -34,22 +43,22 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
             "Vungle Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50),
                 viewGroup = adFrame,
-                listener = this@VungleDemoFragment,
+                listener = this@VungleFragment,
             )
             "Vungle MREC" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.MREC),
                 viewGroup = adFrame,
-                listener = this@VungleDemoFragment,
+                listener = this@VungleFragment,
             )
             "Vungle Interstitial" -> adManager.showBlockingAd(
                 request =  NimbusRequest.forInterstitialAd(item),
                 activity = requireActivity(),
-                listener = this@VungleDemoFragment,
+                listener = this@VungleFragment,
             )
             "Vungle Rewarded" -> adManager.showBlockingAd(
                 request = NimbusRequest.forRewardedVideo(item),
                 activity = requireActivity(),
-                listener = this@VungleDemoFragment
+                listener = this@VungleFragment
             )
         }
     }.root

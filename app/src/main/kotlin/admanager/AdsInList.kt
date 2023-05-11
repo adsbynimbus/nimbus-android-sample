@@ -27,9 +27,14 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = RecyclerView(requireContext()).apply {
         adapter = ScrollingAdapter()
-        addItemDecoration(marginDecoration)
         layoutManager = LinearLayoutManager(context)
         setItemViewCacheSize(6)
+        addItemDecoration(object : RecyclerView.ItemDecoration() {
+            val margin: Int = resources.displayMetrics.heightPixels / 10
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.set(0, margin, 0, margin)
+            }
+        })
     }
 
     override fun onStart() {
@@ -64,15 +69,6 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
             })
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.itemView.contentDescription = when (position) {
-                0 -> "scrollingDemoAdapterItemBanner320"
-                1 -> "scrollingDemoAdapterItemBanner300"
-                2 -> "scrollingDemoAdapterItemBannerInterstitialPortrait"
-                3 -> "scrollingDemoAdapterItemBannerInterstitialLandscape"
-                4 -> "scrollingDemoAdapterItemVideo"
-                else -> "scrollingDemoAdapterItemFacebookNative"
-            }
-
             if (holder.adController == null) when (position) {
                 0 -> NimbusRequest.forBannerAd("test_banner_320", Format.BANNER_320_50, 0)
                 1 -> NimbusRequest.forBannerAd("test_banner_300", Format.LETTERBOX, 0)
@@ -108,17 +104,4 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
             holder.adController?.destroy()
         }
     }
-
-    private val marginDecoration
-        get() = object : RecyclerView.ItemDecoration() {
-            val margin: Int = resources.displayMetrics.heightPixels / 10
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State,
-            ) {
-                outRect.set(0, margin, 0, margin)
-            }
-        }
 }

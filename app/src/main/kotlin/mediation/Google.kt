@@ -9,7 +9,6 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.Destination
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.lineitem.applyDynamicPrice
@@ -38,8 +37,8 @@ class GAMDemoFragment : Fragment() {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (requireArguments().getString("item")) {
             "Banner" -> adFrame.requestBannerAd()
-            "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
             "Interstitial" -> root.context.requestInterstitialAd()
+            "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
             "Dynamic Price Interstitial" -> root.context.requestDynamicInterstitialAd()
             "Dynamic Price Interstitial Static" -> root.context.requestDynamicInterstitialStaticAd()
             "Dynamic Price Interstitial Video" -> root.context.requestDynamicInterstitialVideoAd()

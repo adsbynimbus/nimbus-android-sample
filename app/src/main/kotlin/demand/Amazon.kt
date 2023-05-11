@@ -22,7 +22,7 @@ import com.amazon.device.ads.DTBAdSize
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
+class APSFragment : Fragment(), NimbusRequest.Interceptor {
 
     private var adController: AdController? = null
 
@@ -31,7 +31,7 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@APSDemoFragment)
+        RequestManager.interceptors.add(this@APSFragment)
         when (requireArguments().getString("item")) {
             "APS Banner" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)

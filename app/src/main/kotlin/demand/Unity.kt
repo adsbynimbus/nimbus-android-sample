@@ -14,14 +14,14 @@ import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
 import timber.log.Timber
 
-class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
+class UnityFragment : Fragment(), NimbusRequest.Interceptor {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@UnityDemoFragment)
+        RequestManager.interceptors.add(this@UnityFragment)
         when (requireArguments().getString("item")) {
             "Rewarded Video Unity" -> adManager.showRewardedAd(
                 request = NimbusRequest.forRewardedVideo("Rewarded_Android"),

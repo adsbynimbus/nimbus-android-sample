@@ -30,15 +30,20 @@ class NavigationActivity : AppCompatActivity() {
                 navController.graph = navController.appGraph()
                 toolbar.setupWithNavController(navController)
 
-                navController.addOnDestinationChangedListener { _, dest, _ ->
+                navController.addOnDestinationChangedListener { controller, dest, args ->
                     val isMainNavDestination = dest.route in arrayOf("Main", "Internal")
+                    val isAdDemo = args?.containsKey("item") ?: false
                     headerTitle.apply {
-                        text = if (isMainNavDestination) title else dest.route
+                        text = when {
+                            isMainNavDestination -> title
+                            isAdDemo -> args?.getString("item")
+                            else -> dest.route
+                        }
                         gravity = if (isMainNavDestination) BOTTOM or CENTER_HORIZONTAL else BOTTOM
                         setTextAppearance(this, if (isMainNavDestination) R.style.MainTitle else R.style.Title)
                     }
                     headerSubtitle.apply {
-                        text = dest.label
+                        text = dest.label ?: controller.previousBackStackEntry?.destination?.route
                         gravity = if (isMainNavDestination) TOP or CENTER_HORIZONTAL else TOP
                     }
 

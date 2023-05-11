@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.Destination
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
@@ -29,7 +28,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
         when (requireArguments().getString("item")) {
-            "Manual Request/Render Ad" -> {
+            "Manually Rendered Ad" -> {
                 // Manual Request Ad
                 val request = NimbusRequest.forBannerAd(
                     "test_manual_request_banner",

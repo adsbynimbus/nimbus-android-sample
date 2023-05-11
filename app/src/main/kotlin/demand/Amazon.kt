@@ -12,6 +12,7 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
@@ -34,7 +35,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -59,18 +59,28 @@ fun Context.initializeAmazonPublisherServices(appKey: String) {
     AdRegistration.enableTesting(true)
 }
 
-class APSFragment : Fragment(), NimbusRequest.Interceptor {
+class APSFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
     private var adController: AdController? = null
+
+    fun NimbusRequest.removeNonAPSDemand() = apply {
+        interceptors.add(NimbusRequest.Interceptor {
+            request.imp[0].ext.facebook_app_id = ""
+            request.user?.ext = request.user?.ext?.apply {
+                facebook_buyeruid = null
+                unity_buyeruid = null
+                vungle_buyeruid = null
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@APSFragment)
-        when (requireArguments().getString("item")) {
+        when (val item = requireArguments().getString("item")) {
             "APS Banner" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest().apply {
@@ -89,9 +99,14 @@ class APSFragment : Fragment(), NimbusRequest.Interceptor {
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
-                adManager.showAd(nimbusRequest, refreshInterval = 30, viewGroup = adFrame) {
-                    adController = it.apply { addListener("Banner Controller") }
-                }
+                adManager.showAd(
+                    request = nimbusRequest.removeNonAPSDemand(),
+                    refreshInterval = 30,
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                        adController = controller
+                    },
+                )
             }
             "APS Interstitial Hybrid" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forInterstitialAd("test_interstitial_with_aps")
@@ -110,9 +125,13 @@ class APSFragment : Fragment(), NimbusRequest.Interceptor {
                 }
 
                 /* Show a Nimbus Interstitial ad with Display and Video in the same auction */
-                adManager.showBlockingAd(nimbusRequest, requireActivity()) {
-                    adController = it.apply { addListener("Interstitial Hybrid Controller") }
-                }
+                adManager.showBlockingAd(
+                    request = nimbusRequest.removeNonAPSDemand(),
+                    activity = requireActivity(),
+                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                        adController = controller
+                    }
+                )
             }
         }
     }.root
@@ -120,31 +139,7 @@ class APSFragment : Fragment(), NimbusRequest.Interceptor {
     override fun onDestroyView() {
         adController?.destroy()
         adController = null
-        RequestManager.interceptors.remove(this)
         super.onDestroyView()
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = ""
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
-    }
-
-    private fun AdController.addListener(controllerName: String) {
-        listeners().add(object : AdController.Listener {
-            override fun onAdEvent(adEvent: AdEvent) {
-                Timber.i("$controllerName: %s", adEvent.name)
-                if (adEvent == AdEvent.DESTROYED) adController = null
-            }
-
-            override fun onError(error: NimbusError) {
-                Timber.e("$controllerName: %s", error.message)
-                adController = null
-            }
-        })
     }
 }
 

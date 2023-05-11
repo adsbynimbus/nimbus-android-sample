@@ -11,13 +11,14 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
+import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
 import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import com.adsbynimbus.request.FANDemandProvider
+import com.adsbynimbus.request.NimbusRequest
 import com.facebook.ads.AdSettings.TestAdType
-import timber.log.Timber
 
 fun Context.initializeMetaAudienceNetwork(appId: String) {
     FANDemandProvider.initialize(this, appId)
@@ -32,22 +33,26 @@ fun appIdFromMetaPlacementId(placement: String) = placement.substringBefore("_")
  * indicative of normal usage as the Nimbus server determines which ad units to request based on the
  * request sent from the client.
  */
-class MetaFragment : Fragment(), Renderer.Listener, AdController.Listener {
+class MetaFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
     private var adController: AdController? = null
-    lateinit var item: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        when (requireArguments().getString("item", "").also { item = it }) {
+        when (val item = requireArguments().getString("item")) {
             "Meta Banner",
-            "Meta Native" -> Renderer.loadAd(mockMetaNimbusAd(item), adFrame, this@MetaFragment)
+            "Meta Native" -> Renderer.loadAd(
+                ad = mockMetaNimbusAd(item),
+                container = adFrame,
+                listener = NimbusAdManagerTestListener(identifier = item) {
+                    adController  = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
+                })
             "Meta Interstitial" -> requireActivity().loadBlockingAd(mockMetaNimbusAd(item))?.also {
-                adController = it.apply { listeners.add(this@MetaFragment) }
+                adController = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
             }
         }
     }.root
@@ -56,21 +61,6 @@ class MetaFragment : Fragment(), Renderer.Listener, AdController.Listener {
         adController?.destroy()
         adController = null
         super.onDestroyView()
-    }
-
-    override fun onAdEvent(adEvent: AdEvent) {
-        Timber.i("$item: %s", adEvent.name)
-    }
-
-    override fun onAdRendered(controller: AdController) {
-        adController = controller.also {
-            it.listeners.add(this)
-            it.start()
-        }
-    }
-
-    override fun onError(error: NimbusError) {
-        Timber.e("$item: %s", error.message)
     }
 }
 

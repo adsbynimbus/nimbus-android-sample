@@ -45,7 +45,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             }
 
             /* Unity samples can be found in the Demand folder */
-            if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(appId = BuildConfig.UNITY_GAME_ID)
+            if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(unityGameId = BuildConfig.UNITY_GAME_ID)
 
             /* Vungle samples can be found in the Demand folder*/
             initializeVungle(vungleAppId = BuildConfig.VUNGLE_CONFIG_ID)

@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdEvent
+import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
+import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
 import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.UnityDemandProvider
-import timber.log.Timber
 
 fun Context.initializeUnity(unityGameId: String) {
     if (Nimbus.testMode) UnityDemandProvider.initializeTestMode(this, gameId = unityGameId) else {
@@ -23,43 +20,34 @@ fun Context.initializeUnity(unityGameId: String) {
     }
 }
 
-class UnityFragment : Fragment(), NimbusRequest.Interceptor {
+class UnityFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
+
+    fun NimbusRequest.removeNonUnityDemand() = apply {
+        interceptors.add(NimbusRequest.Interceptor {
+            request.imp[0].ext.facebook_app_id = null
+            request.user?.ext = request.user?.ext?.apply {
+                facebook_buyeruid = null
+                vungle_buyeruid = null
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@UnityFragment)
-        when (requireArguments().getString("item")) {
+        when (val item = requireArguments().getString("item")) {
             "Rewarded Video Unity" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo("Rewarded_Android"),
+                request = NimbusRequest.forRewardedVideo(item).removeNonUnityDemand(),
                 closeButtonDelaySeconds = 30,
                 activity = requireActivity(),
-            ) { controller -> controller.addListener("Rewarded Video Controller (Unity)") }
+                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                }
+            )
         }
     }.root
-
-    override fun onDestroyView() {
-        RequestManager.interceptors.remove(this)
-        super.onDestroyView()
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = ""
-    }
-
-    private fun AdController.addListener(controllerName: String) {
-        listeners.add(object : AdController.Listener {
-            override fun onAdEvent(adEvent: AdEvent) {
-                Timber.i("$controllerName: %s", adEvent.name)
-            }
-
-            override fun onError(error: NimbusError) {
-                Timber.e("$controllerName: %s", error.message)
-            }
-        })
-    }
 }

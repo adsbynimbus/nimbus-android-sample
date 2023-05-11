@@ -19,9 +19,9 @@ import androidx.navigation.fragment.fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adsbynimbus.android.sample.admanager.AdManagerFragment
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.mediation.GAMDemoFragment
+import com.adsbynimbus.android.sample.rendering.AdManagerFragment
 import com.adsbynimbus.android.sample.test.TestRenderFragment
 
 val screens = mutableMapOf(
@@ -38,8 +38,6 @@ val screens = mutableMapOf(
         AdManager("Interstitial Static"),
         AdManager("Interstitial Video"),
         AdManager("Interstitial Hybrid"),
-        AdManager("Blocking Interstitial (5 sec)"),
-        AdManager("Rewarded Static (5 sec)"),
         AdManager("Rewarded Video (5 sec)"),
         AdManager("Ads in ScrollView")
     ),

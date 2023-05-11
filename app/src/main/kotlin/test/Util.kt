@@ -9,12 +9,14 @@ import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
 
+val NimbusResponse.testDescription get() = "${network()} ${type()} ad"
+
 class NimbusAdManagerTestListener(
     val identifier: String,
     val onAdRenderedCallback: (AdController) -> Unit,
 ) : NimbusAdManager.Listener {
 
-    lateinit var response: NimbusResponse
+    var response: NimbusResponse? = null
     override fun onError(error: NimbusError) {
         Timber.e("$identifier: ${error.message}")
     }
@@ -28,9 +30,8 @@ class NimbusAdManagerTestListener(
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
                 if (adEvent == AdEvent.LOADED) controller.view?.apply {
-                    val testIdentifier = "${response.network()} ${response.type()} ad"
                     if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
-                    contentDescription = testIdentifier
+                    contentDescription = response?.testDescription
                 }
             }
             override fun onError(error: NimbusError) {}

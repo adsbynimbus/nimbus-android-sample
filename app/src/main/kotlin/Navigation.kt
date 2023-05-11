@@ -52,7 +52,7 @@ val screens = mutableMapOf(
     ),
     "Third Party Demand" to listOf(
         Header("Unity"),
-        Unity("Rewarded Video Unity (5 sec)"),
+        Unity("Rewarded Video Unity"),
         Header("APS"),
         APS("APS Banner"),
         APS("APS Interstitial Hybrid"),

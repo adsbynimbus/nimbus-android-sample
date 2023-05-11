@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.lineitem.applyDynamicPrice
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.render.NimbusAdView
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.NimbusResponse
 import com.adsbynimbus.request.RequestManager
@@ -30,6 +33,7 @@ class GAMDemoFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
     private var adView: AdManagerAdView? = null
+    private var nimbusResponse: NimbusResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,10 +58,16 @@ class GAMDemoFragment : Fragment() {
     private fun FrameLayout.requestBannerAd(isDynamicPrice: Boolean = false) {
         adView = AdManagerAdView(requireContext()).apply {
             adUnitId = BuildConfig.GAM_PLACEMENT_ID
+            id = R.id.google_ad_view
             setAdSizes(AdSize.BANNER)
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     Timber.v("Banner ad loaded")
+                    /* Set test ID on the Nimbus Ad View if it loaded */
+                    children.filterIsInstance<NimbusAdView>().forEach {
+                        it.id = R.id.nimbus_ad_view
+                        it.contentDescription = nimbusResponse?.run { "${network()} ${type()} ad" }
+                    }
                 }
 
                 override fun onAdFailedToLoad(p0: LoadAdError) {

@@ -12,6 +12,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.testDescription
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -38,13 +39,12 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
                     listener = object : RequestManager.Listener {
                     override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                        val testDescription = "${nimbusResponse.network()} ${nimbusResponse.type()} ad"
                         // Render ad with response
                         Renderer.loadAd(nimbusResponse, adFrame,
                             object : Renderer.Listener, NimbusError.Listener {
                                 override fun onAdRendered(controller: AdController) {
                                     adController = controller.apply {
-                                        view?.contentDescription = testDescription
+                                        view?.contentDescription = nimbusResponse.testDescription
                                         view?.id = nimbus_ad_view
                                         controller.listeners.add(LoggingAdControllerListener(identifier = item))
                                     }

@@ -4,19 +4,12 @@
     <string name="main_title">INTEGRATION ASSIST</string>
     <string name="main_subtitle">Ad Call Demos and Render Testing</string>
 
-    <string name="ad_demo_title">Show Ad Demo</string>
     <string name="ad_demo_subtitle">Select to see Nimbus\' request and render flow</string>
 
-    <string name="third_party_demand_title">Third Party Demand Demo</string>
     <string name="third_party_demand_subtitle">Select to see Nimbus\' integration with third party demand</string>
 
-    <string name="mediation_title">Mediation Platforms</string>
     <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
 
-    <string name="om_title">OM</string>
-    <string name="om_subtitle">SDK integration for MOAT visibility score</string>
-
-    <string name="test_render_title">Test Render</string>
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
     <string name="test_render_button">Test</string>
 

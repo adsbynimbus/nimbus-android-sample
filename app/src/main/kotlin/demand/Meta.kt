@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
@@ -17,7 +16,6 @@ import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import com.adsbynimbus.request.FANDemandProvider
-import com.adsbynimbus.request.NimbusRequest
 import com.facebook.ads.AdSettings.TestAdType
 
 fun Context.initializeMetaAudienceNetwork(appId: String) {

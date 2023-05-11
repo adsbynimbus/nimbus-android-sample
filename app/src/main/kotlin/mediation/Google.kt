@@ -41,8 +41,8 @@ class GAMDemoFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (requireArguments().getString("item")) {
-            "Banner" -> adFrame.requestBannerAd()
-            "Interstitial" -> root.context.requestInterstitialAd()
+            "Banner Mediation" -> adFrame.requestBannerAd()
+            "Interstitial Mediation" -> root.context.requestInterstitialAd()
             "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
             "Dynamic Price Interstitial" -> root.context.requestDynamicInterstitialAd()
             "Dynamic Price Interstitial Static" -> root.context.requestDynamicInterstitialStaticAd()
@@ -64,10 +64,7 @@ class GAMDemoFragment : Fragment() {
                 override fun onAdLoaded() {
                     Timber.v("Banner ad loaded")
                     /* Set test ID on the Nimbus Ad View if it loaded */
-                    children.filterIsInstance<NimbusAdView>().forEach {
-                        it.id = R.id.nimbus_ad_view
-                        it.contentDescription = nimbusResponse?.run { "${network()} ${type()} ad" }
-                    }
+                    addTestIds()
                 }
 
                 override fun onAdFailedToLoad(p0: LoadAdError) {
@@ -176,5 +173,12 @@ class GAMDemoFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun AdManagerAdView.addTestIds() {
+        children.filterIsInstance<NimbusAdView>().forEach {
+            it.id = R.id.nimbus_ad_view
+            it.contentDescription = nimbusResponse?.run { "${network()} ${type()} ad" }
+        }
     }
 }

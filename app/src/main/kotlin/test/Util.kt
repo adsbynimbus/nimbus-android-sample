@@ -40,7 +40,7 @@ class NimbusAdManagerTestListener(
     }
 }
 
-class LoggingAdControllerListener(val identifier: String, ) : AdController.Listener {
+class LoggingAdControllerListener(val identifier: String) : AdController.Listener {
     override fun onAdEvent(adEvent: AdEvent) {
         Timber.i("$identifier: ${adEvent.name}")
     }

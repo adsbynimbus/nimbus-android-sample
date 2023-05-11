@@ -3,16 +3,13 @@ package com.adsbynimbus.android.sample
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Gravity.BOTTOM
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.TextViewCompat
 import androidx.core.widget.TextViewCompat.setTextAppearance
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager

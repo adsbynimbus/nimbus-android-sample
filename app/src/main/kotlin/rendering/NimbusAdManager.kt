@@ -5,9 +5,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
@@ -36,44 +33,41 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
         when (val item = requireArguments().getString("item")) {
-            "Manually Rendered Ad" -> {
-                // Manual Render Ad
-                adManager.makeRequest(
-                    context = root.context,
-                    request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                    listener = object : RequestManager.Listener {
-                    override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                        // Render ad with response
-                        Renderer.loadAd(nimbusResponse, adFrame,
-                            object : Renderer.Listener, NimbusError.Listener {
-                                override fun onAdRendered(controller: AdController) {
-                                    adController = controller.apply {
-                                        view?.contentDescription = nimbusResponse.testDescription
-                                        view?.id = nimbus_ad_view
-                                        controller.alignTop()
-                                        controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                                    }
-                                }
-
-                                override fun onError(error: NimbusError) {
-                                    Timber.e("Manual Render Ad: %s", error.message)
+            "Manually Rendered Ad" -> adManager.makeRequest(
+                context = root.context,
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
+                listener = object : RequestManager.Listener {
+                override fun onAdResponse(nimbusResponse: NimbusResponse) {
+                    // Render ad with response
+                    Renderer.loadAd(nimbusResponse, adFrame,
+                        object : Renderer.Listener, NimbusError.Listener {
+                            override fun onAdRendered(controller: AdController) {
+                                adController = controller.apply {
+                                    view?.contentDescription = nimbusResponse.testDescription
+                                    view?.id = nimbus_ad_view
+                                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
                                 }
                             }
-                        )
-                    }
 
-                    override fun onError(error: NimbusError) {
-                        Timber.e("Manual Render Ad: %s", error.message)
-                    }
-                })
-            }
+                            override fun onError(error: NimbusError) {
+                                Timber.e("Manual Render Ad: %s", error.message)
+                            }
+                        }
+                    )
+                }
+
+                override fun onError(error: NimbusError) {
+                    Timber.e("Manual Render Ad: %s", error.message)
+                }
+            })
             "Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
                 refreshInterval = 30,
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                    controller.alignTop()
+                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
                 },
             )
             "Interstitial Static" -> adManager.showBlockingAd(
@@ -116,7 +110,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     adManager.showAd(
                         request =  NimbusRequest.forBannerAd("$item Banner", Format.BANNER_320_50, Position.HEADER),
                         refreshInterval = 30,
-                        viewGroup = adFrame,
+                        viewGroup = adFrameBanner,
                         listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                             controller.listeners.add(LoggingAdControllerListener(identifier = item))
                         },
@@ -131,7 +125,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     adManager.showAd(
                         request =  NimbusRequest.forVideoAd("$item Video"),
                         refreshInterval = 30,
-                        viewGroup = adFrame,
+                        viewGroup = adFrameVideo,
                         listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                             controller.listeners.add(LoggingAdControllerListener(identifier = item))
                         },

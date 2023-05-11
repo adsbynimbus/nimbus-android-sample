@@ -38,13 +38,13 @@ val screens = mutableMapOf(
         AdManager("Interstitial Static"),
         AdManager("Interstitial Video"),
         AdManager("Interstitial Hybrid"),
-        AdManager("Rewarded Video (5 sec)"),
+        AdManager("Rewarded Video (5 Sec)"),
         AdManager("Ads in ScrollView")
     ),
     "Mediation Platforms" to listOf(
-        Header("Google"),
-        Google("Banner"),
-        Google("Interstitial"),
+        Header("Google Ad Manager"),
+        Google("Banner Mediation"),
+        Google("Interstitial Mediation"),
         Google("Dynamic Price Banner"),
         Google("Dynamic Price Interstitial"),
         Google("Dynamic Price Interstitial Static"),

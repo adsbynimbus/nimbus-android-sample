@@ -40,6 +40,7 @@ class NimbusInitializer : Initializer<Nimbus> {
 
             /* Initializes Meta Audience Network if any of the placement ids have been defined */
             metaPlacementIds.firstOrNull { it.isNotEmpty() }?.let {
+
                 /* Meta samples can be found in the Demand folder */
                 initializeMetaAudienceNetwork(appId = appIdFromMetaPlacementId(placement = it))
             }

@@ -7,28 +7,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.VungleDemandProvider
 import timber.log.Timber
 
-fun initializeVungle() {
-}
-/**
- *
- */
-fun ViewGroup.showBannerAd() {
-
+fun initializeVungle(vungleAppId: String) {
+    VungleDemandProvider.initialize(appId = vungleAppId)
+    /** Disable Vungle demand until we are on the screen we want to show Vungle test ads */
+    VungleDemandProvider.enabled = false
 }
 
 class VungleFragment : Fragment(), AdController.Listener, Renderer.Listener, NimbusAdManager.Listener {
 
+    val adManager: NimbusAdManager = NimbusAdManager()
     var adController: AdController? = null
     lateinit var item: String
 
@@ -86,3 +83,9 @@ class VungleFragment : Fragment(), AdController.Listener, Renderer.Listener, Nim
         Timber.e(error, "$item: %s", error.message)
     }
 }
+
+var VungleDemandProvider.enabled: Boolean
+    get() = RequestManager.interceptors.contains(this)
+    set(enabled) = with(RequestManager.interceptors) {
+        if (enabled) add(VungleDemandProvider) else remove(VungleDemandProvider)
+    }

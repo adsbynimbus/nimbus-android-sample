@@ -1,11 +1,13 @@
 package com.adsbynimbus.android.sample
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Gravity.BOTTOM
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
+import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.TextViewCompat
@@ -15,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
+import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 
 // This variable is top level to avoid creating a companion object on NavigationActivity
 
@@ -64,3 +67,13 @@ class NavigationActivity : AppCompatActivity() {
             .unregisterOnSharedPreferenceChangeListener(SettingsListener)
     }
 }
+
+fun Context.showCustomDialog(message: String): AlertDialog = AlertDialog.Builder(this)
+    .setCancelable(false)
+    .create().apply {
+        setView(CustomDialogBinding.inflate(LayoutInflater.from(this@showCustomDialog)).apply {
+            description.text = getString(R.string.custom_dialog_message, message)
+            button.setOnClickListener { dismiss() }
+        }.root)
+    }
+

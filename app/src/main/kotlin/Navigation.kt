@@ -16,12 +16,10 @@ import androidx.navigation.createGraph
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.fragment
-import androidx.navigation.navArgument
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.android.sample.admanager.AdManagerFragment
-import com.adsbynimbus.android.sample.admanager.ScrollingDemoFragment
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.mediation.GAMDemoFragment
 import com.adsbynimbus.android.sample.test.TestRenderFragment

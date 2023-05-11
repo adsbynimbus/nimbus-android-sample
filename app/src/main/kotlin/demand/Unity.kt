@@ -1,20 +1,31 @@
 package com.adsbynimbus.android.sample.demand
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.adsbynimbus.Nimbus
+import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.UnityDemandProvider
 import timber.log.Timber
 
+fun Context.initializeUnity(unityGameId: String) {
+    if (Nimbus.testMode) UnityDemandProvider.initializeTestMode(this, gameId = unityGameId) else {
+        UnityDemandProvider.initialize(this, gameId = unityGameId)
+    }
+}
+
 class UnityFragment : Fragment(), NimbusRequest.Interceptor {
+
+    val adManager: NimbusAdManager = NimbusAdManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,

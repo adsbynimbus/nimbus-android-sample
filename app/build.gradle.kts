@@ -48,10 +48,6 @@ androidComponents.onVariants { variant ->
             "sample_gam_placement_id",
             "sample_unity_game_id",
             "sample_vungle_config_id",
-            "sample_vungle_interstitial_id",
-            "sample_vungle_rewarded_id",
-            "sample_vungle_banner_320_id",
-            "sample_vungle_mrec_id",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),

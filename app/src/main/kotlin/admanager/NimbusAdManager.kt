@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.openrtb.enumerations.Position
@@ -19,6 +19,7 @@ import timber.log.Timber
 
 class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
+    val adManager: NimbusAdManager = NimbusAdManager()
     private var adController: AdController? = null
 
     override fun onCreateView(

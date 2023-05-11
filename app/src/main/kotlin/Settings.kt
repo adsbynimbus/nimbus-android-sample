@@ -27,6 +27,8 @@ object SettingsListener : SharedPreferences.OnSharedPreferenceChangeListener {
 const val gppTestString =
     "DBABMA~CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
 const val gppTestSids = "2"
+const val tcfString =
+    "CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
 
 fun SharedPreferences.setGppInSharedPrefs(enabled: Boolean) = edit {
     if (enabled) putString("IABGPP_HDR_GppString", gppTestString) else remove("IABGPP_HDR_GppString")

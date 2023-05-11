@@ -1,11 +1,13 @@
 package com.adsbynimbus.android.sample.demand
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
+import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
@@ -13,8 +15,17 @@ import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
+import com.adsbynimbus.request.FANDemandProvider
 import com.facebook.ads.AdSettings.TestAdType
 import timber.log.Timber
+
+fun Context.initializeMetaAudienceNetwork(appId: String) {
+    FANDemandProvider.initialize(this, appId)
+    //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
+}
+
+/** Returns the app id derived from a placement id */
+fun appIdFromMetaPlacementId(placement: String) = placement.substringBefore("_")
 
 /**
  * This Fragment shows what Facebook ads look like when run through the Nimbus renderer but is not
@@ -23,6 +34,7 @@ import timber.log.Timber
  */
 class MetaFragment : Fragment(), Renderer.Listener, AdController.Listener {
 
+    val adManager: NimbusAdManager = NimbusAdManager()
     private var adController: AdController? = null
     lateinit var item: String
 
@@ -78,7 +90,7 @@ fun mockMetaNimbusAd(type: String) = object : NimbusAd {
             it.adTypeString + "#" + if (it in bannerTypes) BuildConfig.FAN_NATIVE_320_ID else BuildConfig.FAN_NATIVE_ID
         }
         "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID}"
-        else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID}"
+        else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID}"
     }
 
     override fun type(): String = if (type == "Meta Native") "native" else "static"

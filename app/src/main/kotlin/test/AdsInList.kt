@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.admanager
+package com.adsbynimbus.android.sample.test
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.demand.mockMetaNimbusAd
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -20,6 +19,8 @@ import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
 
 class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
+
+    val adManager: NimbusAdManager = NimbusAdManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +55,11 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         }
     }
 
-    class ScrollingAdapter : RecyclerView.Adapter<ScrollingAdapter.ViewHolder>() {
+    class ViewHolder(val view: FrameLayout) : RecyclerView.ViewHolder(view) {
+        var adController: AdController? = null
+    }
 
-        class ViewHolder(val view: FrameLayout) : RecyclerView.ViewHolder(view) {
-            var adController: AdController? = null
-        }
+    inner class ScrollingAdapter : RecyclerView.Adapter<ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(FrameLayout(parent.context).apply {

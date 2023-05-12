@@ -99,7 +99,7 @@ dependencies {
     api("androidx.startup:startup-runtime:1.1.1")
 
     /* Material */
-    api("com.google.android.material:material:1.8.0")
+    api("com.google.android.material:material:1.9.0")
 
     /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.11.0")
@@ -121,6 +121,6 @@ dependencies {
     /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */
     api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
     api("org.jetbrains:annotations:24.0.1")
 }

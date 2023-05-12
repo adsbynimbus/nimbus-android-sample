@@ -24,7 +24,7 @@ class NimbusInitializer : Initializer<Nimbus> {
         Timber.plant(Timber.DebugTree())
 
         /* Attaches a logger for SDK events that are sent to Timber */
-        Nimbus.addLogger { level, message -> Timber.log(level, message)}
+        Nimbus.addLogger { level, message -> Timber.log(level, message) }
 
         val metaPlacementIds = listOf(
             BuildConfig.FAN_NATIVE_ID,

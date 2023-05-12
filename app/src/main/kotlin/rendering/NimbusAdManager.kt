@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.test.testDescription
+import com.adsbynimbus.android.sample.test.setTestDescription
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -43,8 +42,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         object : Renderer.Listener, NimbusError.Listener {
                             override fun onAdRendered(controller: AdController) {
                                 adController = controller.apply {
-                                    view?.contentDescription = nimbusResponse.testDescription
-                                    view?.id = nimbus_ad_view
+                                    controller.setTestDescription(response = nimbusResponse)
                                     controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
                                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
                                 }

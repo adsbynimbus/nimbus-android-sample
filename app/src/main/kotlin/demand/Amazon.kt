@@ -9,13 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.request.*
 import com.amazon.device.ads.AdError
 import com.amazon.device.ads.AdRegistration

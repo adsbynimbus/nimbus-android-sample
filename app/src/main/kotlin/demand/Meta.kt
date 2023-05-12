@@ -18,6 +18,12 @@ import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import com.adsbynimbus.request.FANDemandProvider
 import com.facebook.ads.AdSettings.TestAdType
 
+/**
+ * Initializes the Meta SDK and integrates it with the Nimbus SDK.
+ *
+ * @param appId the application id provided by Meta; can be derived from a placement id
+ * @see appIdFromMetaPlacementId
+ */
 fun Context.initializeMetaAudienceNetwork(appId: String) {
     FANDemandProvider.initialize(this, appId)
     //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
@@ -72,6 +78,7 @@ val interstitialTypes = bannerTypes + arrayOf(
 )
 val nativeTypes = interstitialTypes
 
+/** Creates a mock NimbusAd that can be sent to the Nimbus Renderer to load a test Meta ad */
 fun mockMetaNimbusAd(type: String) = object : NimbusAd {
     override fun placementId(): String = when(type) {
         "Meta Native" -> nativeTypes.random().let {
@@ -83,6 +90,7 @@ fun mockMetaNimbusAd(type: String) = object : NimbusAd {
 
     override fun type(): String = if (type == "Meta Native") "native" else "static"
 
+    /** Nimbus currently refers to Meta demand as facebook under the hood */
     override fun network(): String = "facebook"
 
     override fun isInterstitial(): Boolean = type == "Meta Interstitial"

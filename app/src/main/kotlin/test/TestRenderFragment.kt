@@ -22,11 +22,8 @@ class TestRenderFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = FragmentTestRenderBinding.inflate(inflater, container, false).apply {
-        val titleText: String = resources.getString(R.string.test_render_title)
-        val subtitleText: String = resources.getString(R.string.test_render_subtitle)
-
-        headerView.setTitleText(titleText)
-        headerView.setSubtitleText(subtitleText)
+        headerTitle.text = resources.getString(R.string.test_render_title)
+        headerSubtitle.text = resources.getString(R.string.test_render_subtitle)
 
         testButton.setOnClickListener {
             val type = when {

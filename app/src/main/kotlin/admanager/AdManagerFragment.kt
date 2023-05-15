@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -26,12 +26,13 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentAdManagerBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
-        item = bundle.getSerializable("item") as AdItem
+        item = requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as AdItem
+        }
         when (item) {
             AdItem.MANUAL_REQUEST_RENDER_AD -> {
                 // Manual Request Ad

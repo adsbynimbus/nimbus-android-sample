@@ -12,7 +12,7 @@ import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.admanager.APSAdItem.BANNER
 import com.adsbynimbus.android.sample.admanager.APSAdItem.INTERSTITIAL_HYBRID
 import com.adsbynimbus.android.sample.request.loadAd
-import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.request.DTBException
 import com.adsbynimbus.android.sample.request.loadAll
 import com.adsbynimbus.openrtb.request.Format
@@ -33,12 +33,13 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentAdManagerBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@APSDemoFragment)
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
-        item = bundle.getSerializable("item") as APSAdItem
+        item = requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as APSAdItem
+        }
         when (item) {
             BANNER -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)

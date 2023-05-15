@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.databinding.FragmentGamDemoBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.lineitem.applyDynamicPrice
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
@@ -35,15 +35,16 @@ class GAMDemoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentGamDemoBinding.inflate(inflater, container, false).apply {
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
-        val item = bundle.getSerializable("item") as MediationItem
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        val item = requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as MediationItem
+        }
 
         when (item) {
-            MediationItem.BANNER -> banner.requestBannerAd()
-            MediationItem.DYNAMIC_PRICE_BANNER -> banner.requestBannerAd(isDynamicPrice = true)
+            MediationItem.BANNER -> adFrame.requestBannerAd()
+            MediationItem.DYNAMIC_PRICE_BANNER -> adFrame.requestBannerAd(isDynamicPrice = true)
             MediationItem.INTERSTITIAL -> root.context.requestInterstitialAd()
             MediationItem.DYNAMIC_PRICE_INTERSTITIAL ->
                 root.context.requestDynamicInterstitialAd()

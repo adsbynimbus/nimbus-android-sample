@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.adsbynimbus.android.sample.MainFragment"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/navigation_primary">
         <action
             android:id="@+id/to_adDemoFragment"
             app:destination="@id/adDemoFragment"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/adDemoFragment"
         android:name="com.adsbynimbus.android.sample.admanager.AdDemoFragment"
-        tools:layout="@layout/fragment_ad_demo">
+        tools:layout="@layout/navigation_secondary">
         <action
             android:id="@+id/to_adManagerFragment"
             app:destination="@id/adManagerFragment"
@@ -40,49 +40,22 @@
     <fragment
         android:id="@+id/adManagerFragment"
         android:name="com.adsbynimbus.android.sample.admanager.AdManagerFragment"
-        tools:layout="@layout/fragment_ad_manager">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.admanager.AdItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
+        tools:layout="@layout/layout_inline_ad">
     </fragment>
     <fragment
         android:id="@+id/apsDemoFragment"
         android:name="com.adsbynimbus.android.sample.admanager.APSDemoFragment"
-        tools:layout="@layout/fragment_ad_manager">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.admanager.APSAdItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
+        tools:layout="@layout/layout_inline_ad">
     </fragment>
     <fragment
         android:id="@+id/FANDemoFragment"
         android:name="com.adsbynimbus.android.sample.admanager.FANDemoFragment"
-        tools:layout="@layout/fragment_fan_demo">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.admanager.FANAdItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
+        tools:layout="@layout/layout_inline_ad">
     </fragment>
     <fragment
         android:id="@+id/mediationFragment"
         android:name="com.adsbynimbus.android.sample.mediation.MediationPlatformsFragment"
-        tools:layout="@layout/fragment_mediation_platforms">
+        tools:layout="@layout/navigation_secondary">
         <action
             android:id="@+id/to_GAMDemoFragment"
             app:destination="@id/GAMDemoFragment"
@@ -91,21 +64,11 @@
     <fragment
         android:id="@+id/GAMDemoFragment"
         android:name="com.adsbynimbus.android.sample.mediation.GAMDemoFragment"
-        tools:layout="@layout/fragment_gam_demo">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.mediation.MediationItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
+        tools:layout="@layout/layout_inline_ad">
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.adsbynimbus.android.sample.SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        android:name="com.adsbynimbus.android.sample.SettingsFragment" />
     <fragment
         android:id="@+id/testRenderFragment"
         android:name="com.adsbynimbus.android.sample.test.TestRenderFragment"
@@ -113,39 +76,15 @@
     <fragment
         android:id="@+id/scrollingDemoFragment"
         android:name="com.adsbynimbus.android.sample.admanager.ScrollingDemoFragment"
-        tools:layout="@layout/fragment_scrolling_demo">
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
+        tools:layout="@layout/layout_ads_in_list">
     </fragment>
     <fragment
         android:id="@+id/unityAdDemo"
         android:name="com.adsbynimbus.android.sample.demand.UnityDemoFragment">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.demand.UnityAdItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/vungleAdDemo"
         android:name="com.adsbynimbus.android.sample.demand.VungleDemoFragment">
-        <argument
-            android:name="item"
-            app:argType="com.adsbynimbus.android.sample.admanager.VungleAdItem" />
-        <argument
-            android:name="titleText"
-            app:argType="string" />
-        <argument
-            android:name="subtitleText"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/thirdPartyDemand"
@@ -169,6 +108,4 @@
             android:id="@+id/to_unityDemo"
             app:destination="@id/unityAdDemo" />
     </fragment>
-
-
 </navigation>

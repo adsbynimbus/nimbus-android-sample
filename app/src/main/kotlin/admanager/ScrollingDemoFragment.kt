@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.databinding.FragmentScrollingDemoBinding
+import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
@@ -25,10 +25,11 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentScrollingDemoBinding.inflate(inflater, container, false).apply {
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
+    ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
+        requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+        }
 
         recyclerView.adapter = ScrollingAdapter()
         recyclerView.addItemDecoration(marginDecoration)

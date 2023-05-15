@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.databinding.FragmentAdManagerBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.request.NimbusRequest
@@ -23,12 +23,13 @@ class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentAdManagerBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@UnityDemoFragment)
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
-        item = bundle.getSerializable("item") as UnityAdItem
+        item = requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as UnityAdItem
+        }
         when (item) {
             UnityAdItem.REWARDED_VIDEO_UNITY -> adManager.showRewardedAd(
                 NimbusRequest.forRewardedVideo("Rewarded_Android"),

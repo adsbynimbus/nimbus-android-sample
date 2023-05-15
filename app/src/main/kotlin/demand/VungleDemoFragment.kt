@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.admanager.VungleAdItem
-import com.adsbynimbus.android.sample.databinding.FragmentVungleDemoBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.VungleDemandProvider
 import timber.log.Timber
 
@@ -28,9 +27,14 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentVungleDemoBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         VungleDemandProvider.enabled = true
-        item = requireArguments().getSerializable("item") as VungleAdItem
+        logContainer.visibility = View.VISIBLE
+        item =  requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as VungleAdItem
+        }
         when (item) {
             VungleAdItem.BANNER ->
                 NimbusAdManager()
@@ -61,9 +65,6 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
                         this@VungleDemoFragment
                     )
         }
-
-        headerView.setTitleText(requireArguments().getString("titleText", ""))
-        headerView.setSubtitleText(requireArguments().getString("subtitleText", ""))
     }.root
 
     override fun onDestroyView() {

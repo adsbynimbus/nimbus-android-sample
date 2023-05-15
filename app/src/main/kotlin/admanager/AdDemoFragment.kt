@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.common.SampleAppAdapter
-import com.adsbynimbus.android.sample.databinding.FragmentAdDemoBinding
+import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
 
 class AdDemoFragment : Fragment() {
 
@@ -18,16 +18,14 @@ class AdDemoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentAdDemoBinding.inflate(inflater, container, false).apply {
-        val titleText: String = resources.getString(R.string.ad_demo_title)
-        headerView.setTitleText(titleText)
-        headerView.setSubtitleText(resources.getString(R.string.ad_demo_subtitle))
-
+    ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
+        headerTitle.text = resources.getString(R.string.ad_demo_title)
+        headerSubtitle.text = resources.getString(R.string.ad_demo_subtitle)
         val adItemAdapter = SampleAppAdapter("showAdDemo", enumValues<AdItem>()) { item ->
             findNavController().navigate(R.id.to_adManagerFragment, bundleOf(
                 "item" to item,
                 "titleText" to item.description,
-                "subtitleText" to titleText,
+                "subtitleText" to headerTitle.text,
             ))
         }
 

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <com.adsbynimbus.android.sample.common.SampleAppHeader
-        android:id="@+id/header_view"
+    <TextView style="@style/Header.Title"
+        android:id="@+id/header_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:subtitleText="@string/settings_subtitle"
-        app:titleText="@string/settings_title" />
+        android:layout_height="wrap_content" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView style="@style/Header.Subtitle"
+        android:id="@+id/header_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

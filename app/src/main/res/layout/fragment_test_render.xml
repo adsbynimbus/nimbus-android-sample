@@ -6,14 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".test.TestRenderFragment">
 
-    <com.adsbynimbus.android.sample.common.SampleAppHeader
-        android:id="@+id/header_view"
+    <TextView style="@style/Header.Title"
+        android:id="@+id/header_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:titleText="Test Render Fragment" />
+        app:layout_constraintBottom_toTopOf="@id/header_subtitle" />
+
+    <TextView style="@style/Header.Subtitle"
+        android:id="@+id/header_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header_title" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/markup_edit_text"
@@ -22,16 +26,13 @@
         android:layout_margin="16dp"
         android:background="@drawable/text_input_border"
         android:contentDescription="testRenderMarkupEditText"
-        android:gravity="start|top"
         android:imeOptions="actionSend"
         android:padding="5dp"
         android:textColor="@color/turquoise"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@id/test_button"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header_view"
+        app:layout_constraintTop_toBottomOf="@id/markup_edit_text"
         app:layout_constraintVertical_bias="0"
         tools:ignore="HardcodedText"
         tools:text="Markup" />
@@ -48,9 +49,10 @@
         android:text="@string/test_render_button"
         android:textColor="@android:color/white"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/markup_edit_text"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

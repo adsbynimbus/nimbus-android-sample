@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.databinding.FragmentFanDemoBinding
+import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.FANAdRenderer
@@ -59,12 +59,13 @@ class FANDemoFragment : Fragment(), Renderer.Listener, AdController.Listener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentFanDemoBinding.inflate(inflater, container, false).apply {
-        val bundle = requireArguments()
-        headerView.setTitleText(bundle.getString("titleText", ""))
-        headerView.setSubtitleText(bundle.getString("subtitleText", ""))
-        item = bundle.getSerializable("item") as FANAdItem
-        adLayout.loadAd(item)
+    ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        item = requireArguments().run {
+            headerTitle.text = getString("titleText", "")
+            headerSubtitle.text = getString("subtitleText", "")
+            getSerializable("item") as FANAdItem
+        }
+        adFrame.loadAd(item)
     }.root
 
     override fun onDestroyView() {

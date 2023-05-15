@@ -79,7 +79,7 @@ class APSFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (val item = requireArguments().getString("item")) {
-            "APS Banner" -> lifecycleScope.launch {
+            "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest().apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))

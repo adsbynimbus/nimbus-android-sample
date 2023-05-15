@@ -15,7 +15,6 @@
 
     <string name="settings_subtitle">Configure your test app experience</string>
     <string name="settings_user_details">User Details</string>
-    <string name="settings_regs_details">Regs Details</string>
     <string name="settings_test_mode">Nimbus Test Mode</string>
     <string name="settings_coppa">Set COPPA On</string>
     <string name="settings_force_no_fill">Force No Fill</string>
@@ -23,7 +22,7 @@
     <string name="settings_show_countdown">Show Countdown in Video Ads</string>
     <string name="settings_user_did_consent">GDPR Consent</string>
     <string name="settings_user_ccpa_consent">CCPA Consent</string>
-    <string name="settings_regs_gpp_consent">Send GPP Consent String</string>
+    <string name="settings_regs_gpp_consent">GPP Consent</string>
     <string name="settings_tradedesk">Send Trade Desk Identity</string>
 
     <string name="custom_dialog_title">Attention</string>

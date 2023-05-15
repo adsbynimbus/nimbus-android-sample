@@ -16,16 +16,6 @@
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
-        app:dependency="test_mode"
-        app:key="send_tradedesk_id"
-        app:title="@string/settings_tradedesk" />
-
-    <SwitchPreferenceCompat
-        android:layout="@layout/layout_settings_switch_preference"
-        android:selectable="false"
-        app:allowDividerAbove="true"
-        app:allowDividerBelow="true"
-        app:defaultValue="false"
         app:key="coppa"
         app:title="@string/settings_coppa" />
 
@@ -53,8 +43,9 @@
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
-        app:key="show_countdown"
-        app:title="@string/settings_show_countdown" />
+        app:dependency="test_mode"
+        app:key="send_tradedesk_id"
+        app:title="@string/settings_tradedesk" />
 
     <PreferenceCategory
         android:layout="@layout/layout_navigation_header"
@@ -79,13 +70,6 @@
             app:key="ccpa_consent"
             app:title="@string/settings_user_ccpa_consent" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout="@layout/layout_navigation_header"
-        app:layout="@layout/layout_navigation_header"
-        app:title="@string/settings_regs_details">
-
         <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
@@ -94,6 +78,6 @@
             app:defaultValue="false"
             app:key="enabled_gpp"
             app:title="@string/settings_regs_gpp_consent" />
-    </PreferenceCategory>
 
+    </PreferenceCategory>
 </PreferenceScreen>

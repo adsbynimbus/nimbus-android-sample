@@ -51,12 +51,6 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                 NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
                 else disableTradedeskId()
             }
-            "show_countdown" -> getBoolean(it, false).let { enabled ->
-                val videoRenderer = Renderer.INLINE.get("video") as? VideoAdRenderer
-                videoRenderer?.renderingSettings?.apply {
-                    if (enabled) setUiElements(setOf(UiElement.COUNTDOWN, UiElement.AD_ATTRIBUTION)) else setUiElements(emptySet())
-                }
-            }
             "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
                 edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }

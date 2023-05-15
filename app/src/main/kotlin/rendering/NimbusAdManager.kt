@@ -61,11 +61,26 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             })
             "Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
+                viewGroup = adFrame,
+                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                },
+            )
+            "Banner With Refresh" -> adManager.showAd(
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
                 refreshInterval = 30,
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
                     controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                },
+            )
+            "Interstitial Hybrid" -> adManager.showBlockingAd(
+                request = NimbusRequest.forInterstitialAd(item),
+                activity = requireActivity(),
+                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
                 },
             )
             "Interstitial Static" -> adManager.showBlockingAd(
@@ -88,17 +103,20 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
                 },
             )
-            "Interstitial Hybrid" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item),
+            "Interstitial Video Without UI" -> adManager.showBlockingAd(
+                request = NimbusRequest.forInterstitialAd(item).apply {
+                    request.imp[0].banner = null
+                },
+                closeButtonDelaySeconds = 0,
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
                 },
             )
-            "Rewarded Video (5 Sec)" -> adManager.showRewardedAd(
+            "Rewarded Video" -> adManager.showRewardedAd(
                 request = NimbusRequest.forRewardedVideo(item),
                 activity = requireActivity(),
-                closeButtonDelaySeconds = 5,
+                closeButtonDelaySeconds = 60,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
                 },

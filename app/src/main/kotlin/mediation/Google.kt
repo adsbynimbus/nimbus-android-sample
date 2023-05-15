@@ -41,8 +41,8 @@ class GAMDemoFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (requireArguments().getString("item")) {
-            "Banner Mediation" -> adFrame.requestBannerAd()
-            "Interstitial Mediation" -> root.context.requestInterstitialAd()
+            "Banner" -> adFrame.requestBannerAd()
+            "Interstitial" -> root.context.requestInterstitialAd()
             "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
             "Dynamic Price Interstitial" -> root.context.requestDynamicInterstitialAd()
             "Dynamic Price Interstitial Static" -> root.context.requestDynamicInterstitialStaticAd()

@@ -40,7 +40,7 @@ class UnityFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (val item = requireArguments().getString("item")) {
-            "Rewarded Video Unity" -> adManager.showRewardedAd(
+            "Unity Rewarded Video" -> adManager.showRewardedAd(
                 request = NimbusRequest.forRewardedVideo(item).removeNonUnityDemand(),
                 closeButtonDelaySeconds = 30,
                 activity = requireActivity(),

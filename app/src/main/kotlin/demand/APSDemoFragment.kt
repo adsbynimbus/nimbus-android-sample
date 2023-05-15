@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.admanager
+package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.adManager
-import com.adsbynimbus.android.sample.admanager.APSAdItem.BANNER
-import com.adsbynimbus.android.sample.admanager.APSAdItem.INTERSTITIAL_HYBRID
 import com.adsbynimbus.android.sample.request.loadAd
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.request.DTBException
@@ -27,7 +25,6 @@ import timber.log.Timber
 class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
 
     private var adController: AdController? = null
-    private lateinit var item: APSAdItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,13 +32,13 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@APSDemoFragment)
-        item = requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
-            getSerializable("item") as APSAdItem
+        val item = requireArguments().run {
+            headerTitle.text = getString("titleText")
+            headerSubtitle.text = getString("subtitleText")
+            getString("item")
         }
         when (item) {
-            BANNER -> lifecycleScope.launch {
+            "APS Banner" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest().apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
@@ -63,7 +60,7 @@ class APSDemoFragment : Fragment(), NimbusRequest.Interceptor {
                     adController = it.apply { addListener("Banner Controller") }
                 }
             }
-            INTERSTITIAL_HYBRID -> lifecycleScope.launch {
+            "APS Interstitial Hybrid" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forInterstitialAd("test_interstitial_with_aps")
                 val apsInterstitial = DTBAdRequest().apply {
                     setSizes(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))

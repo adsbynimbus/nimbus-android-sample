@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
+import com.adsbynimbus.android.sample.Destination
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.lineitem.applyDynamicPrice
@@ -28,7 +29,6 @@ import timber.log.Timber
 
 class GAMDemoFragment : Fragment() {
 
-
     private var adView: AdManagerAdView? = null
 
     override fun onCreateView(
@@ -37,21 +37,18 @@ class GAMDemoFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         val item = requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
-            getSerializable("item") as MediationItem
+            headerTitle.text = getString("titleText")
+            headerSubtitle.text = getString("subtitleText")
+            getString("item")
         }
 
         when (item) {
-            MediationItem.BANNER -> adFrame.requestBannerAd()
-            MediationItem.DYNAMIC_PRICE_BANNER -> adFrame.requestBannerAd(isDynamicPrice = true)
-            MediationItem.INTERSTITIAL -> root.context.requestInterstitialAd()
-            MediationItem.DYNAMIC_PRICE_INTERSTITIAL ->
-                root.context.requestDynamicInterstitialAd()
-            MediationItem.DYNAMIC_PRICE_INTERSTITIAL_STATIC ->
-                root.context.requestDynamicInterstitialStaticAd()
-            MediationItem.DYNAMIC_PRICE_INTERSTITIAL_VIDEO ->
-                root.context.requestDynamicInterstitialVideoAd()
+            "Banner" -> adFrame.requestBannerAd()
+            "Dynamic Price Banner" -> adFrame.requestBannerAd(isDynamicPrice = true)
+            "Interstitial" -> root.context.requestInterstitialAd()
+            "Dynamic Price Interstitial" -> root.context.requestDynamicInterstitialAd()
+            "Dynamic Price Interstitial Static" -> root.context.requestDynamicInterstitialStaticAd()
+            "Dynamic Price Interstitial Video" -> root.context.requestDynamicInterstitialVideoAd()
         }
     }.root
 

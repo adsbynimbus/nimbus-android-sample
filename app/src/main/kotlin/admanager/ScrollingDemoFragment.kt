@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
+import com.adsbynimbus.android.sample.demand.mockMetaNimbusAd
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
@@ -27,8 +28,8 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = NavigationSecondaryBinding.inflate(inflater, container, false).apply {
         requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
+            headerTitle.text = getString("titleText")
+            headerSubtitle.text = getString("subtitleText")
         }
 
         recyclerView.adapter = ScrollingAdapter()
@@ -89,7 +90,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
                     0)
                 4 -> NimbusRequest.forVideoAd("test_video")
                 else -> {
-                    forFacebookNative().let {
+                    mockMetaNimbusAd("Meta Native").let {
                         Renderer.loadAd(it, holder.view, object : NimbusAdManager.Listener {
                             override fun onAdRendered(controller: AdController) {
                                 holder.adController = controller

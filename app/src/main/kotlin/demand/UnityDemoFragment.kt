@@ -16,34 +16,27 @@ import timber.log.Timber
 
 class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
 
-    private var adController: AdController? = null
-    lateinit var item: UnityAdItem
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@UnityDemoFragment)
-        item = requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
-            getSerializable("item") as UnityAdItem
+        val item = requireArguments().run {
+            headerTitle.text = getString("titleText")
+            headerSubtitle.text = getString("subtitleText")
+            getString("item")
         }
         when (item) {
-            UnityAdItem.REWARDED_VIDEO_UNITY -> adManager.showRewardedAd(
-                NimbusRequest.forRewardedVideo("Rewarded_Android"),
-                5,
-                requireActivity(),
-            ) {
-                it.addListener("Rewarded Video Controller (Unity)")
-            }
+            "Rewarded Video Unity" -> adManager.showRewardedAd(
+                request = NimbusRequest.forRewardedVideo("Rewarded_Android"),
+                closeButtonDelaySeconds = 30,
+                activity = requireActivity(),
+            ) { controller -> controller.addListener("Rewarded Video Controller (Unity)") }
         }
     }.root
 
     override fun onDestroyView() {
-        adController?.destroy()
-        adController = null
         RequestManager.interceptors.remove(this)
         super.onDestroyView()
     }
@@ -53,15 +46,13 @@ class UnityDemoFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     private fun AdController.addListener(controllerName: String) {
-        listeners().add(object : AdController.Listener {
+        listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
                 Timber.i("$controllerName: %s", adEvent.name)
-                if (adEvent == AdEvent.DESTROYED) adController = null
             }
 
             override fun onError(error: NimbusError) {
                 Timber.e("$controllerName: %s", error.message)
-                adController = null
             }
         })
     }

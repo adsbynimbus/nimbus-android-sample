@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.sample.admanager.VungleAdItem
+import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.request.Format
@@ -21,7 +21,7 @@ import timber.log.Timber
 class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener, NimbusAdManager.Listener {
 
     var adController: AdController? = null
-    private lateinit var item : VungleAdItem
+    lateinit var item: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,40 +30,32 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         VungleDemandProvider.enabled = true
         logContainer.visibility = View.VISIBLE
-        item =  requireArguments().run {
-            headerTitle.text = getString("titleText", "")
-            headerSubtitle.text = getString("subtitleText", "")
-            getSerializable("item") as VungleAdItem
+        item = requireArguments().run {
+            headerTitle.text = getString("titleText")
+            headerSubtitle.text = getString("subtitleText")
+            getString("item", "")
         }
         when (item) {
-            VungleAdItem.BANNER ->
-                NimbusAdManager()
-                    .showAd(
-                        NimbusRequest.forBannerAd(item.placementId, Format.BANNER_320_50),
-                        adFrame,
-                        this@VungleDemoFragment
-                    )
-            VungleAdItem.MREC ->
-                NimbusAdManager()
-                    .showAd(
-                        NimbusRequest.forBannerAd(item.placementId, Format.MREC),
-                        adFrame,
-                        this@VungleDemoFragment
-                    )
-            VungleAdItem.INTERSTITIAL ->
-                NimbusAdManager()
-                    .showBlockingAd(
-                        NimbusRequest.forInterstitialAd(item.placementId),
-                        requireActivity(),
-                        this@VungleDemoFragment
-                    )
-            VungleAdItem.REWARDED ->
-                NimbusAdManager()
-                    .showBlockingAd(
-                        NimbusRequest.forRewardedVideo(item.placementId),
-                        requireActivity(),
-                        this@VungleDemoFragment
-                    )
+            "Vungle Banner" -> adManager.showAd(
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50),
+                viewGroup = adFrame,
+                listener = this@VungleDemoFragment,
+            )
+            "Vungle MREC" -> adManager.showAd(
+                request = NimbusRequest.forBannerAd(item, Format.MREC),
+                viewGroup = adFrame,
+                listener = this@VungleDemoFragment,
+            )
+            "Vungle Interstitial" -> adManager.showBlockingAd(
+                request =  NimbusRequest.forInterstitialAd(item),
+                activity = requireActivity(),
+                listener = this@VungleDemoFragment,
+            )
+            "Vungle Rewarded" -> adManager.showBlockingAd(
+                request = NimbusRequest.forRewardedVideo(item),
+                activity = requireActivity(),
+                listener = this@VungleDemoFragment
+            )
         }
     }.root
 
@@ -75,11 +67,11 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
     }
 
     override fun onAdEvent(adEvent: AdEvent) {
-        Timber.i("${item.description}: %s", adEvent.name)
+        Timber.i("$item: %s", adEvent.name)
     }
 
     override fun onAdRendered(controller: AdController) {
-        Timber.i("${item.description}: onAdRendered")
+        Timber.i("$item: onAdRendered")
         adController = controller.also {
             it.listeners().add(this)
             it.start()
@@ -87,6 +79,6 @@ class VungleDemoFragment : Fragment(), AdController.Listener, Renderer.Listener,
     }
 
     override fun onError(error: NimbusError) {
-        Timber.e(error, "${item.description}: %s", error.message)
+        Timber.e(error, "$item: %s", error.message)
     }
 }

@@ -8,6 +8,7 @@
         <item name="colorPrimary">@color/raisin_black</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorControlNormal">@android:color/white</item>
+        <item name="dividerColor">@color/light_gray</item>
         <item name="toolbarStyle">@style/Toolbar</item>
     </style>
 

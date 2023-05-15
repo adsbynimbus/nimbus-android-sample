@@ -1,14 +1,10 @@
 package com.adsbynimbus.android.sample
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.common.Describable
-import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.databinding.NavigationSecondaryBinding
-import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.VungleDemandProvider
 
@@ -38,8 +34,11 @@ var VungleDemandProvider.enabled: Boolean
         if (enabled) add(VungleDemandProvider) else remove(VungleDemandProvider)
     }
 
-fun Describable.navigationBundle(subtitle: CharSequence) = bundleOf(
-    "item" to this,
-    "titleText" to description,
-    "subtitleText" to subtitle,
-)
+fun Context.showCustomDialog(message: String): AlertDialog = AlertDialog.Builder(this)
+    .setCancelable(false)
+    .create().apply {
+        setView(CustomDialogBinding.inflate(LayoutInflater.from(this@showCustomDialog)).apply {
+            description.text = getString(R.string.custom_dialog_message, message)
+            button.setOnClickListener { dismiss() }
+        }.root)
+    }

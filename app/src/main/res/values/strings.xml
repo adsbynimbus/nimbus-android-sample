@@ -36,12 +36,6 @@
     <string name="settings_regs_gpp_consent">Send GPP Consent String</string>
     <string name="settings_tradedesk">Send Trade Desk Identity</string>
 
-    <string name="google">Google</string>
-    <string name="unity">Unity</string>
-    <string name="fan">FAN</string>
-    <string name="aps">APS</string>
-    <string name="vungle">Vungle</string>
-
     <string name="custom_dialog_title">Attention</string>
     <string name="custom_dialog_button">OK</string>
     <string name="custom_dialog_message">"%1$s is not set in gradle.properties"</string>

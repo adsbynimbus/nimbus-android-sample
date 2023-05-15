@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusError
+import com.adsbynimbus.android.sample.Destination
 import com.adsbynimbus.android.sample.adManager
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
@@ -20,7 +21,6 @@ import timber.log.Timber
 class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
     private var adController: AdController? = null
-    lateinit var item: AdItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,13 +28,13 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
-        item = requireArguments().run {
+        val item = requireArguments().run {
             headerTitle.text = getString("titleText", "")
             headerSubtitle.text = getString("subtitleText", "")
-            getSerializable("item") as AdItem
+            getString("item")
         }
         when (item) {
-            AdItem.MANUAL_REQUEST_RENDER_AD -> {
+            "Manual Request/Render Ad" -> {
                 // Manual Request Ad
                 val request = NimbusRequest.forBannerAd(
                     "test_manual_request_banner",
@@ -66,14 +66,14 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     }
                 })
             }
-            AdItem.BANNER -> adManager.showAd(
+            "Banner" -> adManager.showAd(
                 NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER),
                 20,
                 adFrame,
             ) {
                 adController = it.apply { addListener("Banner Controller") }
             }
-            AdItem.INTERSTITIAL_STATIC -> adManager.showBlockingAd(
+            "Interstitial Static" -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_static").apply {
                     request.imp[0].video = null
                 },
@@ -82,7 +82,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             ) {
                 adController = it.apply { addListener("Interstitial Static Controller") }
             }
-            AdItem.INTERSTITIAL_VIDEO -> adManager.showBlockingAd(
+            "Interstitial Video" -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_video").apply {
                     request.imp[0].banner = null
                 },
@@ -91,20 +91,20 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             ) {
                 adController = it.apply { addListener("Interstitial Video Controller") }
             }
-            AdItem.INTERSTITIAL_HYBRID -> adManager.showBlockingAd(
+            "Interstitial Hybrid" -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_interstitial_video"),
                 0,
                 requireActivity(),
             ) {
                 adController = it.apply { addListener("Interstitial Hybrid Controller") }
             }
-            AdItem.BLOCKING_INTERSTITIAL -> adManager.showBlockingAd(
+            "Blocking Interstitial (5 sec)" -> adManager.showBlockingAd(
                 NimbusRequest.forInterstitialAd("test_blocking_interstitial"),
                 requireActivity(),
             ) {
                 it.addListener("Blocking Interstitial Controller")
             }
-            AdItem.REWARDED_STATIC -> adManager.showRewardedAd(
+            "Rewarded Static (5 sec)" -> adManager.showRewardedAd(
                 NimbusRequest.forInterstitialAd("test_rewarded_static").apply {
                     request.imp[0].video = null
                 },
@@ -113,14 +113,14 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             ) {
                 it.addListener("Rewarded Static Controller")
             }
-            AdItem.REWARDED_VIDEO -> adManager.showRewardedAd(
+            "Rewarded Video (5 sec)" -> adManager.showRewardedAd(
                 NimbusRequest.forRewardedVideo("test_rewarded_video"),
                 5,
                 requireActivity(),
             ) {
                 it.addListener("Rewarded Video Controller")
             }
-            AdItem.ADS_IN_LIST -> {
+            "Ads in ScrollView" -> {
                 LayoutAdsInListBinding.inflate(inflater, adFrame, true).apply {
                     adManager.showAd(
                         NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50, Position.HEADER),

@@ -34,7 +34,6 @@ class GAMDemoFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
     private var adView: AdManagerAdView? = null
-    private var nimbusResponse: NimbusResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

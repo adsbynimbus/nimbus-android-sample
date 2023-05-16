@@ -16,6 +16,7 @@ import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.VungleDemandProvider
 
+/** Initializes the Vungle SDK and integrates it with the Nimbus SDK. */
 fun initializeVungle(vungleAppId: String) {
     VungleDemandProvider.initialize(appId = vungleAppId)
     /** Disable Vungle demand until we are on the screen we want to show Vungle test ads */

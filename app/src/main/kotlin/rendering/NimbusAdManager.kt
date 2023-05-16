@@ -24,7 +24,7 @@ import timber.log.Timber
 class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
     val adManager: NimbusAdManager = NimbusAdManager()
-    private var adController: AdController? = null
+    val controllers = mutableListOf<AdController>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,11 +42,11 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     Renderer.loadAd(nimbusResponse, adFrame,
                         object : Renderer.Listener, NimbusError.Listener {
                             override fun onAdRendered(controller: AdController) {
-                                adController = controller.apply {
-                                    controller.setTestDescription(response = nimbusResponse)
-                                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                                }
+                                controllers.add(controller.apply {
+                                    setTestDescription(response = nimbusResponse)
+                                    align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                                    listeners.add(LoggingAdControllerListener(identifier = item))
+                                })
                             }
 
                             override fun onError(error: NimbusError) {
@@ -64,8 +64,10 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    controllers.add(controller.apply {
+                        listeners.add(LoggingAdControllerListener(identifier = item))
+                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    })
                 },
             )
             "Banner With Refresh" -> adManager.showAd(
@@ -73,16 +75,20 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 refreshInterval = 30,
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    controllers.add(controller.apply {
+                        listeners.add(LoggingAdControllerListener(identifier = item))
+                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    })
                 },
             )
             "Inline Video" -> adManager.showAd(
                 request = NimbusRequest.forVideoAd(item),
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
-                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    controllers.add(controller.apply {
+                        listeners.add(LoggingAdControllerListener(identifier = item))
+                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                    })
                 },
             )
             "Interstitial Hybrid" -> adManager.showBlockingAd(
@@ -145,6 +151,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         viewGroup = adFrameBanner,
                         listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                             controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                            controllers.add(controller)
                         },
                     )
                     adManager.showAd(
@@ -152,6 +159,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         viewGroup = adFrameImage,
                         listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                             controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                            controllers.add(controller)
                         },
                     )
                     adManager.showAd(
@@ -160,6 +168,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         viewGroup = adFrameVideo,
                         listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                             controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                            controllers.add(controller)
                         },
                     )
                 }
@@ -168,10 +177,9 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     }.root
 
     override fun onDestroyView() {
-        RequestManager.interceptors.remove(this)
-        adController?.destroy()
-        adController = null
         super.onDestroyView()
+        RequestManager.interceptors.remove(this)
+        controllers.forEach { it.destroy() }
     }
 
     override fun modifyRequest(request: NimbusRequest) {

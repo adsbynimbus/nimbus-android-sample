@@ -14,6 +14,7 @@ import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.UnityDemandProvider
 
+/** Initializes the Unity SDK and integrates it with the Nimbus SDK. */
 fun Context.initializeUnity(unityGameId: String) {
     if (Nimbus.testMode) UnityDemandProvider.initializeTestMode(this, gameId = unityGameId) else {
         UnityDemandProvider.initialize(this, gameId = unityGameId)

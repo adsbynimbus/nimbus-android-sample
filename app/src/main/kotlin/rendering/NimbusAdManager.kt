@@ -16,6 +16,7 @@ import com.adsbynimbus.android.sample.test.setTestDescription
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
+import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.*
 import timber.log.Timber
@@ -76,6 +77,14 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                     controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
                 },
             )
+            "Inline Video" -> adManager.showAd(
+                request = NimbusRequest.forVideoAd(item),
+                viewGroup = adFrame,
+                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                    controller.align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                },
+            )
             "Interstitial Hybrid" -> adManager.showBlockingAd(
                 request = NimbusRequest.forInterstitialAd(item),
                 activity = requireActivity(),
@@ -111,6 +120,13 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                    controller.listeners.add(object : AdController.Listener {
+                        override fun onAdEvent(adEvent: AdEvent) {
+                            if (adEvent == AdEvent.LOADED) controller.view?.alpha = 0f
+                        }
+
+                        override fun onError(error: NimbusError) {}
+                    })
                 },
             )
             "Rewarded Video" -> adManager.showRewardedAd(

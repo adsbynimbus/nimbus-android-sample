@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.allViews
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
@@ -176,9 +177,9 @@ class GAMDemoFragment : Fragment() {
     }
 
     private fun AdManagerAdView.addTestIds() {
-        children.filterIsInstance<NimbusAdView>().forEach {
+        allViews.filterIsInstance<NimbusAdView>().forEach {
             it.id = R.id.nimbus_ad_view
-            it.contentDescription = nimbusResponse?.run { "${network()} ${type()} ad" }
+            it.contentDescription = "test_demand static ad"
         }
     }
 }

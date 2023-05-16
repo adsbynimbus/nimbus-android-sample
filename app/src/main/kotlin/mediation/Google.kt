@@ -14,6 +14,7 @@ import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.lineitem.applyDynamicPrice
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
@@ -48,6 +49,7 @@ class GAMDemoFragment : Fragment() {
             "Dynamic Price Interstitial Static" -> root.context.requestDynamicInterstitialStaticAd()
             "Dynamic Price Interstitial Video" -> root.context.requestDynamicInterstitialVideoAd()
         }
+        if (BuildConfig.GAM_PLACEMENT_ID.isEmpty()) context?.showPropertyMissingDialog("sample_gam_placement_id")
     }.root
 
     override fun onDestroyView() {

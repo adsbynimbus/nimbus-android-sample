@@ -1,6 +1,5 @@
 package com.adsbynimbus.android.sample
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
@@ -28,9 +27,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
-import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.mediation.GAMDemoFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
@@ -162,15 +159,6 @@ class NavigationActivity : AppCompatActivity() {
             .unregisterOnSharedPreferenceChangeListener(SettingsListener)
     }
 }
-
-fun Context.showCustomDialog(message: String): AlertDialog = AlertDialog.Builder(this)
-    .setCancelable(false)
-    .create().apply {
-        setView(CustomDialogBinding.inflate(LayoutInflater.from(this@showCustomDialog)).apply {
-            description.text = getString(R.string.custom_dialog_message, message)
-            button.setOnClickListener { dismiss() }
-        }.root)
-    }
 
 class NavigationFragment : Fragment() {
 

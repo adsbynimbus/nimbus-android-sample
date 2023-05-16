@@ -1,9 +1,13 @@
 package com.adsbynimbus.android.sample.test
 
+import android.app.AlertDialog
+import android.content.Context
+import android.view.LayoutInflater
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.render.R
 import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
+import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.request.NimbusResponse
@@ -48,6 +52,7 @@ class NimbusAdManagerTestListener(
                     controller.setTestDescription(response = response)
                 }
             }
+
             override fun onError(error: NimbusError) {}
         })
         onAdRenderedCallback(controller)
@@ -67,4 +72,15 @@ class LoggingAdControllerListener(val identifier: String) : AdController.Listene
     override fun onError(error: NimbusError) {
         Timber.e("$identifier: ${error.message}")
     }
+}
+
+fun Context.showPropertyMissingDialog(property: String) {
+    AlertDialog.Builder(this)
+        .setCancelable(false)
+        .create().apply {
+            setView(CustomDialogBinding.inflate(LayoutInflater.from(this@showPropertyMissingDialog)).apply {
+                description.text = getString(com.adsbynimbus.android.sample.R.string.custom_dialog_message, property)
+                button.setOnClickListener { dismiss() }
+            }.root)
+        }.show()
 }

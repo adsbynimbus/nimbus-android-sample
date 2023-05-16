@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.UnityDemandProvider
 
@@ -50,5 +52,6 @@ class UnityFragment : Fragment() {
                 }
             )
         }
+        if (BuildConfig.UNITY_GAME_ID.isEmpty()) requireContext().showPropertyMissingDialog("sample_unity_game_id")
     }.root
 }

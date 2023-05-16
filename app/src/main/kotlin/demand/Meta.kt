@@ -12,6 +12,7 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
@@ -50,13 +51,14 @@ class MetaFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Meta Banner",
             "Meta Native" -> Renderer.loadAd(
-                ad = mockMetaNimbusAd(item),
+                ad = mockMetaNimbusAd(item) { requireContext().showPropertyMissingDialog(it) },
                 container = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) {
                     adController  = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
                 })
-            "Meta Interstitial" -> requireActivity().loadBlockingAd(mockMetaNimbusAd(item))?.also {
-                adController = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
+            "Meta Interstitial" -> requireActivity().run {
+                val metaAd = mockMetaNimbusAd(item) { requireContext().showPropertyMissingDialog(it) }
+                loadBlockingAd(metaAd)?.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
             }
         }
     }.root
@@ -79,13 +81,22 @@ val interstitialTypes = bannerTypes + arrayOf(
 val nativeTypes = interstitialTypes
 
 /** Creates a mock NimbusAd that can be sent to the Nimbus Renderer to load a test Meta ad */
-fun mockMetaNimbusAd(type: String) = object : NimbusAd {
+fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = object : NimbusAd {
+
     override fun placementId(): String = when(type) {
         "Meta Native" -> nativeTypes.random().let {
-            it.adTypeString + "#" + if (it in bannerTypes) BuildConfig.FAN_NATIVE_320_ID else BuildConfig.FAN_NATIVE_ID
+            it.adTypeString + "#" + if (it in bannerTypes) BuildConfig.FAN_NATIVE_320_ID.also { id ->
+                if (id.isEmpty()) onPropertyMissing("sample_fan_native_320_id")
+            } else BuildConfig.FAN_NATIVE_ID.also { id ->
+                if (id.isEmpty()) onPropertyMissing("sample_fan_native_id")
+            }
         }
-        "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID}"
-        else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID}"
+        "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID.also { id ->
+            if (id.isEmpty()) onPropertyMissing("sample_fan_interstitial_id")
+        }}}"
+        else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID.also { id ->
+            if (id.isEmpty()) onPropertyMissing("sample_fan_banner_320_id")
+        }}"
     }
 
     override fun type(): String = if (type == "Meta Native") "native" else "static"

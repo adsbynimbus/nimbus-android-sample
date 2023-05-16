@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.align
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.NimbusRequest
@@ -79,6 +81,7 @@ class VungleFragment : Fragment() {
                 },
             )
         }
+        if (BuildConfig.VUNGLE_CONFIG_ID.isEmpty()) context?.showPropertyMissingDialog("sample_vungle_config_id")
     }.root
 
     override fun onDestroyView() {

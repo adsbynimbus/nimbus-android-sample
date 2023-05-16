@@ -24,9 +24,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.fragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.android.sample.demand.*
@@ -35,49 +37,50 @@ import com.adsbynimbus.android.sample.rendering.AdManagerFragment
 import com.adsbynimbus.android.sample.test.TestRenderFragment
 
 val screens = mutableMapOf(
-    "Main" to listOf(
-        Demos("Show Ad Demo"),
-        Demos("Mediation Platforms"),
-        Demos("Third Party Demand"),
-        Demos("Test Render"),
-        Demos("Settings"),
-    ),
-    "Show Ad Demo" to listOf(
-        AdManager("Manually Rendered Ad"),
-        AdManager("Banner"),
-        AdManager("Banner With Refresh"),
-        AdManager("Inline Video"),
-        AdManager("Interstitial Hybrid"),
-        AdManager("Interstitial Static"),
-        AdManager("Interstitial Video"),
-        AdManager("Interstitial Video Without UI"),
-        AdManager("Rewarded Video"),
-        AdManager("Ads in ScrollView")
-    ),
-    "Mediation Platforms" to listOf(
-        Header("Google Ad Manager"),
-        Google("Banner"),
-        Google("Interstitial"),
-        Google("Dynamic Price Banner"),
-        Google("Dynamic Price Interstitial"),
-        Google("Dynamic Price Interstitial Static"),
-        Google("Dynamic Price Interstitial Video"),
-    ),
-    "Third Party Demand" to listOf(
-        Header("APS"),
-        APS("APS Banner With Refresh"),
-        APS("APS Interstitial Hybrid"),
-        Header("Meta Audience Network"),
-        Meta("Meta Banner"),
-        Meta("Meta Interstitial"),
-        Meta("Meta Native"),
-        Header("Unity"),
-        Unity("Unity Rewarded Video"),
-        Header("Vungle"),
-        Vungle("Vungle Banner"),
-        Vungle("Vungle MREC"),
-        Vungle("Vungle Interstitial"),
-        Vungle("Vungle Rewarded"),
+    "Main" to NavigationAdapter(items = arrayOf(
+        "Show Ad Demo",
+        "Mediation Platforms",
+        "Third Party Demand",
+        "Test Render",
+        "Settings",
+    )),
+    "Show Ad Demo" to NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
+        "Manually Rendered Ad",
+        "Banner",
+        "Banner With Refresh",
+        "Inline Video",
+        "Interstitial Hybrid",
+        "Interstitial Static",
+        "Interstitial Video",
+        "Interstitial Video Without UI",
+        "Rewarded Video",
+        "Ads in ScrollView"
+    )),
+    "Mediation Platforms" to NavigationAdapter(destination = "Google", header = "Google Ad Manager", items = arrayOf(
+        "Banner",
+        "Interstitial",
+        "Dynamic Price Banner",
+        "Dynamic Price Interstitial",
+        "Dynamic Price Interstitial Static",
+        "Dynamic Price Interstitial Video",
+    )),
+    "Third Party Demand" to ConcatAdapter(
+        NavigationAdapter(destination = "APS", header = "APS", items = arrayOf(
+            "APS Banner With Refresh",
+            "APS Interstitial Hybrid",
+        )),
+        NavigationAdapter(destination = "Meta", header = "Meta Audience Network", items = arrayOf(
+            "Meta Banner",
+            "Meta Interstitial",
+            "Meta Native",
+        )),
+        NavigationAdapter(destination = "Unity", header = "Unity", items = arrayOf("Unity Rewarded Video")),
+        NavigationAdapter(destination = "Vungle", header = "Vungle", items = arrayOf(
+            "Vungle Banner",
+            "Vungle MREC",
+            "Vungle Interstitial",
+            "Vungle Rewarded",
+        )),
     )
 )
 
@@ -109,22 +112,6 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
 }
 
 var appGraph: NavController.() -> NavGraph = { createGraph(startDestination = "Main") { nimbusGraph(context) } }
-
-sealed interface NavItem {
-    val text: String
-}
-
-interface Decoration : NavItem
-interface Destination : NavItem
-
-@JvmInline value class Demos(val route: String): Destination { override val text: String get() = route }
-@JvmInline value class AdManager(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class APS(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class Google(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class Meta(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class Unity(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class Vungle(val demo: String): Destination { override val text: String get() = demo }
-@JvmInline value class Header(val name: String): Decoration { override val text: String get() = name }
 
 class NavigationActivity : AppCompatActivity() {
 
@@ -194,44 +181,39 @@ class NavigationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = RecyclerView(requireContext()).apply {
-        adapter = NavigationAdapter(items = screens[navController.currentDestination?.route] ?: emptyList())
+        adapter = screens[navController.currentDestination?.route]
+        layoutManager = LinearLayoutManager(context)
+        addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 }
 
-class NavigationAdapter(val items: List<NavItem>) : RecyclerView.Adapter<NavigationAdapter.ViewHolder>() {
+class NavigationAdapter(
+    val destination: String? = null,
+    val header: String? = null,
+    val items: Array<String>,
+) : RecyclerView.Adapter<NavigationAdapter.ViewHolder>() {
+
+    val offset = if (header == null) 0 else 1
 
     class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
-        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, LinearLayout.VERTICAL))
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false) as TextView).apply {
-            view.setOnClickListener {
-                it.findNavController().apply {
-                    when (val screen = items[bindingAdapterPosition] as Destination) {
-                        is Demos -> navigate(screen.text)
-                        is AdManager -> navigate("Show Ad Demo/${screen.demo}")
-                        is APS -> navigate("APS/${screen.demo}")
-                        is Google -> navigate("Google/${screen.demo}")
-                        is Meta -> navigate("Meta/${screen.demo}")
-                        is Unity -> navigate("Unity/${screen.demo}")
-                        is Vungle -> navigate("Vungle/${screen.demo}")
-                    }
-                }
-            }
-        }
+        ViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false) as TextView
+    )
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.size + offset
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.view.text = items[position].text
+        val offsetPosition = position - offset
+        holder.view.text = if (offsetPosition < 0) header else items[offsetPosition].also { item ->
+            holder.view.setOnClickListener {
+                it.findNavController().navigate(destination?.plus("/$item") ?: item)
+            }
+        }
     }
 
-    override fun getItemViewType(position: Int): Int = when (items[position]) {
-        is Header -> R.layout.layout_navigation_header
+    override fun getItemViewType(position: Int): Int = when {
+        position - offset < 0 -> R.layout.layout_navigation_header
         else -> R.layout.layout_navigation
     }
 }

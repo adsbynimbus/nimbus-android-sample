@@ -46,9 +46,7 @@ class VungleFragment : Fragment() {
         logContainer.visibility = View.VISIBLE
         when (val item = requireArguments().getString("item")) {
             "Vungle Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50).also {
-                    it.removeNonVungleDemand()
-                },
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50).apply { removeNonVungleDemand() },
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller.apply {
@@ -57,9 +55,7 @@ class VungleFragment : Fragment() {
                 },
             )
             "Vungle MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.MREC).also {
-                    it.removeNonVungleDemand()
-                },
+                request = NimbusRequest.forBannerAd(item, Format.MREC).apply { removeNonVungleDemand() },
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller.apply {
@@ -68,18 +64,14 @@ class VungleFragment : Fragment() {
                 },
             )
             "Vungle Interstitial" -> adManager.showBlockingAd(
-                request =  NimbusRequest.forInterstitialAd(item).also {
-                    it.removeNonVungleDemand()
-                },
+                request =  NimbusRequest.forInterstitialAd(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller
                 },
             )
             "Vungle Rewarded" -> adManager.showBlockingAd(
-                request = NimbusRequest.forRewardedVideo(item).also {
-                    it.removeNonVungleDemand()
-                },
+                request = NimbusRequest.forRewardedVideo(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller

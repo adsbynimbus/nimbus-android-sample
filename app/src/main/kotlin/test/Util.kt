@@ -44,7 +44,7 @@ class NimbusAdManagerTestListener(
 
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
-                if (adEvent == AdEvent.LOADED) controller.view?.apply {
+                if (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION) {
                     controller.setTestDescription(response = response)
                 }
             }

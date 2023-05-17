@@ -173,6 +173,11 @@ class NavigationFragment : Fragment() {
         layoutManager = LinearLayoutManager(context)
         addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (view as? RecyclerView)?.swapAdapter(null, true)
+    }
 }
 
 class NavigationAdapter(

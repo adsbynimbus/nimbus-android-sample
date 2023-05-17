@@ -2,116 +2,82 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference android:layout="@layout/layout_settings_preference" />
-
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+    <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
         app:allowDividerBelow="true"
         app:defaultValue="true"
         app:key="test_mode"
-        app:switchWidgetContentDescription="nimbusTestModePreferenceSwitch"
-        app:title="@string/settings_test_mode"
-        app:titleContentDescription="nimbusTestModePreferenceTextView" />
+        app:title="@string/settings_test_mode" />
 
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
-        android:layout="@layout/layout_settings_switch_preference"
-        android:selectable="false"
-        app:allowDividerBelow="true"
-        app:defaultValue="false"
-        app:dependency="test_mode"
-        app:key="send_tradedesk_id"
-        app:switchWidgetContentDescription="nimbusTradedeskPreferenceSwitch"
-        app:title="@string/settings_tradedesk"
-        app:titleContentDescription="nimbusTradedeskPreferenceTextView" />
-
-
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+    <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
-        app:switchWidgetContentDescription="coppaPreferenceSwitch"
         app:key="coppa"
-        app:title="@string/settings_coppa"
-        app:titleContentDescription="coppaPreferenceTextView" />
+        app:title="@string/settings_coppa" />
 
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+    <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
-        app:switchWidgetContentDescription="forceNoFillPreferenceSwitch"
         app:key="force_no_fill"
-        app:title="@string/settings_force_no_fill"
-        app:titleContentDescription="forceNoFillPreferenceTextView" />
+        app:title="@string/settings_force_no_fill" />
 
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+    <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="true"
-        app:switchWidgetContentDescription="enableViewabilityPreferenceSwitch"
         app:key="enable_viewability"
-        app:title="@string/settings_enable_viewability"
-        app:titleContentDescription="enableViewabilityPreferenceTextView"/>
+        app:title="@string/settings_enable_viewability" />
 
-    <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+    <SwitchPreferenceCompat
         android:layout="@layout/layout_settings_switch_preference"
         android:selectable="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"
         app:defaultValue="false"
-        app:switchWidgetContentDescription="showCountdownPreferenceSwitch"
-        app:key="show_countdown"
-        app:title="@string/settings_show_countdown"
-        app:titleContentDescription="showCountdownPreferenceTextView"/>
+        app:dependency="test_mode"
+        app:key="send_tradedesk_id"
+        app:title="@string/settings_tradedesk" />
 
     <PreferenceCategory
-        android:layout="@layout/layout_settings_switch_preference"
-        app:layout="@layout/adapter_sample_app_section"
+        android:layout="@layout/layout_navigation_header"
+        app:layout="@layout/layout_navigation_header"
         app:title="@string/settings_user_details">
 
-        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="user_did_consent"
-            app:switchWidgetContentDescription="gdprConsentPreferenceSwitch"
-            app:title="@string/settings_user_did_consent"
-            app:titleContentDescription="gdprConsentPreferenceTextView"/>
+            app:title="@string/settings_user_did_consent" />
 
-        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="ccpa_consent"
-            app:switchWidgetContentDescription="ccpaConsentPreferenceSwitch"
-            app:title="@string/settings_user_ccpa_consent"
-            app:titleContentDescription="ccpaConsentPreferenceTextView"/>
+            app:title="@string/settings_user_ccpa_consent" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout="@layout/layout_settings_switch_preference"
-        app:layout="@layout/adapter_sample_app_section"
-        app:title="@string/settings_regs_details">
-
-        <com.adsbynimbus.android.sample.common.SampleSwitchPreference
+        <SwitchPreferenceCompat
             android:layout="@layout/layout_settings_switch_preference"
             android:selectable="false"
+            app:allowDividerAbove="true"
             app:allowDividerBelow="true"
             app:defaultValue="false"
             app:key="enabled_gpp"
-            app:switchWidgetContentDescription="enabledGppPreferenceSwitch"
-            app:title="@string/settings_regs_gpp_consent"
-            app:titleContentDescription="enableGppPreferenceTextView"/>
+            app:title="@string/settings_regs_gpp_consent" />
 
     </PreferenceCategory>
-
 </PreferenceScreen>

@@ -13,7 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:contentDescription="adManagerBannerLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/banner_header" />
 
@@ -21,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:contentDescription="adManagerBannerLayout"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_header" />
@@ -30,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:contentDescription="adManagerBannerLayout"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/video_header" />
@@ -40,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/raisin_black"
-            android:fontFamily="@font/proxima_nova_regular"
             android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -56,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/raisin_black"
-            android:fontFamily="@font/proxima_nova_regular"
             android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -72,7 +67,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/raisin_black"
-            android:fontFamily="@font/proxima_nova_regular"
             android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"

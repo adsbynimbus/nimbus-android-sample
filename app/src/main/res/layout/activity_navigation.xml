@@ -9,11 +9,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:background="?android:attr/colorPrimary"
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -23,18 +21,35 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_nimbus_logo"
             tools:ignore="ContentDescription" />
-
     </androidx.appcompat.widget.Toolbar>
+
+    <TextView style="@style/Header.Main"
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingBottom="2.5dp"
+        android:gravity="bottom"
+        android:text="@string/main_title"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView style="@style/Header"
+        android:id="@+id/header_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="top"
+        android:paddingTop="2.5dp"
+        android:text="@string/main_subtitle"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        app:layout_constraintTop_toBottomOf="@id/header_title" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
+        app:layout_constraintTop_toBottomOf="@id/header_subtitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
+        tools:layout="@layout/layout_inline_ad" />
 </androidx.constraintlayout.widget.ConstraintLayout>

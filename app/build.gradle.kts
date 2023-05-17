@@ -48,10 +48,6 @@ androidComponents.onVariants { variant ->
             "sample_gam_placement_id",
             "sample_unity_game_id",
             "sample_vungle_config_id",
-            "sample_vungle_interstitial_id",
-            "sample_vungle_rewarded_id",
-            "sample_vungle_banner_320_id",
-            "sample_vungle_mrec_id",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),
@@ -102,9 +98,6 @@ dependencies {
     api("androidx.recyclerview:recyclerview:1.3.0")
     api("androidx.startup:startup-runtime:1.1.1")
 
-    /* Material */
-    api("com.google.android.material:material:1.8.0")
-
     /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.11.0")
     api("com.squareup.okhttp3:logging-interceptor:4.11.0")
@@ -125,6 +118,6 @@ dependencies {
     /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */
     api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
     api("org.jetbrains:annotations:24.0.1")
 }

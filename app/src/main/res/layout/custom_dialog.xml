@@ -4,49 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp">
+    android:padding="@dimen/navigation_padding">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/proxima_nova_bold"
         android:text="@string/custom_dialog_title"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/description"
+    <TextView android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="15dp"
-        android:fontFamily="@font/proxima_nova_regular"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:layout_marginVertical="@dimen/navigation_padding"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Description" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginHorizontal="30dp"
-        android:backgroundTint="@color/turquoise"
-        android:fontFamily="@font/proxima_nova_bold"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="?attr/colorControlActivated"
         android:text="@string/custom_dialog_button"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

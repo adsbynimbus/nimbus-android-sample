@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="@dimen/navigation_height"
     android:orientation="horizontal"
-    android:paddingHorizontal="15dp">
+    android:paddingHorizontal="@dimen/navigation_padding">
 
-    <TextView
-        android:id="@android:id/title"
-        android:layout_width="wrap_content"
+    <TextView android:id="@android:id/title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_weight="1"
-        android:fontFamily="@font/proxima_nova_bold"
-        android:textColor="@color/turquoise"
-        android:textSize="18sp"
+        android:layout_gravity="center_vertical"
+        android:textColor="?attr/colorControlActivated"
         tools:text="Name" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchWidget"
+    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switchWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/turquoise"
-        android:theme="@style/SwitchStyle"
+        android:layout_gravity="center_vertical"
         tools:checked="true" />
-
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

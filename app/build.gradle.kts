@@ -98,9 +98,6 @@ dependencies {
     api("androidx.recyclerview:recyclerview:1.3.0")
     api("androidx.startup:startup-runtime:1.1.1")
 
-    /* Material */
-    api("com.google.android.material:material:1.9.0")
-
     /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.11.0")
     api("com.squareup.okhttp3:logging-interceptor:4.11.0")

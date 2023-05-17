@@ -134,7 +134,7 @@ class NavigationActivity : AppCompatActivity() {
                         gravity = if (isMainNavDestination) Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL else Gravity.BOTTOM
                         TextViewCompat.setTextAppearance(
                             this,
-                            if (isMainNavDestination) R.style.MainTitle else R.style.Title
+                            if (isMainNavDestination) R.style.Header_Main else R.style.Header_Title
                         )
                     }
                     headerSubtitle.apply {

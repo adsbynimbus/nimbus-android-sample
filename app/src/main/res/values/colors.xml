@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background">@android:color/white</color>
+    <color name="onBackground">@android:color/black</color>
+    <color name="primary">@color/raisin_black</color>
+    <color name="onPrimary">@android:color/white</color>
+    <color name="secondary">@color/pink</color>
+    <color name="onSecondary">@android:color/white</color>
+    <color name="tertiary">@color/turquoise</color>
+    <color name="divider">#EEEEEF</color>
+
+    <color name="nimbus_primary">#85D6DA</color>
+    <color name="nimbus_secondary">#209B9E</color>
     <color name="pink">#DB6FA3</color>
     <color name="raisin_black">#222222</color>
     <color name="turquoise">#37B6B7</color>
-    <color name="light_gray">#D8D8D8</color>
-    <color name="gray">#AAAAAA</color>
 </resources>

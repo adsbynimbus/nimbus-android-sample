@@ -3,15 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
-    android:paddingHorizontal="15dp">
+    android:layout_height="@dimen/navigation_height"
+    android:paddingHorizontal="@dimen/navigation_padding">
 
         <TextView android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/proxima_nova_bold"
-            android:textColor="@color/turquoise"
-            android:textSize="18sp"
+            android:textColor="?attr/colorControlActivated"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -22,8 +20,6 @@
             android:id="@+id/seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:thumbTint="@color/turquoise"
-            android:progressTint="@android:color/black"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@android:id/title"
@@ -33,13 +29,10 @@
         <TextView android:id="@+id/seekbar_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/proxima_nova_bold"
-            android:textColor="@color/turquoise"
-            android:textSize="18sp"
+            android:textColor="?attr/colorControlActivated"
             app:layout_constraintStart_toEndOf="@id/seekbar"
             app:layout_constraintTop_toTopOf="@id/seekbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="25"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

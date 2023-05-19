@@ -3,6 +3,7 @@ package com.adsbynimbus.android.sample.test
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.render.R
@@ -14,7 +15,12 @@ import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
 
 /** A Debug description of the Nimbus Response used for UI testing */
-inline val NimbusResponse.testDescription get() = "${network()} ${type()} ad"
+inline val NimbusResponse.testDescription
+    get() = "${network()} ${type()}" + if (width() != 0 && height() != 0) " ${width()}x${height()}" else ""
+
+inline val AdController.muteButton get() = view?.findViewById<View>(R.id.mute)
+
+inline val AdController.volumeDescription get() = if (volume == 0) "Muted" else "Mute"
 
 /** Sets debug information on the AdController for use with UI testing */
 fun AdController.setTestDescription(response: NimbusResponse?) {
@@ -22,6 +28,7 @@ fun AdController.setTestDescription(response: NimbusResponse?) {
         if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
         contentDescription = response?.testDescription
     }
+    muteButton?.contentDescription = volumeDescription
 }
 
 /**
@@ -48,8 +55,10 @@ class NimbusAdManagerTestListener(
 
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
-                if (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION) {
-                    controller.setTestDescription(response = response)
+                when (adEvent) {
+                    AdEvent.LOADED, AdEvent.IMPRESSION -> controller.setTestDescription(response = response)
+                    AdEvent.VOLUME_CHANGED -> controller.run { muteButton?.contentDescription = volumeDescription }
+                    else -> return
                 }
             }
 

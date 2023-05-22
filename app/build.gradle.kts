@@ -88,9 +88,8 @@ dependencies {
     api("androidx.annotation:annotation:1.6.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.6.1")
-    api("androidx.core:core-ktx:1.10.0")
+    api("androidx.core:core-ktx:1.10.1")
     api("androidx.fragment:fragment-ktx:1.5.7")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     api("androidx.navigation:navigation-fragment:2.5.3")
     api("androidx.navigation:navigation-runtime:2.5.3")
     api("androidx.navigation:navigation-ui:2.5.3")
@@ -105,7 +104,7 @@ dependencies {
     /* Logging */
     api("com.jakewharton.timber:timber:5.0.1")
 
-    /** Transitive Dependencies we want updated to the latest */
+    /* Transitive Dependencies we want updated to the latest */
     api("androidx.browser:browser:1.5.0")
     api("androidx.collection:collection-ktx:1.2.0")
     api("androidx.constraintlayout:constraintlayout:2.1.4")

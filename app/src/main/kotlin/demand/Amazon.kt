@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -80,7 +81,7 @@ class APSFragment : Fragment() {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
-                val nimbusRequest = NimbusRequest.forBannerAd("test_banner", Format.BANNER_320_50)
+                val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest().apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
@@ -107,7 +108,7 @@ class APSFragment : Fragment() {
                 )
             }
             "APS Interstitial Hybrid" -> lifecycleScope.launch {
-                val nimbusRequest = NimbusRequest.forInterstitialAd("test_interstitial_with_aps")
+                val nimbusRequest = NimbusRequest.forInterstitialAd(item)
                 val apsInterstitial = DTBAdRequest().apply {
                     setSizes(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
                 }
@@ -118,7 +119,7 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-                listOf(apsInterstitial, apsVideo).loadAll().forEach { apsResponse ->
+                listOf(apsVideo).loadAll { _, error -> Timber.w(error, "APS Request failed: ") }.forEach { apsResponse ->
                     nimbusRequest.addApsResponse(apsResponse)
                 }
 

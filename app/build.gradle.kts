@@ -112,6 +112,8 @@ dependencies {
     api("androidx.room:room-runtime:2.5.1")
     api("androidx.transition:transition:1.4.1")
     api("androidx.work:work-runtime:2.8.1")
+    api("com.google.android.exoplayer:exoplayer-core:2.18.7")
+    api("com.google.android.exoplayer:exoplayer-hls:2.18.7")
     api("com.squareup.okio:okio:3.3.0")
 
     /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */

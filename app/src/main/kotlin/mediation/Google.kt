@@ -78,7 +78,7 @@ class GoogleAdManagerYieldGroupFragment : Fragment() {
     private fun AdManagerAdView.addTestIds() {
         allViews.filterIsInstance<NimbusAdView>().forEach {
             it.id = R.id.nimbus_ad_view
-            it.contentDescription = "test_demand static ad"
+            it.contentDescription = "test_demand static 320x50"
         }
     }
 }

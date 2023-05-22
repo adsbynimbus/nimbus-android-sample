@@ -62,6 +62,7 @@ val screens = mutableMapOf(
         NavigationAdapter(destination = "Google Dynamic Price", items = arrayOf(
             "Dynamic Price Banner",
             "Dynamic Price Banner + Video",
+            "Dynamic Price Inline Video",
             "Dynamic Price Interstitial",
         ))
     ),

@@ -139,6 +139,27 @@ class GoogleAdManagerDynamicPriceFragment : Fragment() {
                     adView.destroy()
                 }
             }
+            "Dynamic Price Inline Video" -> lifecycleScope.launch {
+                val adView = createAdManagerAdView().apply {
+                    setAdSizes(AdSize(400, 300))
+                    adFrame.addView(this)
+                }
+                try {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        val adRequest = AdManagerAdRequest.Builder()
+                        runCatching {
+                            nimbusAdManager.makeDynamicPriceRequest(
+                                request = NimbusRequest.forVideoAd(position = item)
+                            )
+                        }.onSuccess { response ->
+                            response.applyDynamicPrice(request = adRequest, mapping = priceMapping)
+                        }
+                        adView.loadAd(adRequest.build())
+                    }
+                } finally {
+                    adView.destroy()
+                }
+            }
             "Dynamic Price Interstitial" -> lifecycleScope.launch {
                 val adRequest = AdManagerAdRequest.Builder()
                 runCatching {

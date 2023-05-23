@@ -9,10 +9,10 @@
     <string name="third_party_demand_subtitle">Select to see Nimbus\' integration with third party demand</string>
 
     <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
+    <string name="google_ad_manager" translatable="false">Google Ad Manager</string>
 
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
     <string name="test_render_button">Test</string>
-
     <string name="settings_subtitle">Configure your test app experience</string>
     <string name="settings_user_details">User Details</string>
     <string name="settings_test_mode">Nimbus Test Mode</string>

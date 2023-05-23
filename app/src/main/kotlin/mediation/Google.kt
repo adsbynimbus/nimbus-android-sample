@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import androidx.core.view.allViews
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -48,7 +52,7 @@ class GoogleAdManagerYieldGroupFragment : Fragment() {
                         }
                     }
 
-                    adFrame.addView(this)
+                    adFrame.addView(this, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
                     try {
                         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {

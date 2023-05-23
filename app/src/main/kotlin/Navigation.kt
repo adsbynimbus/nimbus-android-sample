@@ -108,9 +108,11 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<AdManagerFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }
     fragment<GoogleAdManagerYieldGroupFragment>("Google Mediation/{item}") {
+        label = context.getString(R.string.google_ad_manager)
         argument("item") { type = NavType.StringType }
     }
     fragment<GoogleAdManagerDynamicPriceFragment>("Google Dynamic Price/{item}") {
+        label = context.getString(R.string.google_ad_manager)
         argument("item") { type = NavType.StringType }
     }
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }

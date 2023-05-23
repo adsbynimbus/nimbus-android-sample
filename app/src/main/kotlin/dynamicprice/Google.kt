@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -83,7 +85,7 @@ class GoogleAdManagerDynamicPriceFragment : Fragment() {
             "Dynamic Price Banner" -> lifecycleScope.launch {
                 val adView = createAdManagerAdView().apply {
                     setAdSizes(AdSize.BANNER)
-                    adFrame.addView(this)
+                    adFrame.addView(this, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
                 }
                 var lastRequestTime = 0L
                 try {
@@ -110,7 +112,7 @@ class GoogleAdManagerDynamicPriceFragment : Fragment() {
             "Dynamic Price Banner + Video" -> lifecycleScope.launch {
                 val adView = createAdManagerAdView().apply {
                     setAdSizes(AdSize(400, 300), AdSize.MEDIUM_RECTANGLE)
-                    adFrame.addView(this)
+                    adFrame.addView(this, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
                 }
                 var lastRequestTime = 0L
                 try {
@@ -142,7 +144,7 @@ class GoogleAdManagerDynamicPriceFragment : Fragment() {
             "Dynamic Price Inline Video" -> lifecycleScope.launch {
                 val adView = createAdManagerAdView().apply {
                     setAdSizes(AdSize(400, 300))
-                    adFrame.addView(this)
+                    adFrame.addView(this, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
                 }
                 try {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

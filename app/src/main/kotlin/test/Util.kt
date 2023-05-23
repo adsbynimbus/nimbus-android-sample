@@ -3,6 +3,7 @@ package com.adsbynimbus.android.sample.test
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.render.R
@@ -14,7 +15,8 @@ import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
 
 /** A Debug description of the Nimbus Response used for UI testing */
-inline val NimbusResponse.testDescription get() = "${network()} ${type()} ad"
+inline val NimbusResponse.testDescription
+    get() = "${network()} ${type()}" + if (width() != 0 && height() != 0) " ${width()}x${height()}" else ""
 
 /** Sets debug information on the AdController for use with UI testing */
 fun AdController.setTestDescription(response: NimbusResponse?) {

@@ -51,14 +51,14 @@ class MetaFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Meta Banner",
             "Meta Native" -> Renderer.loadAd(
-                ad = mockMetaNimbusAd(item) { requireContext().showPropertyMissingDialog(it) },
+                ad = mockMetaNimbusAd(item) { root.context.showPropertyMissingDialog(it) },
                 container = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) {
                     adController  = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
                 })
             "Meta Interstitial" -> requireActivity().run {
-                val metaAd = mockMetaNimbusAd(item) { requireContext().showPropertyMissingDialog(it) }
-                loadBlockingAd(metaAd)?.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
+                val metaAd = mockMetaNimbusAd(item) { showPropertyMissingDialog(it) }
+                loadBlockingAd(metaAd)?.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }?.start()
             }
         }
     }.root

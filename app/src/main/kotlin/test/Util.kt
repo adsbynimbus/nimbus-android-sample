@@ -18,17 +18,12 @@ import timber.log.Timber
 inline val NimbusResponse.testDescription
     get() = "${network()} ${type()}" + if (width() != 0 && height() != 0) " ${width()}x${height()}" else ""
 
-inline val AdController.muteButton get() = view?.findViewById<View>(R.id.mute)
-
-inline val AdController.volumeDescription get() = if (volume == 0) "Muted" else "Mute"
-
 /** Sets debug information on the AdController for use with UI testing */
 fun AdController.setTestDescription(response: NimbusResponse?) {
     view?.apply {
         if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
         contentDescription = response?.testDescription
     }
-    muteButton?.contentDescription = volumeDescription
 }
 
 /**
@@ -55,10 +50,8 @@ class NimbusAdManagerTestListener(
 
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
-                when (adEvent) {
-                    AdEvent.LOADED, AdEvent.IMPRESSION -> controller.setTestDescription(response = response)
-                    AdEvent.VOLUME_CHANGED -> controller.run { muteButton?.contentDescription = volumeDescription }
-                    else -> return
+                if (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION) {
+                    controller.setTestDescription(response = response)
                 }
             }
 

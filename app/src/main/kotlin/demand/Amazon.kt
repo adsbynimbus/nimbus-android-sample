@@ -119,7 +119,7 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-                listOf(apsVideo).loadAll { _, error -> Timber.w(error, "APS Request failed: ") }.forEach { apsResponse ->
+                listOf(apsInterstitial, apsVideo).loadAll { _, error -> Timber.w(error, "APS Request failed: ") }.forEach { apsResponse ->
                     nimbusRequest.addApsResponse(apsResponse)
                 }
 

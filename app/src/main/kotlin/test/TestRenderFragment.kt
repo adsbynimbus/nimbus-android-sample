@@ -25,15 +25,15 @@ class TestRenderFragment : Fragment() {
     ): View = FragmentTestRenderBinding.inflate(inflater, container, false).apply {
         testButton.setOnClickListener {
             val type = when {
-                vastRegex.containsMatchIn(markupEditText.text!!) -> "video"
-                htmlRegex.containsMatchIn(markupEditText.text!!) -> "static"
+                vastRegex.containsMatchIn(markupText.text!!) -> "video"
+                htmlRegex.containsMatchIn(markupText.text!!) -> "static"
                 else -> return@setOnClickListener
             }
 
             requireContext().loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type
 
-                override fun markup(): String = markupEditText.text.toString().unescape()
+                override fun markup(): String = markupText.text.toString().unescape()
 
                 override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
             })?.start()

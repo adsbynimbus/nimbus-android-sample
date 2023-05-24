@@ -6,18 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".test.TestRenderFragment">
 
-    <EditText android:id="@+id/markup_edit_text"
+    <EditText android:id="@+id/markup_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/navigation_padding"
         android:background="@drawable/border"
         android:imeOptions="actionSend"
+        android:inputType="textMultiLine"
         android:padding="5dp"
         android:textSize="15sp"
         android:gravity="top"
+        android:hint="@string/test_render_hint"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/test_button"
-        tools:text="Markup" />
+        app:layout_constraintBottom_toTopOf="@id/test_button" />
 
     <Button android:id="@+id/test_button"
         android:layout_width="0dp"
@@ -30,7 +31,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/markup_edit_text"
+        app:layout_constraintTop_toBottomOf="@id/markup_text"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="HardcodedText" />
 

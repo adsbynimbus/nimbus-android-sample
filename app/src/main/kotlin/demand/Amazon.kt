@@ -96,6 +96,10 @@ class APSFragment : Fragment() {
                     }.onFailure {
                         /* Add the loader from the AdError for refreshing banners */
                         if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
+                        logs.text = buildString {
+                            appendLine(logs.text)
+                            appendLine("APS Request failed: ${it.message}")
+                        }
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
@@ -120,16 +124,20 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-                listOf(apsInterstitial, apsVideo).loadAll { _, error -> Timber.w(error, "APS Request failed: ") }.forEach { apsResponse ->
-                    nimbusRequest.addApsResponse(apsResponse)
-                }
+                listOf(apsInterstitial, apsVideo).loadAll { _, error ->
+                    Timber.w(error, "APS Request failed: ")
+                    logs.text = buildString {
+                        appendLine(logs.text)
+                        appendLine("APS Request failed: ${error.message}")
+                    }
+                }.forEach { apsResponse -> nimbusRequest.addApsResponse(apsResponse) }
 
                 /* Show a Nimbus Interstitial ad with Display and Video in the same auction */
                 adManager.showBlockingAd(
                     request = nimbusRequest.removeNonAPSDemand(),
                     activity = requireActivity(),
                     listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller
+                        adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
                     }
                 )
             }

@@ -47,7 +47,6 @@ class VungleFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         VungleDemandProvider.enabled = true
-        logContainer.visibility = View.VISIBLE
         when (val item = requireArguments().getString("item")) {
             "Vungle Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50).apply { removeNonVungleDemand() },

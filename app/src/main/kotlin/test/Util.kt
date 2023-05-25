@@ -9,6 +9,7 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.render.R
 import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
+import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
@@ -69,25 +70,31 @@ class LoggingAdControllerListener(val identifier: String) : AdController.Listene
     }
 }
 
+/** Listener that will append events and errors to a TextView */
 class OnScreenAdControllerLogger(val view: TextView) : AdController.Listener {
     override fun onAdEvent(adEvent: AdEvent) {
-        view.text = "${view.text}\nEvent: ${adEvent.name}"
+        view.text = buildString {
+            appendLine(view.text)
+            appendLine("Event: ${adEvent.name}")
+        }
     }
 
     override fun onError(error: NimbusError) {
-        view.text = "${view.text}\nError: ${error.errorType.name}\n${error.message}\n"
+        view.text = buildString {
+            appendLine(view.text)
+            appendLine("Error: ${error.errorType.name}")
+            appendLine(error.message)
+        }
     }
 }
 
 fun Context.showPropertyMissingDialog(property: String) {
-    AlertDialog.Builder(this)
-        .setCancelable(false)
-        .create().apply {
-            setView(CustomDialogBinding.inflate(LayoutInflater.from(this@showPropertyMissingDialog)).apply {
-                description.text = getString(com.adsbynimbus.android.sample.R.string.custom_dialog_message, property)
-                button.setOnClickListener { dismiss() }
-            }.root)
-        }.show()
+    AlertDialog.Builder(this).setCancelable(false).create().apply {
+        setView(CustomDialogBinding.inflate(LayoutInflater.from(context)).apply {
+            description.text = getString(custom_dialog_message, property)
+            button.setOnClickListener { dismiss() }
+        }.root)
+    }.show()
 }
 
 object UiTestInterceptor : Interceptor {

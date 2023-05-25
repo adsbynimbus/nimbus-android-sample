@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.databinding.FragmentTestRenderBinding
+import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 
@@ -22,7 +22,7 @@ class TestRenderFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentTestRenderBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutTestBinding.inflate(inflater, container, false).apply {
         testButton.setOnClickListener {
             val type = when {
                 vastRegex.containsMatchIn(markupText.text!!) -> "video"

@@ -33,6 +33,8 @@ class TestRenderFragment : Fragment() {
             requireContext().loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type
 
+                override fun network(): String = "test_render"
+
                 override fun markup(): String = markupText.text.toString().unescape()
 
                 override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))

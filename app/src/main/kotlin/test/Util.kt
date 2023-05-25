@@ -3,7 +3,8 @@ package com.adsbynimbus.android.sample.test
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
+import android.widget.TextView
+import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.render.R
@@ -11,15 +12,16 @@ import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdEvent
+import com.adsbynimbus.render.Interceptor
 import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
 
 /** A Debug description of the Nimbus Response used for UI testing */
-inline val NimbusResponse.testDescription
+inline val NimbusAd.testDescription
     get() = "${network()} ${type()}" + if (width() != 0 && height() != 0) " ${width()}x${height()}" else ""
 
 /** Sets debug information on the AdController for use with UI testing */
-fun AdController.setTestDescription(response: NimbusResponse?) {
+fun AdController.setTestDescription(response: NimbusAd?) {
     view?.apply {
         if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
         contentDescription = response?.testDescription
@@ -47,16 +49,7 @@ class NimbusAdManagerTestListener(
     }
 
     override fun onAdRendered(controller: AdController) {
-
-        controller.listeners.add(object : AdController.Listener {
-            override fun onAdEvent(adEvent: AdEvent) {
-                if (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION) {
-                    controller.setTestDescription(response = response)
-                }
-            }
-
-            override fun onError(error: NimbusError) {}
-        })
+        controller.listeners.add(LoggingAdControllerListener(identifier))
         onAdRenderedCallback(controller)
     }
 }
@@ -76,6 +69,16 @@ class LoggingAdControllerListener(val identifier: String) : AdController.Listene
     }
 }
 
+class OnScreenAdControllerLogger(val view: TextView) : AdController.Listener {
+    override fun onAdEvent(adEvent: AdEvent) {
+        view.text = "${view.text}\nEvent: ${adEvent.name}"
+    }
+
+    override fun onError(error: NimbusError) {
+        view.text = "${view.text}\nError: ${error.errorType.name}\n${error.message}\n"
+    }
+}
+
 fun Context.showPropertyMissingDialog(property: String) {
     AlertDialog.Builder(this)
         .setCancelable(false)
@@ -85,4 +88,12 @@ fun Context.showPropertyMissingDialog(property: String) {
                 button.setOnClickListener { dismiss() }
             }.root)
         }.show()
+}
+
+object UiTestInterceptor : Interceptor {
+    override fun modifyAd(ad: NimbusAd): NimbusAd = ad
+
+    override fun modifyController(ad: NimbusAd, controller: AdController): AdController = controller.apply {
+        controller.setTestDescription(ad)
+    }
 }

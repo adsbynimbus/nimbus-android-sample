@@ -12,6 +12,7 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.*
@@ -103,7 +104,7 @@ class APSFragment : Fragment() {
                     refreshInterval = 30,
                     viewGroup = adFrame,
                     listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller
+                        adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
                     },
                 )
             }

@@ -11,6 +11,7 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.align
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
 import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
@@ -54,6 +55,7 @@ class VungleFragment : Fragment() {
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller.apply {
                         align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                        listeners.add(OnScreenAdControllerLogger(view = logs))
                     }
                 },
             )
@@ -63,6 +65,7 @@ class VungleFragment : Fragment() {
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
                     adController = controller.apply {
                         align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                        listeners.add(OnScreenAdControllerLogger(view = logs))
                     }
                 },
             )
@@ -70,14 +73,14 @@ class VungleFragment : Fragment() {
                 request =  NimbusRequest.forInterstitialAd(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    adController = controller
+                    adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
                 },
             )
             "Vungle Rewarded" -> adManager.showBlockingAd(
                 request = NimbusRequest.forRewardedVideo(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    adController = controller
+                    adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
                 },
             )
         }

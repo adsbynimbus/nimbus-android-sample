@@ -10,8 +10,8 @@ import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
 import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.UnityDemandProvider
@@ -48,7 +48,7 @@ class UnityFragment : Fragment() {
                 closeButtonDelaySeconds = 30,
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    controller.listeners.add(LoggingAdControllerListener(identifier = item))
+                    controller.listeners.add(OnScreenAdControllerLogger(view = logs))
                 }
             )
         }

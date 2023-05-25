@@ -10,8 +10,8 @@ import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.LoggingAdControllerListener
 import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
 import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.Renderer
@@ -54,11 +54,11 @@ class MetaFragment : Fragment() {
                 ad = mockMetaNimbusAd(item) { root.context.showPropertyMissingDialog(it) },
                 container = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item) {
-                    adController  = it.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }
+                    adController  = it
                 })
             "Meta Interstitial" -> requireActivity().run {
                 val metaAd = mockMetaNimbusAd(item) { showPropertyMissingDialog(it) }
-                loadBlockingAd(metaAd)?.apply { listeners.add(LoggingAdControllerListener(identifier = item)) }?.start()
+                loadBlockingAd(metaAd)?.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }?.start()
             }
         }
     }.root

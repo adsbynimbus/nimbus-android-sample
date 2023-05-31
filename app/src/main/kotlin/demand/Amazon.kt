@@ -33,6 +33,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -83,10 +84,7 @@ class APSFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        val adapter = LogAdapter().apply {
-            submitList(mutableListOf())
-            logs.useAsLogger(this)
-        }
+        val adapter = LogAdapter().apply { logs.useAsLogger(this) }
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
@@ -104,7 +102,10 @@ class APSFragment : Fragment() {
                     }.onFailure {
                         /* Add the loader from the AdError for refreshing banners */
                         if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
-                        adapter.submitList(adapter.currentList.apply { add("APS Request failed: ${it.message}") })
+                        adapter.submitList(buildList {
+                            addAll(adapter.currentList)
+                            add("APS Request failed: ${it.message}")
+                        })
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
@@ -133,10 +134,7 @@ class APSFragment : Fragment() {
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
                 listOf(apsInterstitial, apsVideo).loadAll { _, error ->
-                    "APS Request failed: ${error.message}".let {
-                        Timber.w(error, it)
-                        adapter.submitList(adapter.currentList.apply { add(it) })
-                    }
+                    Timber.w(error, "APS Request failed: ${error.message }")
                 }.forEach { apsResponse -> nimbusRequest.addApsResponse(apsResponse) }
 
                 /* Show a Nimbus Interstitial ad with Display and Video in the same auction */
@@ -201,11 +199,10 @@ suspend fun Collection<DTBAdRequest>.loadAll(
     timeout: Long = 750,
     onFailedRequest: (DTBAdRequest, Throwable) -> Unit = { _, _ -> },
 ): List<DTBAdResponse> = coroutineScope {
-    val outerScope = coroutineContext
     val inFlightRequests = map { dtbAdRequest ->
         async(Dispatchers.IO) {
             runCatching { dtbAdRequest.loadAd(ttl = timeout) }
-                .onFailure { withContext(outerScope) { onFailedRequest(dtbAdRequest, it) } }
+                .onFailure { withContext(Dispatchers.Main) { onFailedRequest(dtbAdRequest, it) } }
                 .getOrNull()
         }
     }

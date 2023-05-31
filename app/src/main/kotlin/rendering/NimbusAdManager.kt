@@ -29,6 +29,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
+        val logAdapter = LogAdapter().also { logs.useAsLogger(it) }
         when (val item = requireArguments().getString("item")) {
             "Manually Rendered Ad" -> adManager.makeRequest(
                 context = root.context,
@@ -44,6 +45,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                                     align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
                                     /* Replace the following with your own AdController.Listener implementation */
                                     listeners.add(EmptyAdControllerListenerImplementation)
+                                    listeners.add(OnScreenLogger(logAdapter, nimbusResponse))
                                 })
                             }
 

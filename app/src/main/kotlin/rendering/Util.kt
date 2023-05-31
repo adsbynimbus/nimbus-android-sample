@@ -51,19 +51,25 @@ class NimbusAdManagerTestListener(
     val onAdRenderedCallback: (AdController) -> Unit,
 ) : NimbusAdManager.Listener {
     val adapter = logView.adapter as? LogAdapter ?: LogAdapter().also { logView.useAsLogger(it) }
-    val list = adapter.currentList.toMutableList()
+    var onScreenLogger: OnScreenLogger? = null
 
     override fun onError(error: NimbusError) {
-        adapter.submitList(list.appendError(error))
+        adapter.submitList(buildList {
+            addAll(adapter.currentList)
+            add("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
+        })
         Timber.e("$identifier: ${error.message}")
     }
 
     override fun onAdResponse(nimbusResponse: NimbusResponse) {
         response = nimbusResponse
+        onScreenLogger?.response = nimbusResponse
     }
 
     override fun onAdRendered(controller: AdController) {
-        controller.listeners.add(OnScreenLogger(adapter = adapter, response = response))
+        onScreenLogger = OnScreenLogger(adapter = adapter, response = response).also {
+            controller.listeners.add(it)
+        }
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
                 Timber.i("$identifier: ${adEvent.name}")
@@ -77,21 +83,24 @@ class NimbusAdManagerTestListener(
     }
 }
 
-class OnScreenLogger(val adapter: LogAdapter, val response: NimbusResponse?) : AdController.Listener {
+class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse?) : AdController.Listener {
     private var hasLoggedRendered = false
-    val list = adapter.currentList.toMutableList()
     override fun onAdEvent(adEvent: AdEvent) {
-        if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
-            list.add("Rendered: ${response?.testDescription}")
-            hasLoggedRendered = true
-        }
-        list.add("Event: ${adEvent.name}")
-        adapter.submitList(list)
+        adapter.submitList(buildList {
+            addAll(adapter.currentList)
+            if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
+                add("Rendered: ${response?.testDescription}")
+                hasLoggedRendered = true
+            }
+            add("Event: ${adEvent.name}")
+        })
     }
 
     override fun onError(error: NimbusError) {
-        list.appendError(error)
-        adapter.submitList(list)
+        adapter.submitList(buildList {
+            addAll(adapter.currentList)
+            add("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
+        })
     }
 }
 
@@ -130,10 +139,6 @@ class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<Str
     override fun onBindViewHolder(holder: TextViewHolder, position: Int) {
         holder.view.text = getItem(position)
     }
-}
-
-fun MutableList<String>.appendError(error: NimbusError) = apply {
-    add("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
 }
 
 fun RecyclerView.useAsLogger(logAdapter: LogAdapter = LogAdapter()) = apply {

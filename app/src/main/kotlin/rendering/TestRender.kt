@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.test
+package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -11,8 +11,11 @@ import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
+import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
+import com.adsbynimbus.android.sample.rendering.LogAdapter
+import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.rendering.OnScreenLogger
+import com.adsbynimbus.android.sample.rendering.useAsLogger
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.*
@@ -80,6 +83,10 @@ class APSFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        val adapter = LogAdapter().apply {
+            submitList(mutableListOf())
+            logs.useAsLogger(this)
+        }
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
@@ -88,6 +95,7 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
+
                 runCatching { apsRequest.loadAd() }
                     .onSuccess { apsResponse ->
                         nimbusRequest.addApsResponse(apsResponse)
@@ -96,10 +104,7 @@ class APSFragment : Fragment() {
                     }.onFailure {
                         /* Add the loader from the AdError for refreshing banners */
                         if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
-                        logs.text = buildString {
-                            appendLine(logs.text)
-                            appendLine("APS Request failed: ${it.message}")
-                        }
+                        adapter.submitList(adapter.currentList.apply { add("APS Request failed: ${it.message}") })
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
@@ -107,8 +112,11 @@ class APSFragment : Fragment() {
                     request = nimbusRequest.removeNonAPSDemand(),
                     refreshInterval = 30,
                     viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        adController = controller.apply {
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        }
                     },
                 )
             }
@@ -125,10 +133,9 @@ class APSFragment : Fragment() {
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
                 listOf(apsInterstitial, apsVideo).loadAll { _, error ->
-                    Timber.w(error, "APS Request failed: ")
-                    logs.text = buildString {
-                        appendLine(logs.text)
-                        appendLine("APS Request failed: ${error.message}")
+                    "APS Request failed: ${error.message}".let {
+                        Timber.w(error, it)
+                        adapter.submitList(adapter.currentList.apply { add(it) })
                     }
                 }.forEach { apsResponse -> nimbusRequest.addApsResponse(apsResponse) }
 
@@ -136,8 +143,11 @@ class APSFragment : Fragment() {
                 adManager.showBlockingAd(
                     request = nimbusRequest.removeNonAPSDemand(),
                     activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        adController = controller.apply {
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        }
                     }
                 )
             }

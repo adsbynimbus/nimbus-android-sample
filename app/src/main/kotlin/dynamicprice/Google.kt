@@ -15,7 +15,7 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
+import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.lineitem.LinearPriceGranularity
 import com.adsbynimbus.lineitem.LinearPriceMapping
 import com.adsbynimbus.lineitem.applyDynamicPrice
@@ -33,8 +33,6 @@ import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -125,6 +123,10 @@ class GoogleAdManagerDynamicPriceFragment : Fragment() {
                             runCatching {
                                 nimbusAdManager.makeDynamicPriceRequest(
                                     request = NimbusRequest.forBannerAd(item, Format.MREC).apply {
+                                        configureViewability(
+                                            partnerName = "Google",
+                                            partnerVersion = MobileAds.getVersion().toString(),
+                                        )
                                         request.imp[0].video = Video(
                                             protocols = NimbusRequest.defaultProtocols,
                                             api = byteArrayOf(Apis.OMID),

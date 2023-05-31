@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.test
+package com.adsbynimbus.android.sample.rendering
 
 import android.graphics.Rect
 import android.os.Bundle

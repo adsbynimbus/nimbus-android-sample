@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
+import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
 import com.adsbynimbus.android.sample.rendering.align
-import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
-import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
+import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.NimbusRequest
@@ -51,35 +51,43 @@ class VungleFragment : Fragment() {
             "Vungle Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50).apply { removeNonVungleDemand() },
                 viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                     adController = controller.apply {
                         align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        listeners.add(OnScreenAdControllerLogger(view = logs))
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
                     }
                 },
             )
             "Vungle MREC" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.MREC).apply { removeNonVungleDemand() },
                 viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                     adController = controller.apply {
                         align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        listeners.add(OnScreenAdControllerLogger(view = logs))
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
                     }
                 },
             )
             "Vungle Interstitial" -> adManager.showBlockingAd(
                 request =  NimbusRequest.forInterstitialAd(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    adController = controller.apply {
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
+                    }
                 },
             )
             "Vungle Rewarded" -> adManager.showBlockingAd(
                 request = NimbusRequest.forRewardedVideo(item).apply { removeNonVungleDemand() },
                 activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    adController = controller.apply { listeners.add(OnScreenAdControllerLogger(view = logs)) }
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    adController = controller.apply {
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
+                    }
                 },
             )
         }

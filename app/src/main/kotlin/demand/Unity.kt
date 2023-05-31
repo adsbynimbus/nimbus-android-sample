@@ -10,9 +10,9 @@ import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.test.OnScreenAdControllerLogger
-import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
+import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
+import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.UnityDemandProvider
 
@@ -47,8 +47,9 @@ class UnityFragment : Fragment() {
                 request = NimbusRequest.forRewardedVideo(item).removeNonUnityDemand(),
                 closeButtonDelaySeconds = 30,
                 activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                    controller.listeners.add(OnScreenAdControllerLogger(view = logs))
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    /* Replace the following with your own AdController.Listener implementation */
+                    controller.listeners.add(EmptyAdControllerListenerImplementation)
                 }
             )
         }

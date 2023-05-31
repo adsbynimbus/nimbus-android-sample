@@ -9,7 +9,7 @@ import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
 import com.adsbynimbus.android.sample.demand.initializeMetaAudienceNetwork
 import com.adsbynimbus.android.sample.demand.initializeUnity
 import com.adsbynimbus.android.sample.demand.initializeVungle
-import com.adsbynimbus.android.sample.test.UiTestInterceptor
+import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
 import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.*
 import okhttp3.OkHttpClient

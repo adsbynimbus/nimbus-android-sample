@@ -106,7 +106,7 @@ fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = N
         }
         "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_interstitial_id")
-        }}}"
+        }}"
         else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_banner_320_id")
         }}"

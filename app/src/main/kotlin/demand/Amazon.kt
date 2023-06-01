@@ -175,7 +175,7 @@ class DTBException(val error: AdError) : Exception() {
  * @throws DTBException Amazon did not bid or an error occurred during the request
  * @throws TimeoutCancellationException Amazon did not return a response in time
  */
-suspend fun DTBAdRequest.loadAd(ttl: Long = 750): DTBAdResponse = withTimeout(ttl) {
+suspend fun DTBAdRequest.loadAd(ttl: Long = 1500): DTBAdResponse = withTimeout(ttl) {
     suspendCancellableCoroutine { coroutine ->
         loadAd(object : DTBAdCallback {
             override fun onFailure(error: AdError) {

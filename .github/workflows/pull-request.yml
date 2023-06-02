@@ -40,6 +40,6 @@ jobs:
         uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD }}
-          app-file: nimbus-android-sample/app-debug-unsigned.apk
+          app-file: nimbus-android-sample/debug/app-debug.apk
           env: |
             APP_ID=com.adsbynimbus.android.sample

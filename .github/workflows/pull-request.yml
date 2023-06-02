@@ -20,6 +20,7 @@ jobs:
 
   test:
     name: UI Test
+    needs: sample
     runs-on: ubuntu-latest
     steps:
       - name: Download Release

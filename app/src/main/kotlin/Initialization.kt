@@ -9,6 +9,8 @@ import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
 import com.adsbynimbus.android.sample.demand.initializeMetaAudienceNetwork
 import com.adsbynimbus.android.sample.demand.initializeUnity
 import com.adsbynimbus.android.sample.demand.initializeVungle
+import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
+import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -82,5 +84,7 @@ class NimbusInitializer : Initializer<Nimbus> {
                     ) else it.proceed(it.request())
                 })
         )
+
+        Renderer.interceptors.add(UiTestInterceptor)
     }
 }

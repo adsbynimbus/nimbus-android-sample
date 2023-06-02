@@ -32,7 +32,7 @@ import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.dynamicprice.GoogleAdManagerDynamicPriceFragment
 import com.adsbynimbus.android.sample.mediation.GoogleAdManagerYieldGroupFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
-import com.adsbynimbus.android.sample.test.TestRenderFragment
+import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 
 val screens = mutableMapOf(
     "Main" to NavigationAdapter(items = arrayOf(
@@ -192,23 +192,25 @@ class NavigationFragment : Fragment() {
     }
 }
 
+class TextViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
+
 class NavigationAdapter(
     val destination: String? = null,
     val header: String? = null,
     val items: Array<String>,
-) : RecyclerView.Adapter<NavigationAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<TextViewHolder>() {
 
     val offset = if (header == null) 0 else 1
 
     class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false) as TextView
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder =
+        TextViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false) as TextView
     )
 
     override fun getItemCount(): Int = items.size + offset
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TextViewHolder, position: Int) {
         val offsetPosition = position - offset
         holder.view.text = if (offsetPosition < 0) header else items[offsetPosition].also { item ->
             holder.view.setOnClickListener {

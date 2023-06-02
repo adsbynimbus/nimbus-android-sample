@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
 import androidx.core.view.allViews
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.showPropertyMissingDialog
+import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.render.NimbusAdView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize

@@ -11,7 +11,11 @@ import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.test.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
+import com.adsbynimbus.android.sample.rendering.LogAdapter
+import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
+import com.adsbynimbus.android.sample.rendering.OnScreenLogger
+import com.adsbynimbus.android.sample.rendering.useAsLogger
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.*
@@ -29,6 +33,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -79,6 +84,7 @@ class APSFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        val adapter = LogAdapter().apply { logs.useAsLogger(this) }
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
@@ -87,6 +93,7 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
+
                 runCatching { apsRequest.loadAd() }
                     .onSuccess { apsResponse ->
                         nimbusRequest.addApsResponse(apsResponse)
@@ -95,6 +102,10 @@ class APSFragment : Fragment() {
                     }.onFailure {
                         /* Add the loader from the AdError for refreshing banners */
                         if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
+                        adapter.submitList(buildList {
+                            addAll(adapter.currentList)
+                            add("APS Request failed: ${it.message}")
+                        })
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */
@@ -102,8 +113,11 @@ class APSFragment : Fragment() {
                     request = nimbusRequest.removeNonAPSDemand(),
                     refreshInterval = 30,
                     viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        adController = controller.apply {
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        }
                     },
                 )
             }
@@ -119,16 +133,19 @@ class APSFragment : Fragment() {
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-                listOf(apsInterstitial, apsVideo).loadAll { _, error -> Timber.w(error, "APS Request failed: ") }.forEach { apsResponse ->
-                    nimbusRequest.addApsResponse(apsResponse)
-                }
+                listOf(apsInterstitial, apsVideo).loadAll { _, error ->
+                    Timber.w(error, "APS Request failed: ${error.message }")
+                }.forEach { apsResponse -> nimbusRequest.addApsResponse(apsResponse) }
 
                 /* Show a Nimbus Interstitial ad with Display and Video in the same auction */
                 adManager.showBlockingAd(
                     request = nimbusRequest.removeNonAPSDemand(),
                     activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item) { controller ->
-                        adController = controller
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        adController = controller.apply {
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        }
                     }
                 )
             }
@@ -158,7 +175,7 @@ class DTBException(val error: AdError) : Exception() {
  * @throws DTBException Amazon did not bid or an error occurred during the request
  * @throws TimeoutCancellationException Amazon did not return a response in time
  */
-suspend fun DTBAdRequest.loadAd(ttl: Long = 750): DTBAdResponse = withTimeout(ttl) {
+suspend fun DTBAdRequest.loadAd(ttl: Long = 1500): DTBAdResponse = withTimeout(ttl) {
     suspendCancellableCoroutine { coroutine ->
         loadAd(object : DTBAdCallback {
             override fun onFailure(error: AdError) {
@@ -182,11 +199,10 @@ suspend fun Collection<DTBAdRequest>.loadAll(
     timeout: Long = 750,
     onFailedRequest: (DTBAdRequest, Throwable) -> Unit = { _, _ -> },
 ): List<DTBAdResponse> = coroutineScope {
-    val outerScope = coroutineContext
     val inFlightRequests = map { dtbAdRequest ->
         async(Dispatchers.IO) {
             runCatching { dtbAdRequest.loadAd(ttl = timeout) }
-                .onFailure { withContext(outerScope) { onFailedRequest(dtbAdRequest, it) } }
+                .onFailure { withContext(Dispatchers.Main) { onFailedRequest(dtbAdRequest, it) } }
                 .getOrNull()
         }
     }

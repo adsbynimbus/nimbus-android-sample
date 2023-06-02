@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.test
+package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.databinding.FragmentTestRenderBinding
+import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 
@@ -22,18 +22,20 @@ class TestRenderFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentTestRenderBinding.inflate(inflater, container, false).apply {
+    ): View = LayoutTestBinding.inflate(inflater, container, false).apply {
         testButton.setOnClickListener {
             val type = when {
-                vastRegex.containsMatchIn(markupEditText.text!!) -> "video"
-                htmlRegex.containsMatchIn(markupEditText.text!!) -> "static"
+                vastRegex.containsMatchIn(markupText.text!!) -> "video"
+                htmlRegex.containsMatchIn(markupText.text!!) -> "static"
                 else -> return@setOnClickListener
             }
 
             requireContext().loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type
 
-                override fun markup(): String = markupEditText.text.toString().unescape()
+                override fun network(): String = "test_render"
+
+                override fun markup(): String = markupText.text.toString().unescape()
 
                 override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
             })?.start()

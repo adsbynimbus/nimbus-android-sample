@@ -11,6 +11,7 @@ import com.adsbynimbus.android.sample.demand.initializeUnity
 import com.adsbynimbus.android.sample.demand.initializeVungle
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
 import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.VideoAdRenderer
 import com.adsbynimbus.request.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -86,5 +87,7 @@ class NimbusInitializer : Initializer<Nimbus> {
         )
 
         Renderer.interceptors.add(UiTestInterceptor)
+
+        VideoAdRenderer.showMuteButton = true
     }
 }

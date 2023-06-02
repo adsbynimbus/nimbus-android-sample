@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Download Release
         uses: actions/download-artifact@v3
+        with:
+          name: nimbus-android-sample
 
       - name: Checkout Nimbus Mobile QA
         uses: actions/checkout@v3
@@ -38,6 +40,6 @@ jobs:
         uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD }}
-          app-file: nimbus-android-sample/debug/app-debug-unsigned.apk
+          app-file: nimbus-android-sample/app-debug-unsigned.apk
           env: |
             APP_ID=com.adsbynimbus.android.sample

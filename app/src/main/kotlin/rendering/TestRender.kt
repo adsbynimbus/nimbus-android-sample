@@ -13,8 +13,6 @@ import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 
 class TestRenderFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-
     private val vastRegex = Regex("<vast", RegexOption.IGNORE_CASE)
     private val htmlRegex = Regex("<html", RegexOption.IGNORE_CASE)
 

@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.7.0"
+val nimbusVersion = "2.9.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -65,7 +65,7 @@ dependencies {
 
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
-    api("com.amazon.android:aps-sdk:9.8.0")
+    api("com.amazon.android:aps-sdk:9.8.1")
 
     /* Meta Audience Network Demand */
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
@@ -73,26 +73,26 @@ dependencies {
 
     /* Google Mediation Adapters and Dynamic Price */
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    api("com.google.android.gms:play-services-ads:22.0.0")
+    api("com.google.android.gms:play-services-ads:22.1.0")
 
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
-    api("com.unity3d.ads:unity-ads:4.6.1")
+    api("com.unity3d.ads:unity-ads:4.7.1")
 
     /* Vungle Demand */
     api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
     api("com.vungle:publisher-sdk-android:6.12.1")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.7.1")
+    api("androidx.activity:activity-ktx:1.7.2")
     api("androidx.annotation:annotation:1.6.0")
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("androidx.core:core-ktx:1.10.1")
     api("androidx.fragment:fragment-ktx:1.5.7")
-    api("androidx.navigation:navigation-fragment:2.5.3")
-    api("androidx.navigation:navigation-runtime:2.5.3")
-    api("androidx.navigation:navigation-ui:2.5.3")
+    api("androidx.navigation:navigation-fragment:2.6.0")
+    api("androidx.navigation:navigation-runtime:2.6.0")
+    api("androidx.navigation:navigation-ui:2.6.0")
     api("androidx.preference:preference-ktx:1.2.0")
     api("androidx.recyclerview:recyclerview:1.3.0")
     api("androidx.startup:startup-runtime:1.1.1")
@@ -119,6 +119,6 @@ dependencies {
     /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */
     api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     api("org.jetbrains:annotations:24.0.1")
 }

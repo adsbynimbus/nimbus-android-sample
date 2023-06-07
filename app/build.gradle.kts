@@ -89,7 +89,7 @@ dependencies {
     api("androidx.annotation:annotation-experimental:1.3.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("androidx.core:core-ktx:1.10.1")
-    api("androidx.fragment:fragment-ktx:1.5.7")
+    api("androidx.fragment:fragment-ktx:1.6.0")
     api("androidx.navigation:navigation-fragment:2.6.0")
     api("androidx.navigation:navigation-runtime:2.6.0")
     api("androidx.navigation:navigation-ui:2.6.0")

@@ -33,7 +33,6 @@ jobs:
         with:
           repository: 'timehop/nimbus-mobile-qa'
           path: .maestro
-          ref: build/flow
           ssh-key: ${{ secrets.NIMBUS_QA_DEPLOY }}
 
       - name: Run Maestro Cloud

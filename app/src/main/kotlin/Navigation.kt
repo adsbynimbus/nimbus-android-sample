@@ -75,6 +75,7 @@ val screens = mutableMapOf(
             "Meta Banner",
             "Meta Interstitial",
             "Meta Native",
+            "Meta Rewarded Video",
         )),
         NavigationAdapter(destination = "Unity", header = "Unity", items = arrayOf("Unity Rewarded Video")),
         NavigationAdapter(destination = "Vungle", header = "Vungle", items = arrayOf(

@@ -21,6 +21,7 @@ import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import com.adsbynimbus.request.FANDemandProvider
 import com.adsbynimbus.request.NimbusResponse
+import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSettings.TestAdType
 import java.util.UUID
 
@@ -54,6 +55,10 @@ class MetaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+
+        // Enabling Meta Ads test mode. Must not be set `true` in production.
+        AdSettings.setTestMode(true)
+
         when (val item = requireArguments().getString("item")) {
             "Meta Banner",
             "Meta Native" -> mockMetaNimbusAd(item) { root.context.showPropertyMissingDialog(it) }.let { metaAd ->
@@ -65,6 +70,15 @@ class MetaFragment : Fragment() {
                     })
             }
             "Meta Interstitial" -> requireActivity().run {
+                val metaAd = mockMetaNimbusAd(item) { showPropertyMissingDialog(it) }
+                loadBlockingAd(metaAd)?.apply {
+                    /* Replace the following with your own AdController.Listener implementation */
+                    logs.useAsLogger(LogAdapter().also {
+                        listeners.add(OnScreenLogger(it, response = metaAd))
+                    })
+                }?.start()
+            }
+            "Meta Rewarded Video" -> requireActivity().run {
                 val metaAd = mockMetaNimbusAd(item) { showPropertyMissingDialog(it) }
                 loadBlockingAd(metaAd)?.apply {
                     /* Replace the following with your own AdController.Listener implementation */
@@ -107,6 +121,9 @@ fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = N
         "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_interstitial_id")
         }}"
+        "Meta Rewarded Video" -> BuildConfig.FAN_REWARDED_VIDEO_ID.also { id ->
+            if (id.isEmpty()) onPropertyMissing("sample_fan_rewarded_video_id")
+        }
         else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_banner_320_id")
         }}"
@@ -114,13 +131,24 @@ fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = N
     markup = "",
     position = type,
     network = "facebook",  /** Nimbus currently refers to Meta demand as facebook under the hood */
-    type = if (type == "Meta Native") "native" else "static",
-    is_interstitial = if (type == "Meta Interstitial") 1 else 0,
+    type = when(type) {
+        "Meta Native" -> "native"
+        "Meta Rewarded Video" -> "video"
+        else -> {
+            "static"
+        }
+    },
+    is_interstitial = when(type) {
+        "Meta Interstitial" -> 1
+        "Meta Rewarded Video" -> 1
+        else -> 0
+    },
     width = if (type != "Meta Native") 320 else 0,
     height = when(type) {
         "Meta Banner" -> 50
         "Meta Interstitial" -> 480
         "Meta Native" -> 0
+        "Meta Rewarded Video" -> 480
         else -> 0
     }
 ))

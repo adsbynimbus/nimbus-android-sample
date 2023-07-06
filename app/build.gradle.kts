@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.10.0"
+val nimbusVersion = "2.11.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -43,6 +43,7 @@ androidComponents.onVariants { variant ->
             "sample_aps_video",
             "sample_fan_native_id",
             "sample_fan_interstitial_id",
+            "sample_fan_rewarded_video_id",
             "sample_fan_banner_320_id",
             "sample_fan_native_320_id",
             "sample_gam_placement_id",

@@ -36,7 +36,7 @@ jobs:
           ssh-key: ${{ secrets.NIMBUS_QA_DEPLOY }}
 
       - name: Run Maestro Cloud
-        uses: mobile-dev-inc/action-maestro-cloud@v1
+        uses: mobile-dev-inc/action-maestro-cloud@v1.3.3
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD }}
           app-file: debug/app-debug.apk

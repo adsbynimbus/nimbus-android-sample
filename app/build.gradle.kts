@@ -49,6 +49,11 @@ androidComponents.onVariants { variant ->
             "sample_gam_placement_id",
             "sample_unity_game_id",
             "sample_vungle_config_id",
+            "sample_admob_appid",
+            "sample_admob_banner",
+            "sample_admob_interstitial",
+            "sample_admob_rewarded",
+            "sample_admob_rewarded_interstitial",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),
@@ -74,7 +79,12 @@ dependencies {
 
     /* Google Mediation Adapters and Dynamic Price */
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
-    api("com.google.android.gms:play-services-ads:22.1.0")
+    api("com.google.android.gms:play-services-ads:22.2.0")
+
+    /* Admob and Dynamic Price */
+//    api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
+    api(project(":extensions:admob"))
+    api("com.google.android.gms:play-services-ads:22.2.0")
 
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")

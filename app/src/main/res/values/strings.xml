@@ -14,6 +14,9 @@
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
     <string name="test_render_button">Test</string>
     <string name="test_render_hint">Enter Markup</string>
+    <string name="test_render_invalid_ad">Invalid Ad</string>
+    <string name="test_render_invalid_ad_message">Please enter a valid HTML or VAST ad.</string>
+
     <string name="settings_subtitle">Configure your test app experience</string>
     <string name="settings_user_details">User Details</string>
     <string name="settings_test_mode">Nimbus Test Mode</string>

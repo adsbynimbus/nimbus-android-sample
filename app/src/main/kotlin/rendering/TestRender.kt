@@ -1,5 +1,6 @@
 package com.adsbynimbus.android.sample.rendering
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
@@ -14,7 +16,6 @@ import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 class TestRenderFragment : Fragment() {
 
     private val vastRegex = Regex("<vast", RegexOption.IGNORE_CASE)
-    private val htmlRegex = Regex("<html", RegexOption.IGNORE_CASE)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,11 +23,16 @@ class TestRenderFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutTestBinding.inflate(inflater, container, false).apply {
         testButton.setOnClickListener {
-            val type = when {
-                vastRegex.containsMatchIn(markupText.text!!) -> "video"
-                htmlRegex.containsMatchIn(markupText.text!!) -> "static"
-                else -> return@setOnClickListener
+            val markup = markupText.text!!.trim(' ', '\n')
+
+            if (markup.isEmpty()) {
+                AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.test_render_invalid_ad))
+                    .setMessage(getString(R.string.test_render_invalid_ad_message)).show()
+                return@setOnClickListener
             }
+
+            val type = if (vastRegex.containsMatchIn(markup)) "video" else "static"
 
             requireContext().loadBlockingAd(object : NimbusAd {
                 override fun type(): String = type

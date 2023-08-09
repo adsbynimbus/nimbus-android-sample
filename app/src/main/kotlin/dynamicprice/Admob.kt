@@ -64,7 +64,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
         }
 
         when (item) {
-            "Dynamic Price Banner" -> lifecycleScope.launch {
+            "Dynamic Banner" -> lifecycleScope.launch {
                 AdView(requireContext()).apply {
                     adUnitId = BuildConfig.ADMOB_BANNER
                     id = R.id.google_ad_view
@@ -106,7 +106,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             }
 
-            "Dynamic Price Interstitial" -> AdManagerInterstitialAd.load(requireActivity(),
+            "Dynamic Interstitial" -> AdManagerInterstitialAd.load(requireActivity(),
                 BuildConfig.ADMOB_INTERSTITIAL,
                 AdManagerAdRequest.Builder()
                     .addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras)
@@ -138,7 +138,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             )
 
-            "Dynamic Price Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
+            "Dynamic Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
                 BuildConfig.ADMOB_REWARDED_INTERSTITIAL,
                 AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
                 object : RewardedInterstitialAdLoadCallback() {
@@ -170,7 +170,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             )
 
-            "Dynamic Price Rewarded" -> RewardedAd.load(requireActivity(),
+            "Dynamic Rewarded" -> RewardedAd.load(requireActivity(),
                 BuildConfig.ADMOB_REWARDED,
                 AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
                 object : RewardedAdLoadCallback() {

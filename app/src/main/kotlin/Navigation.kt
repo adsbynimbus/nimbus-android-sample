@@ -67,10 +67,10 @@ val screens = mutableMapOf(
             "Dynamic Price Interstitial",
         )),
         NavigationAdapter(destination = "AdMob Dynamic Price", header = "AdMob", items = arrayOf(
-            "Dynamic Price Banner",
-            "Dynamic Price Interstitial",
-            "Dynamic Price Rewarded",
-            "Dynamic Price Rewarded Video",
+            "Dynamic Banner",
+            "Dynamic Interstitial",
+            "Dynamic Rewarded",
+            "Dynamic Rewarded Video",
         ))
 ),
     "Third Party Demand" to ConcatAdapter(

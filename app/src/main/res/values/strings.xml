@@ -10,6 +10,7 @@
 
     <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
     <string name="google_ad_manager" translatable="false">Google Ad Manager</string>
+    <string name="google_admob" translatable="false">AdMob</string>
 
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
     <string name="test_render_button">Test</string>

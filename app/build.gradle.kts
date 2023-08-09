@@ -81,7 +81,7 @@ dependencies {
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
     api("com.google.android.gms:play-services-ads:22.2.0")
 
-    /* Admob and Dynamic Price */
+    /* Dynamic Adapters for AdMob */
     api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
     api("com.google.android.gms:play-services-ads:22.2.0")
 

@@ -1,4 +1,4 @@
-package com.adsbynimbus.android.sample.dynamicprice
+package com.adsbynimbus.android.sample.dynamicadapter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,7 +32,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnPaidEventListener
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
-import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -42,7 +41,7 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoa
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-public class GoogleAdMobDynamicPrideFragment : Fragment() {
+public class GoogleAdMobDynamicFragment : Fragment() {
     
     private val adManager = NimbusAdManager()
     override fun onCreateView(
@@ -64,7 +63,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
         }
 
         when (item) {
-            "Dynamic Price Banner" -> lifecycleScope.launch {
+            "Dynamic Banner" -> lifecycleScope.launch {
                 AdView(requireContext()).apply {
                     adUnitId = BuildConfig.ADMOB_BANNER
                     id = R.id.google_ad_view
@@ -106,7 +105,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             }
 
-            "Dynamic Price Interstitial" -> AdManagerInterstitialAd.load(requireActivity(),
+            "Dynamic Interstitial" -> AdManagerInterstitialAd.load(requireActivity(),
                 BuildConfig.ADMOB_INTERSTITIAL,
                 AdManagerAdRequest.Builder()
                     .addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras)
@@ -138,7 +137,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             )
 
-            "Dynamic Price Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
+            "Dynamic Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
                 BuildConfig.ADMOB_REWARDED_INTERSTITIAL,
                 AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
                 object : RewardedInterstitialAdLoadCallback() {
@@ -170,7 +169,7 @@ public class GoogleAdMobDynamicPrideFragment : Fragment() {
                 }
             )
 
-            "Dynamic Price Rewarded" -> RewardedAd.load(requireActivity(),
+            "Dynamic Rewarded" -> RewardedAd.load(requireActivity(),
                 BuildConfig.ADMOB_REWARDED,
                 AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
                 object : RewardedAdLoadCallback() {

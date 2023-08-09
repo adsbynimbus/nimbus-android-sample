@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.dynamicprice.GoogleAdManagerDynamicPriceFragment
-import com.adsbynimbus.android.sample.dynamicprice.GoogleAdMobDynamicPrideFragment
+import com.adsbynimbus.android.sample.dynamicadapter.GoogleAdMobDynamicFragment
 import com.adsbynimbus.android.sample.mediation.GoogleAdManagerYieldGroupFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
@@ -66,11 +66,11 @@ val screens = mutableMapOf(
             "Dynamic Price Inline Video",
             "Dynamic Price Interstitial",
         )),
-        NavigationAdapter(destination = "AdMob Dynamic Price", header = "AdMob", items = arrayOf(
-            "Dynamic Price Banner",
-            "Dynamic Price Interstitial",
-            "Dynamic Price Rewarded",
-            "Dynamic Price Rewarded Video",
+        NavigationAdapter(destination = "Dynamic Adapters for AdMob", header = "AdMob", items = arrayOf(
+            "Dynamic Banner",
+            "Dynamic Interstitial",
+            "Dynamic Rewarded",
+            "Dynamic Rewarded Video",
         ))
 ),
     "Third Party Demand" to ConcatAdapter(
@@ -123,7 +123,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
         label = context.getString(R.string.google_ad_manager)
         argument("item") { type = NavType.StringType }
     }
-    fragment<GoogleAdMobDynamicPrideFragment>("AdMob Dynamic Price/{item}") {
+    fragment<GoogleAdMobDynamicFragment>("Dynamic Adapters for AdMob/{item}") {
         label = context.getString(R.string.google_admob)
         argument("item") { type = NavType.StringType }
     }

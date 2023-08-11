@@ -70,7 +70,7 @@ val screens = mutableMapOf(
             "Dynamic Banner",
             "Dynamic Interstitial",
             "Dynamic Rewarded",
-            "Dynamic Rewarded Video",
+            "Dynamic Rewarded Interstitial",
         ))
 ),
     "Third Party Demand" to ConcatAdapter(

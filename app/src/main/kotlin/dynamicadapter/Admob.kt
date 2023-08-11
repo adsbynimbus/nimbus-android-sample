@@ -137,38 +137,6 @@ public class GoogleAdMobDynamicFragment : Fragment() {
                 }
             )
 
-            "Dynamic Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
-                BuildConfig.ADMOB_REWARDED_INTERSTITIAL,
-                AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
-                object : RewardedInterstitialAdLoadCallback() {
-                    override fun onAdLoaded(ad: RewardedInterstitialAd) {
-                        Timber.v("Rewarded ad loaded")
-                        ad.onPaidEventListener = OnPaidEventListener {
-                            NimbusAdManager().notifyPrice(nimbusExtras, it)
-                        }
-
-                        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdImpression() {
-                                adManager.notifyImpression(nimbusExtras, ad.responseInfo)
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                adManager.notifyError(nimbusExtras, p0)
-                            }
-                        }
-
-                        ad.show(requireActivity()) {
-                            Timber.v("rewarded ${it.amount} ${it.type}")
-                        }
-                    }
-
-                    override fun onAdFailedToLoad(p0: LoadAdError) {
-                        Timber.w("Error loading Rewarded ad %s", p0.message)
-                        adManager.notifyError(nimbusExtras, p0)
-                    }
-                }
-            )
-
             "Dynamic Rewarded" -> RewardedAd.load(requireActivity(),
                 BuildConfig.ADMOB_REWARDED,
                 AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
@@ -197,6 +165,38 @@ public class GoogleAdMobDynamicFragment : Fragment() {
 
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         Timber.w("Error loading Rewarded Video ad %s", p0.message)
+                        adManager.notifyError(nimbusExtras, p0)
+                    }
+                }
+            )
+
+            "Dynamic Rewarded Interstitial" -> RewardedInterstitialAd.load(requireActivity(),
+                BuildConfig.ADMOB_REWARDED_INTERSTITIAL,
+                AdManagerAdRequest.Builder().addNetworkExtrasBundle(NimbusCustomAdapter::class.java, nimbusExtras).build(),
+                object : RewardedInterstitialAdLoadCallback() {
+                    override fun onAdLoaded(ad: RewardedInterstitialAd) {
+                        Timber.v("Rewarded ad loaded")
+                        ad.onPaidEventListener = OnPaidEventListener {
+                            NimbusAdManager().notifyPrice(nimbusExtras, it)
+                        }
+
+                        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdImpression() {
+                                adManager.notifyImpression(nimbusExtras, ad.responseInfo)
+                            }
+
+                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                                adManager.notifyError(nimbusExtras, p0)
+                            }
+                        }
+
+                        ad.show(requireActivity()) {
+                            Timber.v("rewarded ${it.amount} ${it.type}")
+                        }
+                    }
+
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        Timber.w("Error loading Rewarded ad %s", p0.message)
                         adManager.notifyError(nimbusExtras, p0)
                     }
                 }

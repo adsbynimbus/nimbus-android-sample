@@ -33,7 +33,9 @@ import com.adsbynimbus.android.sample.dynamicprice.GoogleAdManagerDynamicPriceFr
 import com.adsbynimbus.android.sample.dynamicadapter.GoogleAdMobDynamicFragment
 import com.adsbynimbus.android.sample.mediation.GoogleAdManagerYieldGroupFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
+import com.adsbynimbus.android.sample.rendering.MobileFuseFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
+import com.mobilefuse.sdk.MobileFuse
 
 val screens = mutableMapOf(
     "Main" to NavigationAdapter(items = arrayOf(
@@ -43,18 +45,26 @@ val screens = mutableMapOf(
         "Test Render",
         "Settings",
     )),
-    "Show Ad Demo" to NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
-        "Manually Rendered Ad",
-        "Banner",
-        "Banner With Refresh",
-        "Inline Video",
-        "Interstitial Hybrid",
-        "Interstitial Static",
-        "Interstitial Video",
-        "Interstitial Video Without UI",
-        "Rewarded Video",
-        "Ads in ScrollView"
-    )),
+    "Show Ad Demo" to ConcatAdapter(
+        NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
+            "Manually Rendered Ad",
+            "Banner",
+            "Banner With Refresh",
+            "Inline Video",
+            "Interstitial Hybrid",
+            "Interstitial Static",
+            "Interstitial Video",
+            "Interstitial Video Without UI",
+            "Rewarded Video",
+            "Ads in ScrollView"
+        )),
+        NavigationAdapter(destination = "MobileFuse", header = "MobileFuse", items = arrayOf(
+            "Banner",
+            "MREC",
+            "Interstitial",
+            "Rewarded",
+        ))
+    ),
     "Mediation Platforms" to ConcatAdapter(
         NavigationAdapter(destination = "Google Mediation", header = "Google Ad Manager", items = arrayOf(
             "Banner",
@@ -128,6 +138,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
         argument("item") { type = NavType.StringType }
     }
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<UnityFragment>("Unity/{item}") { argument("item") { type = NavType.StringType } }
     fragment<VungleFragment>("Vungle/{item}") { argument("item") { type = NavType.StringType } }
 }

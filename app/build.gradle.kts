@@ -83,7 +83,6 @@ dependencies {
 
     /* Dynamic Adapters for AdMob */
     api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
-    api("com.google.android.gms:play-services-ads:22.2.0")
 
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")

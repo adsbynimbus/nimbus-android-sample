@@ -87,7 +87,12 @@ class NimbusInitializer : Initializer<Nimbus> {
         )
 
         Renderer.interceptors.add(UiTestInterceptor)
+        MobileFuseDemandProvider.enabled = false
 
         VideoAdRenderer.showMuteButton = true
     }
 }
+var NimbusRequest.Interceptor.enabled : Boolean
+    get() = RequestManager.interceptors.contains(this)
+    set(value) { if (value) RequestManager.interceptors.add(this) else RequestManager.interceptors.remove(this) }
+

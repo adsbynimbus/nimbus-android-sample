@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
@@ -8,11 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
+import com.adsbynimbus.request.MobileFuseDemandProvider
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
 
@@ -24,7 +29,7 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@MobileFuseFragment)
+        MobileFuseDemandProvider.enabled = true
         when (val item = requireArguments().getString("item")) {
             "Banner" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd("TimeHope_Display_Android_Nimbus_OB", Format.BANNER_320_50, Position.HEADER),
@@ -75,6 +80,7 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
     override fun onDestroyView() {
         super.onDestroyView()
         RequestManager.interceptors.remove(this)
+        MobileFuseDemandProvider.enabled = false
         controllers.forEach { it.destroy() }
     }
 

@@ -51,7 +51,7 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                 NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
                 else disableTradedeskId()
             }
-            "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
+            "coppa" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
                 edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
             }

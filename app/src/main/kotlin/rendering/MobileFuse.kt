@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.enabled
 import com.adsbynimbus.openrtb.enumerations.Position
@@ -29,10 +30,11 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        RequestManager.interceptors.add(this@MobileFuseFragment)
         MobileFuseDemandProvider.enabled = true
         when (val item = requireArguments().getString("item")) {
             "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd("TimeHope_Display_Android_Nimbus_OB", Format.BANNER_320_50, Position.HEADER),
+                request = NimbusRequest.forBannerAd(BuildConfig.MOBILE_FUSE_BANNER, Format.BANNER_320_50, Position.HEADER),
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                     controllers.add(controller.apply {
@@ -43,7 +45,7 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
                 },
             )
             "MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd("TimeHope_MREC_Android_Nimbus_OB", Format.MREC, Position.HEADER),
+                request = NimbusRequest.forBannerAd(BuildConfig.MOBILE_FUSE_MREC, Format.MREC, Position.HEADER),
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                     controllers.add(controller.apply {
@@ -54,7 +56,7 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
                 },
             )
             "Interstitial" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd("TimeHope_INSTL_Android_Nimbus_OB").apply {
+                request = NimbusRequest.forInterstitialAd(BuildConfig.MOBILE_FUSE_INTERSTITIAL).apply {
                     request.imp[0].video = null
                 },
                 activity = requireActivity(),
@@ -64,7 +66,7 @@ class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
                 },
             )
             "Rewarded" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo("TimeHope_Rewarded_Android_Nimbus_OB").apply {
+                request = NimbusRequest.forRewardedVideo(BuildConfig.MOBILE_FUSE_REWARDED).apply {
                     companionAds = emptyArray()
                 },
                 activity = requireActivity(),

@@ -54,6 +54,10 @@ androidComponents.onVariants { variant ->
             "sample_admob_interstitial",
             "sample_admob_rewarded",
             "sample_admob_rewarded_interstitial",
+            "sample_mobile_fuse_banner",
+            "sample_mobile_fuse_mrec",
+            "sample_mobile_fuse_interstitial",
+            "sample_mobile_fuse_rewarded",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),

@@ -28,6 +28,14 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
+    buildTypes {
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
+    }
 }
 
 androidComponents.onVariants { variant ->

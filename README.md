@@ -1,4 +1,4 @@
-# Nimbus Android Sample [![Build](https://github.com/timehop/nimbus-android-sample/actions/workflows/build.yml/badge.svg)](https://github.com/timehop/nimbus-android-sample/actions/workflows/build.yml)
+# Nimbus Android Sample [![Build](https://github.com/adsbynimbus/nimbus-android-sample/actions/workflows/build.yml/badge.svg)](https://github.com/adsbynimbus/nimbus-android-sample/actions/workflows/build.yml)
 
 Welcome to Nimbus Sample App - ads by publishers, for publishers.
 

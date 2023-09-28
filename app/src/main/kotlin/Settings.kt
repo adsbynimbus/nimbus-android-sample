@@ -19,8 +19,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 object SettingsListener : SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        sharedPreferences.initNimbusFeatures(setOf(key))
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
+        key?.let { sharedPreferences.initNimbusFeatures(setOf(key)) }
     }
 }
 

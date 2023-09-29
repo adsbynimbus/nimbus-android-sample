@@ -31,7 +31,7 @@ jobs:
       - name: Checkout Nimbus Mobile QA
         uses: actions/checkout@v3
         with:
-          repository: 'timehop/nimbus-mobile-qa'
+          repository: 'adsbynimbus/nimbus-mobile-qa'
           path: .maestro
           ssh-key: ${{ secrets.NIMBUS_QA_DEPLOY }}
 

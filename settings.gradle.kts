@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         if (providers.environmentVariable("GITHUB_ACTIONS").isPresent) {
             // If running in Github Actions, use Github packages because it's free
             maven {
-                url = uri("https://maven.pkg.github.com/timehop/nimbus-openrtb")
+                url = uri("https://maven.pkg.github.com/adsbynimbus/nimbus-openrtb")
                 name = "openrtb"
                 credentials(PasswordCredentials::class)
                 content {

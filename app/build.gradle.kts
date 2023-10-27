@@ -31,9 +31,11 @@ android {
 }
 
 androidComponents.onVariants { variant ->
-    variant.manifestPlaceholders.put("gamAppId",
-        providers.gradleProperty("sample_gam_app_id").orElse("ca-app-pub-3940256099942544~3347511713")
-    )
+    val gamAppId = providers.gradleProperty("sample_gam_app_id")
+        .orNull
+        .orEmpty()
+        .ifEmpty { "ca-app-pub-3940256099942544~3347511713" }
+    variant.manifestPlaceholders.put("gamAppId", gamAppId)
 
     /* Other keys that can be configured in the sample app */
     listOf(

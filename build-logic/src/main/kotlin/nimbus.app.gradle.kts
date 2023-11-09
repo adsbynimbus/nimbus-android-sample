@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
     }
 
     /* Ensures the jvmTarget is aligned at 17 for both languages */

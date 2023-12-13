@@ -54,10 +54,7 @@ class NimbusAdManagerTestListener(
     var onScreenLogger: OnScreenLogger? = null
 
     override fun onError(error: NimbusError) {
-        adapter.submitList(buildList {
-            addAll(adapter.currentList)
-            add("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
-        })
+        adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
         Timber.e("$identifier: ${error.message}")
     }
 
@@ -83,24 +80,19 @@ class NimbusAdManagerTestListener(
     }
 }
 
-class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse?) : AdController.Listener {
+class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse?) :
+    AdController.Listener {
     private var hasLoggedRendered = false
     override fun onAdEvent(adEvent: AdEvent) {
-        adapter.submitList(buildList {
-            addAll(adapter.currentList)
-            if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
-                add("Rendered: ${response?.testDescription}")
-                hasLoggedRendered = true
-            }
-            add("Event: ${adEvent.name}")
-        })
+        if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
+            adapter.appendLog("Rendered: ${response?.testDescription}")
+            hasLoggedRendered = true
+        }
+        adapter.appendLog("Event: ${adEvent.name}")
     }
 
     override fun onError(error: NimbusError) {
-        adapter.submitList(buildList {
-            addAll(adapter.currentList)
-            add("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
-        })
+        adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
     }
 }
 
@@ -114,17 +106,18 @@ fun Context.showPropertyMissingDialog(property: String) {
 }
 
 object EmptyAdControllerListenerImplementation : AdController.Listener {
-    override fun onAdEvent(adEvent: AdEvent) { }
+    override fun onAdEvent(adEvent: AdEvent) {}
 
-    override fun onError(error: NimbusError) { }
+    override fun onError(error: NimbusError) {}
 }
 
 object UiTestInterceptor : Interceptor {
     override fun modifyAd(ad: NimbusAd): NimbusAd = ad
 
-    override fun modifyController(ad: NimbusAd, controller: AdController): AdController = controller.apply {
-        controller.setTestDescription(ad)
-    }
+    override fun modifyController(ad: NimbusAd, controller: AdController): AdController =
+        controller.apply {
+            controller.setTestDescription(ad)
+        }
 }
 
 class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<String>() {
@@ -132,9 +125,17 @@ class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<Str
 
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
 }) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder = TextViewHolder(
-        AppCompatTextView(parent.context)
-    )
+    val messageList = mutableListOf<String>()
+
+    fun appendLog(message: String) {
+        messageList.add(message)
+        submitList(messageList)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder =
+        TextViewHolder(
+            AppCompatTextView(parent.context)
+        )
 
     override fun onBindViewHolder(holder: TextViewHolder, position: Int) {
         holder.view.text = getItem(position)
@@ -143,5 +144,6 @@ class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<Str
 
 fun RecyclerView.useAsLogger(logAdapter: LogAdapter = LogAdapter()) = apply {
     adapter = logAdapter
-    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false).apply { stackFromEnd = true }
+    layoutManager =
+        LinearLayoutManager(context, RecyclerView.VERTICAL, false).apply { stackFromEnd = true }
 }

@@ -29,126 +29,150 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
-        val logAdapter = LogAdapter().also { logs.useAsLogger(it) }
         when (val item = requireArguments().getString("item")) {
-            "Manually Rendered Ad" -> adManager.makeRequest(
-                context = root.context,
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                listener = object : RequestManager.Listener {
-                override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                    // Render ad with response
-                    Renderer.loadAd(nimbusResponse, adFrame,
-                        object : Renderer.Listener, NimbusError.Listener {
-                            override fun onAdRendered(controller: AdController) {
-                                controllers.add(controller.apply {
-                                    setTestDescription(response = nimbusResponse)
-                                    align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                                    /* Replace the following with your own AdController.Listener implementation */
-                                    listeners.add(EmptyAdControllerListenerImplementation)
-                                    listeners.add(OnScreenLogger(logAdapter, nimbusResponse))
-                                })
-                            }
+            "Manually Rendered Ad" -> {
+                adManager.makeRequest(
+                    context = root.context,
+                    request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
+                    listener = object : RequestManager.Listener {
+                        override fun onAdResponse(nimbusResponse: NimbusResponse) {
+                            // Render ad with response
+                            Renderer.loadAd(nimbusResponse, adFrame,
+                                object : Renderer.Listener, NimbusError.Listener {
+                                    override fun onAdRendered(controller: AdController) {
+                                        controllers.add(controller.apply {
+                                            setTestDescription(response = nimbusResponse)
+                                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                                            /* Replace the following with your own AdController.Listener implementation */
+                                            listeners.add(EmptyAdControllerListenerImplementation)
+                                            listeners.add(OnScreenLogger(LogAdapter().also { logs.useAsLogger(it) }, nimbusResponse))
+                                        })
+                                    }
 
-                            override fun onError(error: NimbusError) {
-                                Timber.e("Manual Render Ad: %s", error.message)
-                            }
-                        }
-                    )
-                }
-
-                override fun onError(error: NimbusError) {
-                    Timber.e("Manual Render Ad: %s", error.message)
-                }
-            })
-            "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Banner With Refresh" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                refreshInterval = 30,
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Inline Video" -> adManager.showAd(
-                request = NimbusRequest.forVideoAd(item),
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Interstitial Hybrid" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item),
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Interstitial Static" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    request.imp[0].video = null
-                },
-                closeButtonDelaySeconds = 0,
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Interstitial Video" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    request.imp[0].banner = null
-                },
-                closeButtonDelaySeconds = 0,
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Interstitial Video Without UI" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    request.imp[0].banner = null
-                },
-                closeButtonDelaySeconds = 0,
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controller.listeners.add(object : AdController.Listener {
-                        override fun onAdEvent(adEvent: AdEvent) {
-                            if (adEvent == AdEvent.LOADED) controller.view?.alpha = 0f
+                                    override fun onError(error: NimbusError) {
+                                        Timber.e("Manual Render Ad: %s", error.message)
+                                    }
+                                }
+                            )
                         }
 
-                        override fun onError(error: NimbusError) {}
+                        override fun onError(error: NimbusError) {
+                            Timber.e("Manual Render Ad: %s", error.message)
+                        }
                     })
-                },
-            )
-            "Rewarded Video" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(item),
-                activity = requireActivity(),
-                closeButtonDelaySeconds = 60,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
+            }
+            "Banner" -> {
+                adManager.showAd(
+                    request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        controllers.add(controller.apply {
+                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        })
+                    },
+                )
+            }
+            "Banner With Refresh" -> {
+                adManager.showAd(
+                    request = NimbusRequest.forBannerAd(
+                        item,
+                        Format.BANNER_320_50,
+                        Position.HEADER
+                    ),
+                    refreshInterval = 30,
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(
+                        identifier = item,
+                        logView = logs
+                    ) { controller ->
+                        controllers.add(controller.apply {
+                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        })
+                    }
+                )
+            }
+            "Inline Video" -> {
+                adManager.showAd(
+                    request = NimbusRequest.forVideoAd(item),
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        controllers.add(controller.apply {
+                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        })
+                    },
+                )
+            }
+            "Interstitial Hybrid" -> {
+                adManager.showBlockingAd(
+                    request = NimbusRequest.forInterstitialAd(item),
+                    activity = requireActivity(),
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        /* Replace the following with your own AdController.Listener implementation */
+                        controller.listeners.add(EmptyAdControllerListenerImplementation)
+                    },
+                )
+            }
+            "Interstitial Static" -> {
+                adManager.showBlockingAd(
+                    request = NimbusRequest.forInterstitialAd(item).apply {
+                        request.imp[0].video = null
+                    },
+                    closeButtonDelaySeconds = 0,
+                    activity = requireActivity(),
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        /* Replace the following with your own AdController.Listener implementation */
+                        controller.listeners.add(EmptyAdControllerListenerImplementation)
+                    },
+                )
+            }
+            "Interstitial Video" -> {
+                adManager.showBlockingAd(
+                    request = NimbusRequest.forInterstitialAd(item).apply {
+                        request.imp[0].banner = null
+                    },
+                    closeButtonDelaySeconds = 0,
+                    activity = requireActivity(),
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        /* Replace the following with your own AdController.Listener implementation */
+                        controller.listeners.add(EmptyAdControllerListenerImplementation)
+                    },
+                )
+            }
+            "Interstitial Video Without UI" -> {
+                adManager.showBlockingAd(
+                    request = NimbusRequest.forInterstitialAd(item).apply {
+                        request.imp[0].banner = null
+                    },
+                    closeButtonDelaySeconds = 0,
+                    activity = requireActivity(),
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        controller.listeners.add(object : AdController.Listener {
+                            override fun onAdEvent(adEvent: AdEvent) {
+                                if (adEvent == AdEvent.LOADED) controller.view?.alpha = 0f
+                            }
+
+                            override fun onError(error: NimbusError) {}
+                        })
+                    },
+                )
+            }
+            "Rewarded Video" -> {
+                adManager.showRewardedAd(
+                    request = NimbusRequest.forRewardedVideo(item),
+                    activity = requireActivity(),
+                    closeButtonDelaySeconds = 60,
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        /* Replace the following with your own AdController.Listener implementation */
+                        controller.listeners.add(EmptyAdControllerListenerImplementation)
+                    },
+                )
+            }
             "Ads in ScrollView" -> {
                 LayoutAdsInListBinding.inflate(inflater, adFrame, true).apply {
                     adManager.showAd(

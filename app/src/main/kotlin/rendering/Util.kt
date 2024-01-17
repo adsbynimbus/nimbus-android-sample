@@ -25,6 +25,7 @@ import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.Interceptor
 import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArrayList
 
 /** A Debug description of the Nimbus Response used for UI testing */
 inline val NimbusAd.testDescription
@@ -61,15 +62,16 @@ class NimbusAdManagerTestListener(
     override fun onAdResponse(nimbusResponse: NimbusResponse) {
         response = nimbusResponse
         onScreenLogger?.response = nimbusResponse
+        onScreenLogger = OnScreenLogger(adapter = adapter, response = response)
     }
 
     override fun onAdRendered(controller: AdController) {
-        onScreenLogger = OnScreenLogger(adapter = adapter, response = response).also {
-            controller.listeners.add(it)
-        }
+        onScreenLogger?.let { controller.listeners.add(it) }
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
-                Timber.i("$identifier: ${adEvent.name}")
+                val message = "$identifier: ${adEvent.name}"
+                Timber.i(message)
+                adapter.appendLog(message)
             }
 
             override fun onError(error: NimbusError) {
@@ -125,11 +127,12 @@ class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<Str
 
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
 }) {
-    val messageList = mutableListOf<String>()
+    val messageList = CopyOnWriteArrayList<String>()
 
     fun appendLog(message: String) {
         messageList.add(message)
         submitList(messageList)
+        notifyItemInserted(messageList.size - 1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder =
@@ -140,9 +143,14 @@ class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<Str
     override fun onBindViewHolder(holder: TextViewHolder, position: Int) {
         holder.view.text = getItem(position)
     }
+
+    fun clear() {
+        messageList.clear()
+        submitList(messageList)
+    }
 }
 
-fun RecyclerView.useAsLogger(logAdapter: LogAdapter = LogAdapter()) = apply {
+fun RecyclerView.useAsLogger(logAdapter: LogAdapter) = apply {
     adapter = logAdapter
     layoutManager =
         LinearLayoutManager(context, RecyclerView.VERTICAL, false).apply { stackFromEnd = true }

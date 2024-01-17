@@ -102,10 +102,7 @@ class APSFragment : Fragment() {
                     }.onFailure {
                         /* Add the loader from the AdError for refreshing banners */
                         if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
-                        adapter.submitList(buildList {
-                            addAll(adapter.currentList)
-                            add("APS Request failed: ${it.message}")
-                        })
+                        adapter.appendLog("APS Request failed: ${it.message}")
                     }
 
                 /* Show a Nimbus refreshing banner attached to the adFrame */

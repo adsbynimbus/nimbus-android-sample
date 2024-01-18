@@ -4,14 +4,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Orientation
 import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
@@ -52,7 +49,7 @@ class NimbusAdManagerTestListener(
     val onAdRenderedCallback: (AdController) -> Unit,
 ) : NimbusAdManager.Listener {
     val adapter = logView.adapter as? LogAdapter ?: LogAdapter().also { logView.useAsLogger(it) }
-    var onScreenLogger: OnScreenLogger? = null
+    val onScreenLogger: OnScreenLogger by lazy { OnScreenLogger(adapter = adapter, response = response, identifier = identifier) }
 
     override fun onError(error: NimbusError) {
         adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
@@ -61,17 +58,14 @@ class NimbusAdManagerTestListener(
 
     override fun onAdResponse(nimbusResponse: NimbusResponse) {
         response = nimbusResponse
-        onScreenLogger?.response = nimbusResponse
-        onScreenLogger = OnScreenLogger(adapter = adapter, response = response)
+        onScreenLogger.response = nimbusResponse
     }
 
     override fun onAdRendered(controller: AdController) {
-        onScreenLogger?.let { controller.listeners.add(it) }
+        onScreenLogger.let { controller.listeners.add(it) }
         controller.listeners.add(object : AdController.Listener {
             override fun onAdEvent(adEvent: AdEvent) {
-                val message = "$identifier: ${adEvent.name}"
-                Timber.i(message)
-                adapter.appendLog(message)
+                Timber.i("$identifier: ${adEvent.name}")
             }
 
             override fun onError(error: NimbusError) {
@@ -82,7 +76,7 @@ class NimbusAdManagerTestListener(
     }
 }
 
-class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse?) :
+class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse? = null, val identifier: String? = null) :
     AdController.Listener {
     private var hasLoggedRendered = false
     override fun onAdEvent(adEvent: AdEvent) {
@@ -90,7 +84,7 @@ class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse?) :
             adapter.appendLog("Rendered: ${response?.testDescription}")
             hasLoggedRendered = true
         }
-        adapter.appendLog("Event: ${adEvent.name}")
+        adapter.appendLog("${identifier ?: "Event"}: ${adEvent.name}")
     }
 
     override fun onError(error: NimbusError) {

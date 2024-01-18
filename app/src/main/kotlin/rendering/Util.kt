@@ -49,7 +49,7 @@ class NimbusAdManagerTestListener(
     val onAdRenderedCallback: (AdController) -> Unit,
 ) : NimbusAdManager.Listener {
     val adapter = logView.adapter as? LogAdapter ?: LogAdapter().also { logView.useAsLogger(it) }
-    val onScreenLogger: OnScreenLogger by lazy { OnScreenLogger(adapter = adapter, response = response, identifier = identifier) }
+    val onScreenLogger: OnScreenLogger by lazy { OnScreenLogger(adapter = adapter, response = response) }
 
     override fun onError(error: NimbusError) {
         adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })

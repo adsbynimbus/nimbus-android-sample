@@ -182,7 +182,7 @@ class AdLoaderAdListener(
         logAdapter.appendLog("onAdOpened")
     }
 }
-class NimbusRenderingDynamicPriceFragment : Fragment() {
+class DynamicPriceFragment : Fragment() {
 
     val adManager = NimbusAdManager()
     var adView: AdManagerAdView? = null

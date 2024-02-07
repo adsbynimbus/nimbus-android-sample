@@ -31,7 +31,7 @@ import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.dynamicadapter.GoogleAdMobDynamicFragment
 import com.adsbynimbus.android.sample.mediation.GoogleAdManagerYieldGroupFragment
-import com.adsbynimbus.android.sample.mediation.NimbusRenderingDynamicPriceFragment
+import com.adsbynimbus.android.sample.mediation.DynamicPriceFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 
@@ -60,7 +60,7 @@ val screens = mutableMapOf(
             "Banner",
             "Interstitial",
         )),
-        NavigationAdapter(destination = "DynamicPriceRendering", items = arrayOf(
+        NavigationAdapter(destination = "DynamicPriceRendering", header = "Dynamic Price", items = arrayOf(
             "Banner",
             "Inline Video",
             "Interstitial",
@@ -69,12 +69,6 @@ val screens = mutableMapOf(
             "Force Loss",
             "AdLoader Banner",
             "AdLoader Inline Video",
-        )),
-        NavigationAdapter(destination = "Google Dynamic Price", items = arrayOf(
-            "Dynamic Price Banner",
-            "Dynamic Price Banner + Video",
-            "Dynamic Price Inline Video",
-            "Dynamic Price Interstitial",
         )),
         NavigationAdapter(destination = "Dynamic Adapters for AdMob", header = "AdMob", items = arrayOf(
             "Dynamic Banner",
@@ -131,7 +125,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
         label = context.getString(R.string.google_ad_manager)
         argument("item") { type = NavType.StringType }
     }
-    fragment<NimbusRenderingDynamicPriceFragment>("DynamicPriceRendering/{item}") {
+    fragment<DynamicPriceFragment>("DynamicPriceRendering/{item}") {
         argument("item") { type = NavType.StringType }
     }
     fragment<GoogleAdMobDynamicFragment>("Dynamic Adapters for AdMob/{item}") {

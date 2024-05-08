@@ -128,6 +128,7 @@ dependencies {
     api("com.google.android.exoplayer:exoplayer-hls:2.19.1")
     api("com.squareup.okio:okio:3.3.0")
 
+    api("com.google.ads.interactivemedia.v3:interactivemedia:3.33.0")
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     api("org.jetbrains:annotations:24.0.1")

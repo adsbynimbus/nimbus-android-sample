@@ -87,6 +87,10 @@ dependencies {
     api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
     api("com.google.android.gms:play-services-ads:23.0.0")
 
+    /* Mobile Fuse Demand */
+    api("com.adsbynimbus.android:extension-mobilefuse:$nimbusVersion")
+    api("com.mobilefuse.sdk:mobilefuse-sdk-core:1.7.5")
+
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
     api("com.unity3d.ads:unity-ads:4.7.1")

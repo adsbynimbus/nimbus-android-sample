@@ -71,36 +71,35 @@ dependencies {
     /* Nimbus (Version is defined by the project version above) */
     api("com.adsbynimbus.android:nimbus:$nimbusVersion")
 
+    /* uncomment the lines below to override Nimbus preferred versions */
+
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
+//    api("com.amazon.android:aps-sdk:9.+")
 
     /* Meta Audience Network Demand */
     api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
+//    api("com.facebook.android:audience-network-sdk:6.+")
 
     /* Google Mediation Adapters and Dynamic Price */
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
+//    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Dynamic Adapters for AdMob */
     api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
+//    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Mobile Fuse Demand */
     api("com.adsbynimbus.android:extension-mobilefuse:$nimbusVersion")
+//    api("com.mobilefuse.sdk:mobilefuse-sdk-core:1.+")
 
     /* Unity Demand */
     api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
+//    api("com.unity3d.ads:unity-ads:4.+")
 
     /* Vungle Demand */
     api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
-
-    /* uncomment to override nimbus preferred versions
-    api("com.amazon.android:aps-sdk:9.+")
-    api("com.facebook.android:audience-network-sdk:6.+")
-    api("com.google.android.gms:play-services-ads:23.+")
-    api("com.google.android.gms:play-services-ads:23.+")
-    api("com.mobilefuse.sdk:mobilefuse-sdk-core:1.+")
-    api("com.unity3d.ads:unity-ads:4.+")
-    api("com.vungle:publisher-sdk-android:6.+")
-     */
+//    api("com.vungle:publisher-sdk-android:6.+")
 
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.9.1")

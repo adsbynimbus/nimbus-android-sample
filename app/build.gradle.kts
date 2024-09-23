@@ -56,6 +56,7 @@ androidComponents.onVariants { variant ->
             "sample_admob_interstitial",
             "sample_admob_rewarded",
             "sample_admob_rewarded_interstitial",
+            "sample_admob_native",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),
@@ -73,6 +74,10 @@ dependencies {
 
     /* uncomment the lines below to override Nimbus preferred versions */
 
+    /* Admob Demand */
+    api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
+//    api("com.google.android.gms:play-services-ads:23.+")
+
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
 //    api("com.amazon.android:aps-sdk:9.+")
@@ -85,8 +90,8 @@ dependencies {
     api("com.adsbynimbus.android:extension-google:$nimbusVersion")
 //    api("com.google.android.gms:play-services-ads:23.+")
 
-    /* Dynamic Adapters for AdMob */
-    api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
+    /* Dynamic Adapters for Google/AdMob */
+    api("com.adsbynimbus.android:extension-googlemediation:$nimbusVersion")
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Mobile Fuse Demand */

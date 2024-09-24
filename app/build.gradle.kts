@@ -39,6 +39,12 @@ androidComponents.onVariants { variant ->
 
     /* Other keys that can be configured in the sample app */
     listOf(
+            "sample_admob_appid",
+            "sample_admob_banner",
+            "sample_admob_interstitial",
+            "sample_admob_native",
+            "sample_admob_rewarded",
+            "sample_admob_rewarded_interstitial",
             "sample_aps_app_key",
             "sample_aps_banner",
             "sample_aps_static",
@@ -49,14 +55,12 @@ androidComponents.onVariants { variant ->
             "sample_fan_banner_320_id",
             "sample_fan_native_320_id",
             "sample_gam_placement_id",
+            "sample_mobile_fuse_banner",
+            "sample_mobile_fuse_mrec",
+            "sample_mobile_fuse_interstitial",
+            "sample_mobile_fuse_rewarded",
             "sample_unity_game_id",
             "sample_vungle_config_id",
-            "sample_admob_appid",
-            "sample_admob_banner",
-            "sample_admob_interstitial",
-            "sample_admob_rewarded",
-            "sample_admob_rewarded_interstitial",
-            "sample_admob_native",
     ).forEach {
         variant.buildConfigFields.put(
             it.substringAfter("sample_").uppercase(),

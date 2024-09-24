@@ -75,7 +75,7 @@ val screens = mutableMapOf(
             "Dynamic Interstitial",
             "Dynamic Rewarded",
             "Dynamic Rewarded Interstitial",
-        ))
+        )),
 ),
     "Third Party Demand" to ConcatAdapter(
         NavigationAdapter(destination = "APS", header = "APS", items = arrayOf(
@@ -87,6 +87,13 @@ val screens = mutableMapOf(
             "Meta Interstitial",
             "Meta Native",
             "Meta Rewarded Video",
+        )),
+        NavigationAdapter(destination = "MobileFuse", header = "MobileFuse", items = arrayOf(
+            "Banner",
+            "Banner With Refresh",
+            "MREC",
+            "Interstitial",
+            "Rewarded",
         )),
         NavigationAdapter(destination = "Unity", header = "Unity", items = arrayOf("Unity Rewarded Video")),
         NavigationAdapter(destination = "Vungle", header = "Vungle", items = arrayOf(
@@ -133,6 +140,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
         argument("item") { type = NavType.StringType }
     }
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<UnityFragment>("Unity/{item}") { argument("item") { type = NavType.StringType } }
     fragment<VungleFragment>("Vungle/{item}") { argument("item") { type = NavType.StringType } }
 }

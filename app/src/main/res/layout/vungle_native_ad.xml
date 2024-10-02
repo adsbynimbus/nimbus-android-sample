@@ -1,4 +1,4 @@
-<com.vungle.warren.NativeAdLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/native_ad_container"
     android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/native_ad_media" />
 
-        <com.vungle.warren.ui.view.MediaView
+        <com.vungle.ads.internal.ui.view.MediaView
             android:id="@+id/native_ad_media"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -85,4 +85,4 @@
             app:layout_constraintBottom_toBottomOf="@id/native_ad_icon"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.vungle.warren.NativeAdLayout>
+</FrameLayout>

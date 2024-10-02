@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -23,9 +24,8 @@ import com.adsbynimbus.render.VungleRenderer
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
 import com.adsbynimbus.request.VungleDemandProvider
-import com.vungle.warren.NativeAd
-import com.vungle.warren.NativeAdLayout
-import com.vungle.warren.ui.view.MediaView
+import com.vungle.ads.NativeAd
+import com.vungle.ads.internal.ui.view.MediaView
 
 /** Initializes the Vungle SDK and integrates it with the Nimbus SDK. */
 fun initializeVungle(vungleAppId: String) {
@@ -144,16 +144,16 @@ class NativeRenderingDelegate : VungleRenderer.Delegate {
             val sponsoredLabel = findViewById<TextView>(R.id.native_ad_sponsored_label)
             val nativeAdCallToAction = findViewById<Button>(R.id.native_ad_call_to_action)
 
-            nativeAdTitle.text = nativeAd.adTitle
-            nativeAdBody.text = nativeAd.adBodyText
-            nativeAd.adStarRating?.let { rateView.text = it.toString() }
+            nativeAdTitle.text = nativeAd.getAdTitle()
+            nativeAdBody.text = nativeAd.getAdBodyText()
+            nativeAd.getAdStarRating()?.let { rateView.text = it.toString() }
             nativeAdCallToAction.visibility =
                 if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-            nativeAdCallToAction.text = nativeAd.adCallToActionText
-            sponsoredLabel.text = nativeAd.adSponsoredText
+            nativeAdCallToAction.text = nativeAd.getAdCallToActionText()
+            sponsoredLabel.text = nativeAd.getAdSponsoredText()
 
             nativeAd.registerViewForInteraction(
-                this as NativeAdLayout, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction)
+                this as FrameLayout, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction)
             )
         }
 }

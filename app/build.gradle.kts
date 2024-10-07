@@ -108,7 +108,7 @@ dependencies {
 
     /* Vungle Demand */
     api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
-//    api("com.vungle:publisher-sdk-android:6.+")
+//    api("com.vungle:vungle-ads:7.+")
 
     /* Androidx Libraries */
     api("androidx.activity:activity-ktx:1.9.1")

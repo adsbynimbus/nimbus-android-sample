@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Internal code
         uses: actions/checkout@v3
         with:
-          repository: 'timehop/nimbus-android'
+          repository: 'adsbynimbus/nimbus-android'
           path: 'nimbus-android'
           ssh-key: ${{ secrets.NIMBUS_ANDROID_KEY }}
           lfs: true
@@ -36,7 +36,7 @@ jobs:
       - name: Checkout Nimbus Android Extensions
         uses: actions/checkout@v3
         with:
-          repository: 'timehop/nimbus-android-extensions'
+          repository: 'adsbynimbus/nimbus-android-extensions'
           path: 'nimbus-android-extensions'
           ssh-key: ${{ secrets.EXTENSIONS_DEPLOY_KEY }}
 

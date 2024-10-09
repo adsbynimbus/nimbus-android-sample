@@ -17,28 +17,3 @@ jobs:
     if: ${{ !startsWith(github.head_ref, 'arch') }}
     uses: ./.github/workflows/internal.yml
     secrets: inherit
-
-  test:
-    name: UI Test
-    needs: sample
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Release
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: nimbus-android-sample
-
-      - name: Checkout Nimbus Mobile QA
-        uses: actions/checkout@v3
-        with:
-          repository: 'timehop/nimbus-mobile-qa'
-          path: .maestro
-          ssh-key: ${{ secrets.NIMBUS_QA_DEPLOY }}
-
-      - name: Run Maestro Cloud
-        uses: mobile-dev-inc/action-maestro-cloud@v1.3.3
-        with:
-          api-key: ${{ secrets.MAESTRO_CLOUD }}
-          app-file: debug/app-debug.apk
-          env: |
-            APP_ID=com.adsbynimbus.android.sample

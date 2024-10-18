@@ -52,6 +52,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         request.request.user?.apply {
             buyeruid = null
             ext?.unity_buyeruid = null
+            ext?.mfx_buyerdata = null
         }
     }
 

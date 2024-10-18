@@ -220,6 +220,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         request.request.user?.ext = request.request.user?.ext?.apply {
             facebook_buyeruid = null
             unity_buyeruid = null
+            mfx_buyerdata = null
             vungle_buyeruid = null
         }
     }

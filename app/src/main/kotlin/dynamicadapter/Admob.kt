@@ -54,6 +54,7 @@ public class GoogleAdMobDynamicFragment : Fragment() {
             it.request.user?.ext = it.request.user?.ext?.apply {
                 facebook_buyeruid = null
                 unity_buyeruid = null
+                mfx_buyerdata = null
                 vungle_buyeruid = null
             }
         })

@@ -44,6 +44,7 @@ class VungleFragment : Fragment() {
             request.imp[0].ext.facebook_app_id = null
             request.user?.ext = request.user?.ext?.apply {
                 facebook_buyeruid = null
+                mfx_buyerdata = null
                 unity_buyeruid = null
             }
         })

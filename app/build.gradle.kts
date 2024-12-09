@@ -55,6 +55,16 @@ androidComponents.onVariants { variant ->
             "sample_fan_banner_320_id",
             "sample_fan_native_320_id",
             "sample_gam_placement_id",
+            "sample_mintegral_app_id",
+            "sample_mintegral_app_key",
+            "sample_mintegral_banner_placement",
+            "sample_mintegral_banner_adunit",
+            "sample_mintegral_interstitial_placement",
+            "sample_mintegral_interstitial_adunit",
+            "sample_mintegral_native_placement",
+            "sample_mintegral_native_adunit",
+            "sample_mintegral_rewarded_placement",
+            "sample_mintegral_rewarded_adunit",
             "sample_mobile_fuse_banner",
             "sample_mobile_fuse_mrec",
             "sample_mobile_fuse_interstitial",
@@ -97,6 +107,10 @@ dependencies {
     /* Dynamic Adapters for Google/AdMob */
     api("com.adsbynimbus.android:extension-googlemediation:$nimbusVersion")
 //    api("com.google.android.gms:play-services-ads:23.+")
+
+    /* Mintegral Demand */
+    api("com.adsbynimbus.android:extension-mintegral:$nimbusVersion")
+//    api("com.mbridge.msdk.oversea:mbridge_android_sdk:16.+")
 
     /* Mobile Fuse Demand */
     api("com.adsbynimbus.android:extension-mobilefuse:$nimbusVersion")

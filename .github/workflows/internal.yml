@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Internal code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'adsbynimbus/nimbus-android'
           path: 'nimbus-android'
@@ -28,26 +28,26 @@ jobs:
           lfs: true
 
       - name: Checkout Sample code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: 'nimbus-android/sample'
           lfs: true
 
       - name: Checkout Nimbus Android Extensions
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'adsbynimbus/nimbus-android-extensions'
           path: 'nimbus-android-extensions'
           ssh-key: ${{ secrets.EXTENSIONS_DEPLOY_KEY }}
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
       - name: Build App
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
         with:
           arguments: :app:build
           build-root-directory: nimbus-android

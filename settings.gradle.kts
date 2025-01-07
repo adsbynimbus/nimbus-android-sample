@@ -3,7 +3,13 @@
 pluginManagement {
     includeBuild("build-logic")
     repositories {
-        google()
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -11,12 +17,18 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+                includeGroupAndSubgroups("org.chromium")
+            }
+        }
         mavenCentral()
         if (providers.environmentVariable("GITHUB_ACTIONS").isPresent) {
             // If running in Github Actions, use Github packages because it's free
-            maven {
-                url = uri("https://maven.pkg.github.com/timehop/nimbus-openrtb")
+            maven("https://maven.pkg.github.com/timehop/nimbus-openrtb") {
                 name = "openrtb"
                 credentials(PasswordCredentials::class)
                 content {
@@ -24,11 +36,8 @@ dependencyResolutionManagement {
                 }
             }
         }
-        maven {
-            url = uri("https://adsbynimbus-public.s3.amazonaws.com/android/sdks")
-            credentials {
-                username = "*"
-            }
+        // Provides access to Nimbus SDK artifacts
+        maven("https://adsbynimbus-public.s3.amazonaws.com/android/sdks") {
             content {
                 includeGroupByRegex(".*\\.adsbynimbus.*")
             }

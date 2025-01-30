@@ -42,6 +42,18 @@ dependencyResolutionManagement {
                 includeGroupByRegex(".*\\.adsbynimbus.*")
             }
         }
+        // Provides access to the LiveRamp SDK
+        maven("https://sdk-android-prod.launch.liveramp.com") {
+            content {
+                includeGroupByRegex(".*\\.liveramp.*")
+            }
+        }
+        // Provides access to the Mintegral SDK
+        maven("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") {
+            content {
+                includeGroupByRegex(".*\\.mbridge.*")
+            }
+        }
     }
 }
 

@@ -46,10 +46,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build App
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build
+      - name: Build App
         run: ./gradlew :app:build
         working-directory: nimbus-android
 

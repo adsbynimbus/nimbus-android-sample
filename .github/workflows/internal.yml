@@ -48,9 +48,10 @@ jobs:
 
       - name: Build App
         uses: gradle/actions/setup-gradle@v4
-        with:
-          arguments: :app:build
-          build-root-directory: nimbus-android
+
+      - name: Build
+        run: ./gradlew :app:build
+        working-directory: nimbus-android
 
       - name: Upload to Firebase
         if: ${{ github.event_name == 'workflow_dispatch' }}

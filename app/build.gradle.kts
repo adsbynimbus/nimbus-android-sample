@@ -1,25 +1,37 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.BuildConfigField
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("nimbus.app")
+    alias(libs.plugins.android.app)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.nimbus.app)
 }
 
-val nimbusVersion = "2.24.1"
-
-/* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
+    }
+
+    compileSdk = libs.versions.android.sdk.compile.get().toInt()
+
     defaultConfig {
+        minSdk = libs.versions.android.sdk.min.get().toInt()
+        targetSdk = libs.versions.android.sdk.compile.get().toInt()
         applicationId = "com.adsbynimbus.android.sample"
-        versionCode = 1
-        versionName = nimbusVersion
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionCode = 1
+        versionCatalogs.named("libs").findVersion("nimbus").ifPresent {
+            versionName = it.requiredVersion
+        }
         proguardFile("r8-rules.pro")
 
         /* This is one example of adding keys to the application using buildConfigField */
@@ -28,6 +40,12 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
+    }
 }
 
 androidComponents.onVariants { variant ->
@@ -77,88 +95,75 @@ androidComponents.onVariants { variant ->
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
     }
-
-    /* Fixes an issue with Coroutines 1.7.0-beta */
-    variant.packaging.resources.pickFirsts.add("META-INF/versions/**")
 }
 
 dependencies {
     /* Nimbus (Version is defined by the project version above) */
-    api("com.adsbynimbus.android:nimbus:$nimbusVersion")
-
-    /* uncomment the lines below to override Nimbus preferred versions */
+    api(libs.nimbus)
 
     /* Admob Demand */
-    api("com.adsbynimbus.android:extension-admob:$nimbusVersion")
+    api(libs.nimbus.admob)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* APS Demand */
-    api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
+    api(libs.nimbus.aps)
 //    api("com.amazon.android:aps-sdk:9.+")
 
     /* Meta Audience Network Demand */
-    api("com.adsbynimbus.android:extension-facebook:$nimbusVersion")
+    api(libs.nimbus.meta)
 //    api("com.facebook.android:audience-network-sdk:6.+")
 
     /* Google Mediation Adapters and Dynamic Price */
-    api("com.adsbynimbus.android:extension-google:$nimbusVersion")
+    api(libs.nimbus.google)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Dynamic Adapters for Google/AdMob */
-    api("com.adsbynimbus.android:extension-googlemediation:$nimbusVersion")
-//    api("com.google.android.gms:play-services-ads:23.+")
+    api(libs.nimbus.googlemediation)
 
     /* Mintegral Demand */
-    api("com.adsbynimbus.android:extension-mintegral:$nimbusVersion")
+    api(libs.nimbus.mintegral)
 //    api("com.mbridge.msdk.oversea:mbridge_android_sdk:16.+")
 
     /* Mobile Fuse Demand */
-    api("com.adsbynimbus.android:extension-mobilefuse:$nimbusVersion")
+    api(libs.nimbus.mobilefuse)
 //    api("com.mobilefuse.sdk:mobilefuse-sdk-core:1.+")
 
     /* Unity Demand */
-    api("com.adsbynimbus.android:extension-unity:$nimbusVersion")
+    api(libs.nimbus.unity)
 //    api("com.unity3d.ads:unity-ads:4.+")
 
     /* Vungle Demand */
-    api("com.adsbynimbus.android:extension-vungle:$nimbusVersion")
+    api(libs.nimbus.vungle)
 //    api("com.vungle:vungle-ads:7.+")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.9.1")
-    api("androidx.annotation:annotation:1.8.2")
-    api("androidx.annotation:annotation-experimental:1.4.1")
-    api("androidx.appcompat:appcompat:1.7.0")
-    api("androidx.core:core-ktx:1.13.1")
-    api("androidx.fragment:fragment-ktx:1.8.2")
-    api("androidx.navigation:navigation-fragment:2.7.7")
-    api("androidx.navigation:navigation-runtime:2.7.7")
-    api("androidx.navigation:navigation-ui:2.7.7")
-    api("androidx.preference:preference-ktx:1.2.1")
-    api("androidx.recyclerview:recyclerview:1.3.2")
-    api("androidx.startup:startup-runtime:1.1.1")
+    api(libs.androidx.activity)
+    api(libs.androidx.annotation)
+    api(libs.androidx.annotation.experimental)
+    api(libs.androidx.appcompat)
+    api(libs.bundles.androidx.navigation)
+    api(libs.androidx.preference)
+    api(libs.androidx.recyclerview)
+    api(libs.androidx.startup)
 
     /* Networking Client */
-    api("com.squareup.okhttp3:okhttp:4.12.0")
-    api("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    api(libs.okhttp)
+    api(libs.okhttp.logging)
 
     /* Logging */
-    api("com.jakewharton.timber:timber:5.0.1")
+    api(libs.timber)
 
     /* Transitive Dependencies we want updated to the latest */
-    api("androidx.browser:browser:1.8.0")
-    api("androidx.collection:collection-ktx:1.4.3")
-    api("androidx.constraintlayout:constraintlayout:2.1.4")
-    api("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-    api("androidx.room:room-runtime:2.6.1")
-    api("androidx.transition:transition:1.5.1")
-    api("androidx.work:work-runtime:2.9.1")
-    api("com.google.android.exoplayer:exoplayer-core:2.19.1")
-    api("com.google.android.exoplayer:exoplayer-hls:2.19.1")
-    api("com.squareup.okio:okio:3.6.0")
-
-    api("com.google.ads.interactivemedia.v3:interactivemedia:3.35.0")
-
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    api("org.jetbrains:annotations:24.0.1")
+    api(libs.androidx.browser)
+    api(libs.androidx.collection)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.coordinatorlayout)
+    api(libs.androidx.core)
+    api(libs.androidx.fragment)
+    api(libs.androidx.lifecycle)
+    api(libs.androidx.room)
+    api(libs.androidx.transition)
+    api(libs.androidx.work)
+    api(libs.kotlin.coroutines.android)
+    api(libs.kotlin.serialization.json)
 }

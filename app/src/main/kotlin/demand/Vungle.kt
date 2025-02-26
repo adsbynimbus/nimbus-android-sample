@@ -160,7 +160,7 @@ class NativeRenderingDelegate : VungleRenderer.Delegate {
 }
 
 var VungleDemandProvider.enabled: Boolean
-    get() = RequestManager.asyncInterceptors.contains(this)
-    set(enabled) = with(RequestManager.asyncInterceptors) {
+    get() = RequestManager.interceptors.contains(this)
+    set(enabled) = with(RequestManager.interceptors) {
         if (enabled) add(VungleDemandProvider) else remove(VungleDemandProvider)
     }

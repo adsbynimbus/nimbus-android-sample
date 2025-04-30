@@ -6,9 +6,6 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.render.Renderer
-import com.adsbynimbus.render.VideoAdRenderer
-import com.google.ads.interactivemedia.v3.api.UiElement
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -46,15 +43,18 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
                     edit { putBoolean("send_tradedesk_id", false) }
                 }
             }
+
             "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
                 if (enabled && Nimbus.testMode)
-                NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
+                    NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
                 else disableTradedeskId()
             }
+
             "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
                 edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
             }
+
             "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
             "enable_viewability" -> Nimbus.thirdPartyViewabilityEnabled = getBoolean(it, true)
             "enabled_gpp" -> setGppInSharedPrefs(enabled = getBoolean(it, false))

@@ -20,7 +20,7 @@ androidx-preference = "1.2.1"
 androidx-recyclerview = "1.4.0"
 androidx-room = "2.7.1"
 androidx-startup = "1.2.0"
-androidx-transition = "1.6.1"
+androidx-transition = "1.6.0"
 androidx-work = "2.10.1"
 
 kotlin = "2.1.20"

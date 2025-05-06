@@ -138,8 +138,6 @@ dependencies {
 
     /* Androidx Libraries */
     api(libs.androidx.activity)
-    api(libs.androidx.annotation)
-    api(libs.androidx.annotation.experimental)
     api(libs.androidx.appcompat)
     api(libs.bundles.androidx.navigation)
     api(libs.androidx.preference)
@@ -154,16 +152,7 @@ dependencies {
     api(libs.timber)
 
     /* Transitive Dependencies we want updated to the latest */
-    api(libs.androidx.browser)
-    api(libs.androidx.collection)
     api(libs.androidx.constraintlayout)
     api(libs.androidx.coordinatorlayout)
-    api(libs.androidx.core)
-    api(libs.androidx.fragment)
-    api(libs.androidx.lifecycle)
     api(libs.androidx.room)
-    api(libs.androidx.transition)
-    api(libs.androidx.work)
-    api(libs.kotlin.coroutines.android)
-    api(libs.kotlin.serialization.json)
 }

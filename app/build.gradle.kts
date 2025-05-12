@@ -23,7 +23,7 @@ android {
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.android.sdk.min.get().toInt()
+        minSdk = libs.versions.android.sdk.min.get().toInt().coerceAtLeast(23)
         targetSdk = libs.versions.android.sdk.compile.get().toInt()
         applicationId = "com.adsbynimbus.android.sample"
         multiDexEnabled = true

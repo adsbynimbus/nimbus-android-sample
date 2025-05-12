@@ -2,7 +2,7 @@
 android = "8.9.2"
 android-jvm = "17"
 android-sdk-compile = "35"
-android-sdk-min = "21"
+android-sdk-min = "23"
 
 androidx-activity = "1.10.1"
 androidx-appcompat = "1.7.0"

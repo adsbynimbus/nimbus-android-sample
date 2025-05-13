@@ -2,42 +2,19 @@ package com.adsbynimbus.android.sample.demand
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.LogAdapter
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.OnScreenLogger
-import com.adsbynimbus.android.sample.rendering.useAsLogger
+import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.request.*
-import com.amazon.device.ads.AdError
-import com.amazon.device.ads.AdRegistration
-import com.amazon.device.ads.DTBAdCallback
-import com.amazon.device.ads.DTBAdNetwork
-import com.amazon.device.ads.DTBAdNetworkInfo
-import com.amazon.device.ads.DTBAdRequest
-import com.amazon.device.ads.DTBAdResponse
-import com.amazon.device.ads.DTBAdSize
-import com.amazon.device.ads.MRAIDPolicy
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
+import com.amazon.device.ads.*
+import kotlinx.coroutines.*
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -50,9 +27,6 @@ fun Context.initializeAmazonPublisherServices(appKey: String) {
     /* Set the MRAID Policy */
     AdRegistration.setMRAIDSupportedVersions(arrayOf("1.0", "2.0", "3.0"))
     AdRegistration.setMRAIDPolicy(MRAIDPolicy.CUSTOM)
-
-    /* Set Nimbus as the Mediator */
-    AdRegistration.setAdNetworkInfo(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS))
 
     /* Set Nimbus as the Open Measurement Partner */
     AdRegistration.addCustomAttribute("omidPartnerName", Nimbus.sdkName)
@@ -89,7 +63,7 @@ class APSFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
-                val apsRequest = DTBAdRequest().apply {
+                val apsRequest = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
 
@@ -121,10 +95,10 @@ class APSFragment : Fragment() {
             }
             "APS Interstitial Hybrid" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forInterstitialAd(item)
-                val apsInterstitial = DTBAdRequest().apply {
+                val apsInterstitial = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
                 }
-                val apsVideo = DTBAdRequest().apply {
+                val apsVideo = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize.DTBVideo(
                         resources.displayMetrics.widthPixels,
                         resources.displayMetrics.heightPixels, BuildConfig.APS_VIDEO))

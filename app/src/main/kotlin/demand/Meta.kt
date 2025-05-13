@@ -105,6 +105,14 @@ val interstitialTypes = bannerTypes + arrayOf(
     TestAdType.CAROUSEL_IMG_SQUARE_APP_INSTALL,
     TestAdType.CAROUSEL_IMG_SQUARE_LINK,
 )
+
+val rewardedTypes = arrayOf(
+    TestAdType.VIDEO_HD_16_9_46S_APP_INSTALL,
+    TestAdType.VIDEO_HD_16_9_15S_APP_INSTALL,
+    TestAdType.VIDEO_HD_9_16_39S_APP_INSTALL,
+    TestAdType.PLAYABLE,
+)
+
 val nativeTypes = interstitialTypes
 
 /** Creates a mock NimbusAd that can be sent to the Nimbus Renderer to load a test Meta ad */
@@ -121,9 +129,9 @@ fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = N
         "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${BuildConfig.FAN_INTERSTITIAL_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_interstitial_id")
         }}"
-        "Meta Rewarded Video" -> BuildConfig.FAN_REWARDED_VIDEO_ID.also { id ->
+        "Meta Rewarded Video" -> "${rewardedTypes.random().adTypeString}#${BuildConfig.FAN_REWARDED_VIDEO_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_rewarded_video_id")
-        }
+        }}"
         else -> "${bannerTypes.random().adTypeString}#${BuildConfig.FAN_BANNER_320_ID.also { id ->
             if (id.isEmpty()) onPropertyMissing("sample_fan_banner_320_id")
         }}"
@@ -151,4 +159,6 @@ fun mockMetaNimbusAd(type: String, onPropertyMissing: (String) -> Unit = {}) = N
         "Meta Rewarded Video" -> 480
         else -> 0
     }
-))
+)).also {
+    it.renderInfoOverride.put("is_rewarded", (type == "Meta Rewarded Video").toString())
+}

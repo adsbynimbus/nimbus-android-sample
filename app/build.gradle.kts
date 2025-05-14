@@ -102,23 +102,23 @@ dependencies {
     api(libs.nimbus)
 
     /* Admob Demand */
-    api(libs.nimbus.admob)
+//    api(libs.nimbus.admob)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* APS Demand */
     api(libs.nimbus.aps)
-//    api("com.amazon.android:aps-sdk:9.+")
+    api("com.amazon.android:aps-sdk:10.+")
 
     /* Meta Audience Network Demand */
     api(libs.nimbus.meta)
 //    api("com.facebook.android:audience-network-sdk:6.+")
 
     /* Google Mediation Adapters and Dynamic Price */
-    api(libs.nimbus.google)
+//    api(libs.nimbus.google)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Dynamic Adapters for Google/AdMob */
-    api(libs.nimbus.googlemediation)
+//    api(libs.nimbus.googlemediation)
 
     /* Mintegral Demand */
     api(libs.nimbus.mintegral)

@@ -63,7 +63,7 @@ class APSFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
-                val apsRequest = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
+                val apsRequest = DTBAdRequest().apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
 
@@ -95,10 +95,10 @@ class APSFragment : Fragment() {
             }
             "APS Interstitial Hybrid" -> lifecycleScope.launch {
                 val nimbusRequest = NimbusRequest.forInterstitialAd(item)
-                val apsInterstitial = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
+                val apsInterstitial = DTBAdRequest().apply {
                     setSizes(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
                 }
-                val apsVideo = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
+                val apsVideo = DTBAdRequest().apply {
                     setSizes(DTBAdSize.DTBVideo(
                         resources.displayMetrics.widthPixels,
                         resources.displayMetrics.heightPixels, BuildConfig.APS_VIDEO))

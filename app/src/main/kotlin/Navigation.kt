@@ -29,6 +29,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
+import com.adsbynimbus.android.sample.dynamicadapter.GoogleAdMobDynamicFragment
+import com.adsbynimbus.android.sample.mediation.GoogleAdManagerYieldGroupFragment
+import com.adsbynimbus.android.sample.mediation.DynamicPriceFragment
 import com.adsbynimbus.android.sample.rendering.AdManagerFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 
@@ -52,6 +55,28 @@ val screens = mutableMapOf(
         "Rewarded Video",
         "Ads in ScrollView"
     )),
+    "Mediation Platforms" to ConcatAdapter(
+        NavigationAdapter(destination = "Google Mediation", header = "Google Ad Manager", items = arrayOf(
+            "Banner",
+            "Interstitial",
+        )),
+        NavigationAdapter(destination = "DynamicPriceRendering", header = "Dynamic Price", items = arrayOf(
+            "Banner",
+            "Inline Video",
+            "Interstitial",
+            "Rewarded Video",
+            "Rewarded Interstitial",
+            "Force Loss",
+            "AdLoader Banner",
+            "AdLoader Inline Video",
+        )),
+        NavigationAdapter(destination = "Dynamic Adapters for AdMob", header = "AdMob", items = arrayOf(
+            "Dynamic Banner",
+            "Dynamic Interstitial",
+            "Dynamic Rewarded",
+            "Dynamic Rewarded Interstitial",
+        )),
+),
     "Third Party Demand" to ConcatAdapter(
         NavigationAdapter(destination = "APS", header = "APS", items = arrayOf(
             "APS Banner With Refresh",
@@ -103,6 +128,17 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     }
     fragment<AdManagerFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<GoogleAdManagerYieldGroupFragment>("Google Mediation/{item}") {
+        label = context.getString(R.string.google_ad_manager)
+        argument("item") { type = NavType.StringType }
+    }
+    fragment<DynamicPriceFragment>("DynamicPriceRendering/{item}") {
+        argument("item") { type = NavType.StringType }
+    }
+    fragment<GoogleAdMobDynamicFragment>("Dynamic Adapters for AdMob/{item}") {
+        label = context.getString(R.string.google_admob)
+        argument("item") { type = NavType.StringType }
+    }
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<UnityFragment>("Unity/{item}") { argument("item") { type = NavType.StringType } }

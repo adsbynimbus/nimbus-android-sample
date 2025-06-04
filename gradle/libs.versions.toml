@@ -69,6 +69,7 @@ nimbus-google = { module = "com.adsbynimbus.android:extension-google", version.r
 nimbus-googlemediation = { module = "com.adsbynimbus.android:extension-googlemediation", version.ref = "nimbus" }
 nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus" }
 nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus" }
+nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus" }
 nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus" }
 nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }

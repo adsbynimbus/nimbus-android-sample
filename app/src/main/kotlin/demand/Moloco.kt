@@ -2,43 +2,30 @@ package com.adsbynimbus.android.sample.demand
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.TOP
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
+import com.adsbynimbus.android.sample.BuildConfig.MOLOCO_BANNER_ADUNITID
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.databinding.MolocoNativeAdBinding
 import com.adsbynimbus.android.sample.mediation.removeOtherDemandIds
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.align
-import com.adsbynimbus.internal.nimbusScope
+import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdMobRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
-import com.adsbynimbus.request.withAdMobBanner
-import com.adsbynimbus.request.withAdMobInterstitial
-import com.adsbynimbus.request.withAdMobNative
-import com.adsbynimbus.request.withAdMobRewarded
-import com.adsbynimbus.request.withMoloco
-import com.google.android.gms.ads.nativead.NativeAd
+import com.adsbynimbus.render.*
+import com.adsbynimbus.request.*
 import com.moloco.sdk.internal.MolocoLogger
 import com.moloco.sdk.publisher.MediationInfo
 import com.moloco.sdk.publisher.Moloco
 import com.moloco.sdk.publisher.init.MolocoInitParams
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
-fun initializeMoloco(context: Context, appKey: String, block: () -> Unit) {
-    MolocoLogger.logEnabled = true
-
+fun initializeMoloco(context: Context, appKey: String) {
+    if (!Moloco.isInitialized) {
+        MolocoLogger.logEnabled = true
         Moloco.initialize(
             MolocoInitParams(
                 appContext = context.applicationContext,
@@ -47,10 +34,8 @@ fun initializeMoloco(context: Context, appKey: String, block: () -> Unit) {
             )
         ) { result ->
             Timber.v("Moloco initialized with ${result.initialization} - ${result.description}")
-            nimbusScope.launch(Dispatchers.Main) {
-                block()
-            }
         }
+    }
 }
 
 class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
@@ -63,16 +48,26 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY)
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> nimbusScope.launch(Dispatchers.IO) {
-                initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY) {
-                    showBanner(item)
-                }
-            }
+            "Banner" -> adManager.showAd(
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
+                    removeOtherDemandIds()
+                    withMoloco(MOLOCO_BANNER_ADUNITID)
+                },
+                viewGroup = adFrame,
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    controllers.add(controller.apply {
+                        align { TOP or CENTER_HORIZONTAL }
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
+                    })
+                },
+            )
             "MREC" -> adManager.showAd(
                 request = NimbusRequest.forBannerAd(item, Format.MREC, Position.HEADER).apply {
                     removeOtherDemandIds()
-                    withAdMobBanner(BuildConfig.ADMOB_BANNER)
+                    withMoloco(BuildConfig.MOLOCO_BANNER_ADUNITID)
                 },
                 viewGroup = adFrame,
                 listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
@@ -83,10 +78,11 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
                     })
                 },
             )
+
             "Interstitial" -> adManager.showBlockingAd(
                 request = NimbusRequest.forInterstitialAd(item).apply {
                     removeOtherDemandIds()
-                    withAdMobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
+                    withMoloco(BuildConfig.MOLOCO_INTERSTITIAL_ADUNITID)
                 },
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
@@ -94,11 +90,11 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
                     controller.listeners.add(EmptyAdControllerListenerImplementation)
                 },
             )
+
             "Rewarded" -> adManager.showRewardedAd(
                 request = NimbusRequest.forRewardedVideo(item).apply {
-                    companionAds = emptyArray()
                     removeOtherDemandIds()
-                    withAdMobRewarded(BuildConfig.ADMOB_REWARDED)
+                    withMoloco(BuildConfig.MOLOCO_REWARDED_ADUNITID)
                 },
                 activity = requireActivity(),
                 closeButtonDelaySeconds = 60,
@@ -107,19 +103,18 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
                     controller.listeners.add(EmptyAdControllerListenerImplementation)
                 },
             )
+
             "Native" -> {
-                AdMobRenderer.delegate = object : AdMobRenderer.Delegate {
-                    override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View {
-                        return GoogleNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                MolocoRenderer.delegate = object : MolocoRenderer.Delegate {
+                    override fun customViewForRendering(container: ViewGroup, nativeAd: NimbusMolocoNativeAd): View =
+                        MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                             populateNativeAdView(nativeAd, this)
                         }.root
-                    }
                 }
                 adManager.showAd(
                     request = NimbusRequest.forNativeAd(item).apply {
-                        companionAds = emptyArray()
                         removeOtherDemandIds()
-                        withAdMobNative(BuildConfig.ADMOB_NATIVE)
+                        withMoloco(BuildConfig.MOLOCO_NATIVE_ADUNITID)
                     },
                     viewGroup = adFrame,
                     listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
@@ -130,23 +125,6 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
             }
         }
     }.root
-
-    private fun LayoutInlineAdBinding.showBanner(item: String) {
-        adManager.showAd(
-            request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
-                removeOtherDemandIds()
-                withMoloco(BuildConfig.MOLOCO_BANNER_ADUNITID)
-            },
-            viewGroup = adFrame,
-            listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                controllers.add(controller.apply {
-                    align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                    /* Replace the following with your own AdController.Listener implementation */
-                    listeners.add(EmptyAdControllerListenerImplementation)
-                })
-            },
-        )
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -163,80 +141,42 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
         }
     }
 
-    private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: GoogleNativeAdBinding) {
-        val nativeAdView = unifiedAdBinding.root
+    private fun populateNativeAdView(nativeAd: NimbusMolocoNativeAd, binding: MolocoNativeAdBinding) = with(nativeAd) {
+        assets.title?.let {
+            binding.adHeadline.text = it
+            binding.adHeadline.visibility = View.VISIBLE
+        } ?: run { binding.adHeadline.visibility = View.INVISIBLE }
 
-        // Set the media view.
-        nativeAdView.mediaView = unifiedAdBinding.adMedia
+        assets.description?.let {
+            binding.adBody.text = it
+            binding.adBody.visibility = View.VISIBLE
+        } ?: run { binding.adBody.visibility = View.INVISIBLE }
 
-        // Set other ad assets.
-        nativeAdView.headlineView = unifiedAdBinding.adHeadline
-        nativeAdView.bodyView = unifiedAdBinding.adBody
-        nativeAdView.callToActionView = unifiedAdBinding.adCallToAction
-        nativeAdView.iconView = unifiedAdBinding.adAppIcon
-        nativeAdView.priceView = unifiedAdBinding.adPrice
-        nativeAdView.starRatingView = unifiedAdBinding.adStars
-        nativeAdView.storeView = unifiedAdBinding.adStore
-        nativeAdView.advertiserView = unifiedAdBinding.adAdvertiser
+        assets.callToActionText?.let {
+            binding.adCallToAction.text = it
+            binding.adCallToAction.visibility = View.VISIBLE
+        } ?: run { binding.adCallToAction.visibility = View.INVISIBLE }
 
-        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
-        unifiedAdBinding.adHeadline.text = nativeAd.headline
-        nativeAd.mediaContent?.let { unifiedAdBinding.adMedia.mediaContent = it }
+        assets.sponsorText?.let {
+            binding.adAdvertiser.text = it
+            binding.adAdvertiser.visibility = View.VISIBLE
+        } ?: run { binding.adAdvertiser.visibility = View.INVISIBLE }
 
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
-        if (nativeAd.body == null) {
-            unifiedAdBinding.adBody.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adBody.visibility = View.VISIBLE
-            unifiedAdBinding.adBody.text = nativeAd.body
+        assets.rating?.let {
+            binding.adStars.rating = it
+            binding.adStars.visibility = View.VISIBLE
+        } ?: run { binding.adStars.visibility = View.INVISIBLE }
+
+        assets.mediaView?.let {
+            binding.mediaContainer.addView(it)
         }
 
-        if (nativeAd.callToAction == null) {
-            unifiedAdBinding.adCallToAction.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adCallToAction.visibility = View.VISIBLE
-            unifiedAdBinding.adCallToAction.text = nativeAd.callToAction
-        }
+        assets.iconUri?.let {
+            binding.adAppIcon.setImageURI(it)
+            binding.adAppIcon.visibility = View.VISIBLE
+        } ?: run { binding.adAppIcon.visibility = View.INVISIBLE }
 
-        if (nativeAd.icon == null) {
-            unifiedAdBinding.adAppIcon.visibility = View.GONE
-        } else {
-            unifiedAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
-            unifiedAdBinding.adAppIcon.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.price == null) {
-            unifiedAdBinding.adPrice.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adPrice.visibility = View.VISIBLE
-            unifiedAdBinding.adPrice.text = nativeAd.price
-        }
-
-        if (nativeAd.store == null) {
-            unifiedAdBinding.adStore.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adStore.visibility = View.VISIBLE
-            unifiedAdBinding.adStore.text = nativeAd.store
-        }
-
-        if (nativeAd.starRating == null) {
-            unifiedAdBinding.adStars.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
-            unifiedAdBinding.adStars.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.advertiser == null) {
-            unifiedAdBinding.adAdvertiser.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adAdvertiser.text = nativeAd.advertiser
-            unifiedAdBinding.adAdvertiser.visibility = View.VISIBLE
-        }
-
-        // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad.
-        nativeAdView.setNativeAd(nativeAd)
+        setClickableViews(binding.adCallToAction, binding.adHeadline)
     }
 }
 

@@ -4,14 +4,11 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.android.sample.demand.appIdFromMetaPlacementId
-import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
-import com.adsbynimbus.android.sample.demand.initializeMetaAudienceNetwork
-import com.adsbynimbus.android.sample.demand.initializeUnity
-import com.adsbynimbus.android.sample.demand.initializeVungle
+import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
 import com.adsbynimbus.render.Renderer
-import com.adsbynimbus.request.*
+import com.adsbynimbus.request.OkHttpNimbusClient
+import com.adsbynimbus.request.RequestManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber

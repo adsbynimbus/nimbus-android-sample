@@ -176,7 +176,8 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
             binding.adAppIcon.visibility = View.VISIBLE
         } ?: run { binding.adAppIcon.visibility = View.INVISIBLE }
 
-        setClickableViews(binding.adCallToAction, binding.adHeadline)
+        clickableViews.add(binding.adCallToAction)
+        clickableViews.add(binding.adHeadline)
     }
 }
 

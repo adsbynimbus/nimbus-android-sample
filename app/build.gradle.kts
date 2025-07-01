@@ -87,6 +87,11 @@ androidComponents.onVariants { variant ->
             "sample_mobile_fuse_mrec",
             "sample_mobile_fuse_interstitial",
             "sample_mobile_fuse_rewarded",
+            "sample_moloco_app_key",
+            "sample_moloco_banner_adunitid",
+            "sample_moloco_interstitial_adunitid",
+            "sample_moloco_rewarded_adunitid",
+            "sample_moloco_native_adunitid",
             "sample_unity_game_id",
             "sample_vungle_config_id",
     ).forEach {
@@ -127,6 +132,9 @@ dependencies {
     /* Mobile Fuse Demand */
     api(libs.nimbus.mobilefuse)
 //    api("com.mobilefuse.sdk:mobilefuse-sdk-core:1.+")
+
+    api(libs.nimbus.moloco)
+//    api("com.moloco.sdk:moloco-sdk:3.+")
 
     /* Unity Demand */
     api(libs.nimbus.unity)

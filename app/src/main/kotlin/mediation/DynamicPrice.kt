@@ -2,9 +2,7 @@ package com.adsbynimbus.android.sample.mediation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.NimbusAdManager
@@ -12,11 +10,7 @@ import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.LogAdapter
 import com.adsbynimbus.android.sample.rendering.useAsLogger
-import com.adsbynimbus.google.GoogleAuctionData
 import com.adsbynimbus.google.NimbusRewardCallback
-import com.adsbynimbus.google.handleEventForNimbus
-import com.adsbynimbus.google.notifyImpression
-import com.adsbynimbus.google.notifyNoFill
 import com.adsbynimbus.google.showAd
 import com.adsbynimbus.lineitem.applyDynamicPrice
 import com.adsbynimbus.openrtb.request.Format
@@ -27,24 +21,9 @@ import com.adsbynimbus.request.NimbusRequest.Companion.forBannerAd
 import com.adsbynimbus.request.NimbusRequest.Companion.forInterstitialAd
 import com.adsbynimbus.request.NimbusRequest.Companion.forRewardedVideo
 import com.adsbynimbus.request.NimbusRequest.Companion.forVideoAd
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdValue
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnPaidEventListener
-import com.google.android.gms.ads.ResponseInfo
-import com.google.android.gms.ads.admanager.AdManagerAdRequest
-import com.google.android.gms.ads.admanager.AdManagerAdView
-import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
-import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback
-import com.google.android.gms.ads.admanager.AppEventListener
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.admanager.*
+import com.google.android.gms.ads.rewarded.*
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import kotlinx.coroutines.launch
@@ -61,23 +40,18 @@ inline val LoadAdError.isNoFill: Boolean
  * @param auctionData Created after receiving a response from Nimbus
  */
 fun AdManagerAdView.setNimbusListeners(
-    auctionData: GoogleAuctionData,
-    adManager: NimbusAdManager,
     logAdapter: LogAdapter,
 ) {
     val listener = object : AdListener(), AppEventListener, OnPaidEventListener {
         override fun onAdFailedToLoad(loadError: LoadAdError) {
-            if (loadError.isNoFill) adManager.notifyNoFill(auctionData)
             logAdapter.appendLog("onAdFailedToLoad $loadError")
         }
 
         override fun onAdImpression() {
-            adManager.notifyImpression(auctionData, responseInfo)
             logAdapter.appendLog("onImpression")
         }
 
         override fun onPaidEvent(event: AdValue) {
-            auctionData.onPaidEvent(event)
             logAdapter.appendLog("onPaidEvent $event")
         }
 
@@ -99,7 +73,6 @@ fun AdManagerAdView.setNimbusListeners(
 
         override fun onAppEvent(name: String, info: String) {
             logAdapter.appendLog("onAppEvent $name")
-            if (handleEventForNimbus(name, info)) auctionData.nimbusWin = true
         }
 
     }
@@ -109,20 +82,16 @@ fun AdManagerAdView.setNimbusListeners(
 }
 
 fun AdManagerInterstitialAd.setNimbusListeners(
-    auctionData: GoogleAuctionData,
-    adManager: NimbusAdManager,
     logAdapter: LogAdapter,
 ) {
     val eventListener = object : FullScreenContentCallback(), AppEventListener, OnPaidEventListener {
 
         override fun onAdImpression() {
-            adManager.notifyImpression(auctionData, responseInfo)
             logAdapter.appendLog("onImpression")
         }
 
         override fun onAppEvent(name: String, info: String) {
             logAdapter.appendLog("onAppEvent $name")
-            if (handleEventForNimbus(name, info)) auctionData.nimbusWin = true
         }
 
         override fun onAdClicked() {
@@ -151,18 +120,14 @@ fun AdManagerInterstitialAd.setNimbusListeners(
 }
 
 class AdLoaderAdListener(
-    val auctionData: GoogleAuctionData,
-    val adManager: NimbusAdManager,
     val logAdapter: LogAdapter,
 ) : AdListener() {
     var responseInfo: ResponseInfo? = null
     override fun onAdFailedToLoad(loadError: LoadAdError) {
-        if (loadError.isNoFill) adManager.notifyNoFill(auctionData)
         logAdapter.appendLog("onAdFailedToLoad $loadError")
     }
 
     override fun onAdImpression() {
-        adManager.notifyImpression(auctionData, responseInfo)
         logAdapter.appendLog("onImpression")
     }
 
@@ -207,7 +172,7 @@ class DynamicPriceFragment : Fragment() {
                     runCatching {
                         adManager.makeRequest(root.context, forBannerAd("test_dp_rendering", Format.BANNER_320_50))
                     }.onSuccess { nimbusAd ->
-                        adManagerAdView.setNimbusListeners(GoogleAuctionData(nimbusAd), adManager, logAdapter)
+                        adManagerAdView.setNimbusListeners(logAdapter)
                         adManagerAdView.loadAd(AdManagerAdRequest.Builder().applyDynamicPrice(nimbusAd).build())
                     }
                 }
@@ -224,7 +189,7 @@ class DynamicPriceFragment : Fragment() {
                             companionAds = arrayOf(CompanionAd.end(320, 480))
                         })
                     }.onSuccess { nimbusAd ->
-                        adManagerAdView.setNimbusListeners(GoogleAuctionData(nimbusAd), adManager, logAdapter)
+                        adManagerAdView.setNimbusListeners(logAdapter)
                         adManagerAdView.loadAd(AdManagerAdRequest.Builder().applyDynamicPrice(nimbusAd).build())
                     }
                 }
@@ -238,7 +203,7 @@ class DynamicPriceFragment : Fragment() {
                     AdManagerInterstitialAd.load(requireContext(), unitId,
                         adManagerRequest, object : AdManagerInterstitialAdLoadCallback() {
                             override fun onAdLoaded(ad: AdManagerInterstitialAd) {
-                                ad.setNimbusListeners(GoogleAuctionData(nimbusAd), adManager, logAdapter)
+                                ad.setNimbusListeners(logAdapter)
                                 ad.show(requireActivity())
                             }
                         })
@@ -255,7 +220,7 @@ class DynamicPriceFragment : Fragment() {
                             override fun onAdLoaded(ad: RewardedAd) {
 
                                 // When ready to show the ad, use
-                                ad.showAd(requireActivity(), nimbusAd, adManager, LoggingRewardCallback())
+                                ad.showAd(requireActivity(), nimbusAd, LoggingRewardCallback())
                             }
 
                             override fun onAdFailedToLoad(error: LoadAdError) {
@@ -275,7 +240,7 @@ class DynamicPriceFragment : Fragment() {
                             override fun onAdLoaded(ad: RewardedInterstitialAd) {
 
                                 // When ready to show the ad, use
-                                ad.showAd(requireActivity(), nimbusAd, adManager, LoggingRewardCallback())
+                                ad.showAd(requireActivity(), nimbusAd, LoggingRewardCallback())
                             }
 
                             override fun onAdFailedToLoad(error: LoadAdError) {
@@ -294,7 +259,7 @@ class DynamicPriceFragment : Fragment() {
                     runCatching {
                         adManager.makeRequest(root.context, forBannerAd("test_no_fill", Format.BANNER_320_50))
                     }.onSuccess { nimbusAd ->
-                        adManagerAdView.setNimbusListeners(GoogleAuctionData(nimbusAd), adManager, logAdapter)
+                        adManagerAdView.setNimbusListeners(logAdapter)
                         adManagerAdView.loadAd(AdManagerAdRequest.Builder().applyDynamicPrice(nimbusAd).also {
                             it.addCustomTargeting("na_test", "no_fill")
                         }.build())
@@ -310,8 +275,7 @@ class DynamicPriceFragment : Fragment() {
                             forBannerAd("test_dp_rendering", Format.MREC)
                         )
                     }.onSuccess { nimbusAd ->
-                        val auctionData = GoogleAuctionData(nimbusAd)
-                        val adLoaderAdListener = AdLoaderAdListener(auctionData, adManager, logAdapter)
+                        val adLoaderAdListener = AdLoaderAdListener(logAdapter)
                         val builder = AdManagerAdRequest.Builder()
                         builder.applyDynamicPrice(nimbusAd)
 
@@ -323,11 +287,9 @@ class DynamicPriceFragment : Fragment() {
                             )
                             it.setAppEventListener { name, info ->
                                 logAdapter.appendLog("onAppEvent $name")
-                                if (it.handleEventForNimbus(name, info)) auctionData.nimbusWin = true
                             }
 
                             it.setOnPaidEventListener { event ->
-                                auctionData.onPaidEvent(event)
                                 logAdapter.appendLog("onPaidEvent $event")
                             }
                             adLoaderAdListener.responseInfo = it.responseInfo
@@ -342,8 +304,7 @@ class DynamicPriceFragment : Fragment() {
                     runCatching {
                         adManager.makeRequest(root.context.applicationContext, forVideoAd("test_dp_rendering"))
                     }.onSuccess { nimbusAd ->
-                        val auctionData = GoogleAuctionData(nimbusAd)
-                        val adLoaderAdListener = AdLoaderAdListener(auctionData, adManager, logAdapter)
+                        val adLoaderAdListener = AdLoaderAdListener(logAdapter)
                         val builder = AdManagerAdRequest.Builder()
                         builder.applyDynamicPrice(nimbusAd)
 
@@ -352,11 +313,9 @@ class DynamicPriceFragment : Fragment() {
 
                             it.setAppEventListener { name, info ->
                                 logAdapter.appendLog("onAppEvent $name")
-                                if (it.handleEventForNimbus(name, info)) auctionData.nimbusWin = true
                             }
 
                             it.setOnPaidEventListener { event ->
-                                auctionData.onPaidEvent(event)
                                 logAdapter.appendLog("onPaidEvent $event")
                             }
                             adLoaderAdListener.responseInfo = it.responseInfo

@@ -1,14 +1,10 @@
 package com.adsbynimbus.android.sample.dynamicadapter
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
@@ -16,20 +12,10 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.google.NimbusCustomAdapter
 import com.adsbynimbus.google.nimbusExtras
-import com.adsbynimbus.google.notifyError
-import com.adsbynimbus.google.notifyImpression
-import com.adsbynimbus.google.notifyPrice
 import com.adsbynimbus.render.NimbusAdView
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnPaidEventListener
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -78,15 +64,7 @@ public class GoogleAdMobDynamicFragment : Fragment() {
 
                         override fun onAdFailedToLoad(p0: LoadAdError) {
                             Timber.w("Error loading banner ad ${p0.message}")
-                            adManager.notifyError(nimbusExtras, p0)
                         }
-
-                        override fun onAdImpression() {
-                            adManager.notifyImpression(nimbusExtras, responseInfo)
-                        }
-                    }
-                    onPaidEventListener = OnPaidEventListener {
-                        adManager.notifyPrice(nimbusExtras, it)
                     }
 
                     adFrame.addView(
@@ -114,26 +92,11 @@ public class GoogleAdMobDynamicFragment : Fragment() {
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {
                         Timber.v("Interstitial ad loaded")
-                        ad.onPaidEventListener = OnPaidEventListener {
-                            NimbusAdManager().notifyPrice(nimbusExtras, it)
-                        }
-
-                        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdImpression() {
-                                adManager.notifyImpression(nimbusExtras, ad.responseInfo)
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                adManager.notifyError(nimbusExtras, p0)
-                            }
-                        }
-
                         ad.show(requireActivity())
                     }
 
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         Timber.w("Error loading interstitial ad %s", p0.message)
-                        adManager.notifyError(nimbusExtras, p0)
                     }
                 }
             )
@@ -145,20 +108,6 @@ public class GoogleAdMobDynamicFragment : Fragment() {
                     override fun onAdLoaded(ad: RewardedAd) {
                         Timber.v("Video rewarded ad loaded")
 
-                        ad.onPaidEventListener = OnPaidEventListener {
-                            NimbusAdManager().notifyPrice(nimbusExtras, it)
-                        }
-
-                        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdImpression() {
-                                adManager.notifyImpression(nimbusExtras, ad.responseInfo)
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                adManager.notifyError(nimbusExtras, p0)
-                            }
-                        }
-
                         ad.show(requireActivity()) {
                             Timber.v("Video rewarded ${it.amount} ${it.type}")
                         }
@@ -166,7 +115,6 @@ public class GoogleAdMobDynamicFragment : Fragment() {
 
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         Timber.w("Error loading Rewarded Video ad %s", p0.message)
-                        adManager.notifyError(nimbusExtras, p0)
                     }
                 }
             )
@@ -177,19 +125,6 @@ public class GoogleAdMobDynamicFragment : Fragment() {
                 object : RewardedInterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: RewardedInterstitialAd) {
                         Timber.v("Rewarded ad loaded")
-                        ad.onPaidEventListener = OnPaidEventListener {
-                            NimbusAdManager().notifyPrice(nimbusExtras, it)
-                        }
-
-                        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdImpression() {
-                                adManager.notifyImpression(nimbusExtras, ad.responseInfo)
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                adManager.notifyError(nimbusExtras, p0)
-                            }
-                        }
 
                         ad.show(requireActivity()) {
                             Timber.v("rewarded ${it.amount} ${it.type}")
@@ -198,7 +133,6 @@ public class GoogleAdMobDynamicFragment : Fragment() {
 
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         Timber.w("Error loading Rewarded ad %s", p0.message)
-                        adManager.notifyError(nimbusExtras, p0)
                     }
                 }
             )

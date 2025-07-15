@@ -15,6 +15,12 @@ android {
         viewBinding = true
     }
 
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
         targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
@@ -32,7 +38,10 @@ android {
         versionCatalogs.named("libs").findVersion("nimbus").ifPresent {
             versionName = it.requiredVersion
         }
-        proguardFile("r8-rules.pro")
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            layout.projectDirectory.file("r8-rules.pro")
+        )
 
         /* This is one example of adding keys to the application using buildConfigField */
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")

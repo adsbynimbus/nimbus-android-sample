@@ -106,9 +106,9 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
 
             "Native" -> {
                 MolocoRenderer.delegate = object : MolocoRenderer.Delegate {
-                    override fun customViewForRendering(container: ViewGroup, nativeAd: NimbusMolocoNativeAd): View =
+                    override fun customViewForRendering(container: ViewGroup, nimbusMolocoNativeAd: NimbusMolocoNativeAd): View =
                         MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                            populateNativeAdView(nativeAd, this)
+                            populateNativeAdView(nimbusMolocoNativeAd, this)
                         }.root
                 }
                 adManager.showAd(

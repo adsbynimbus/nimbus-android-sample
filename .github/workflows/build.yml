@@ -21,13 +21,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-         lfs: true
+          lfs: true
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: '24'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -39,5 +39,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nimbus-android-sample
-          path: app/build/outputs/apk/
+          path: app/build/outputs/
           retention-days: 5
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-reports
+          path: '**/build/reports/'

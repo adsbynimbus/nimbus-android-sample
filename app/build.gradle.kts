@@ -95,7 +95,7 @@ androidComponents.onVariants { variant ->
             "sample_unity_game_id",
             "sample_vungle_config_id",
     ).forEach {
-        variant.buildConfigFields.put(
+        variant.buildConfigFields?.put(
             it.substringAfter("sample_").uppercase(),
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )

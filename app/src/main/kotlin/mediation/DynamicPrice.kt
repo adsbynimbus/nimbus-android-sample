@@ -220,7 +220,7 @@ class DynamicPriceFragment : Fragment() {
                             override fun onAdLoaded(ad: RewardedAd) {
 
                                 // When ready to show the ad, use
-                                ad.showAd(requireActivity(), nimbusAd, LoggingRewardCallback())
+                                ad.showAd(requireActivity(), nimbusAd, adManager, LoggingRewardCallback())
                             }
 
                             override fun onAdFailedToLoad(error: LoadAdError) {
@@ -240,7 +240,7 @@ class DynamicPriceFragment : Fragment() {
                             override fun onAdLoaded(ad: RewardedInterstitialAd) {
 
                                 // When ready to show the ad, use
-                                ad.showAd(requireActivity(), nimbusAd, LoggingRewardCallback())
+                                ad.showAd(requireActivity(), nimbusAd, adManager, LoggingRewardCallback())
                             }
 
                             override fun onAdFailedToLoad(error: LoadAdError) {

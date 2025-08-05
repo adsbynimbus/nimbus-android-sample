@@ -21,7 +21,7 @@ root project gradle.properties file. If you would like to use your production ke
 
 ### Optional IDs
 
-In order to see APS/FAN/GAM/Unity/Vungle examples you must also supply it's IDs. You can do so by
+In order to see APS/FAN/GAM/Unity/Vungle examples you must also supply its IDs. You can do so by
 adding the IDs in the predefined fields in the root project `gradle.properties` file or by replacing
 the buildConfigFields in `app/build.gradle.kts`
 
@@ -44,11 +44,11 @@ You will be able to see several examples categorized by specific sections, such 
 ## Testing Ad Markup
 
 The `Test Render` section of the sample app provides basic functionality for rendering ad markup using the latest 
-version of the Nimbus SDK. The tool provides a text input field that can receive any well formed HTML or VAST markup
+version of the Nimbus SDK. The tool provides a text input field that can receive any well-formed HTML or VAST markup
 and will render the ad as a full screen ad. 
 
-1. Copy the contents of the `markup` field, without the any leading or trailing quotes, from a Nimbus
-   response and paste it into the input field.
+1. Copy the contents of the `markup` field without any leading or trailing quotes from a Nimbus response and paste it 
+   into the input field.
 2. Click the `Test` button. The markup will be rendered into a full screen container.
 
 ### Verifying Static Ads
@@ -69,15 +69,8 @@ removed or properly escaped prior to pasting it into the tool.
 
 ### Verifying Video Ads
 
-Errors rendering a video ad can be identified by a completely black screen with the the close button appearing at the 
+Errors rendering a video ad can be identified by a completely black screen with the close button appearing at the 
 top left of the ad container. Detailed information about the error can be retrieved using `logcat`.
-
-#### Companion Ads
-
-If the VAST creative contains a companion ad that does not render, check the size of the Companion Ad in the markup.
-The `Test Render` tool is setup with a 320 by 480 end card Companion Ad by default; if another size Companion Ad is 
-defined in the VAST it will not render without rebuilding the Sample app with an additional Companion Ad definition
-that matches the size defined in the VAST markup.
 
 ## Need help?
 

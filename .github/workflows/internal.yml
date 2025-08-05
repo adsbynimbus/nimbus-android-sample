@@ -1,6 +1,11 @@
 name: Internal App
 
 on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '**'
   workflow_call:
   workflow_dispatch:
     inputs:

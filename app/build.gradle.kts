@@ -28,6 +28,10 @@ android {
 
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
+    kotlinOptions {
+        jvmTarget = libs.versions.android.jvm.get()
+    }
+
     defaultConfig {
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.compile.get().toInt()
@@ -49,12 +53,6 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
-    }
 }
 
 androidComponents.onVariants { variant ->
@@ -153,10 +151,10 @@ dependencies {
     api(libs.nimbus.vungle)
 //    api("com.vungle:vungle-ads:7.+")
 
+    api(libs.kotlin.coroutines.android)
+
     /* Androidx Libraries */
     api(libs.androidx.activity)
-    api(libs.androidx.annotation)
-    api(libs.androidx.annotation.experimental)
     api(libs.androidx.appcompat)
     api(libs.bundles.androidx.navigation)
     api(libs.androidx.preference)
@@ -171,16 +169,9 @@ dependencies {
     api(libs.timber)
 
     /* Transitive Dependencies we want updated to the latest */
-    api(libs.androidx.browser)
     api(libs.androidx.collection)
     api(libs.androidx.constraintlayout)
     api(libs.androidx.coordinatorlayout)
-    api(libs.androidx.core)
-    api(libs.androidx.fragment)
-    api(libs.androidx.lifecycle)
     api(libs.androidx.room)
-    api(libs.androidx.transition)
-    api(libs.androidx.work)
-    api(libs.kotlin.coroutines.android)
-    api(libs.kotlin.serialization.json)
+    api(libs.okio)
 }

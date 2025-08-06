@@ -63,15 +63,6 @@ class NimbusAdManagerTestListener(
 
     override fun onAdRendered(controller: AdController) {
         onScreenLogger.let { controller.listeners.add(it) }
-        controller.listeners.add(object : AdController.Listener {
-            override fun onAdEvent(adEvent: AdEvent) {
-                Timber.i("$identifier: ${adEvent.name}")
-            }
-
-            override fun onError(error: NimbusError) {
-                Timber.e("$identifier: ${error.message}")
-            }
-        })
         onAdRenderedCallback(controller)
     }
 }
@@ -84,10 +75,12 @@ class OnScreenLogger(val adapter: LogAdapter, var response: NimbusResponse? = nu
             adapter.appendLog("Rendered: ${response?.testDescription}")
             hasLoggedRendered = true
         }
+        Timber.i("$identifier: ${adEvent.name}")
         adapter.appendLog("${identifier ?: "Event"}: ${adEvent.name}")
     }
 
     override fun onError(error: NimbusError) {
+        Timber.e("$identifier: ${error.message}")
         adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
     }
 }

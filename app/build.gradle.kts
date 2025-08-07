@@ -82,6 +82,10 @@ androidComponents.onVariants { variant ->
             "sample_fan_banner_320_id",
             "sample_fan_native_320_id",
             "sample_gam_placement_id",
+            "sample_inmobi_account_id",
+            "sample_inmobi_banner_placement_id",
+            "sample_inmobi_interstitial_placement_id",
+            "sample_inmobi_rewarded_placement_id",
             "sample_mintegral_app_id",
             "sample_mintegral_app_key",
             "sample_mintegral_banner_placement",
@@ -133,6 +137,8 @@ dependencies {
 
     /* Dynamic Adapters for Google/AdMob */
     api(libs.nimbus.googlemediation)
+
+    api(libs.nimbus.inmobi)
 
     /* Mintegral Demand */
     api(libs.nimbus.mintegral)

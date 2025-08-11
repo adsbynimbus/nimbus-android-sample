@@ -38,13 +38,6 @@
                         android:isIndicator="true"
                         android:numStars="5"
                         android:stepSize="0.5" />
-
-                    <TextView android:id="@+id/ad_advertiser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView android:id="@+id/ad_headline"

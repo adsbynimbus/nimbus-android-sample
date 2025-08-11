@@ -8,13 +8,16 @@ import android.view.Gravity.TOP
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig.*
+import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.mediation.removeOtherDemandIds
 import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.enumerations.Position.HEADER
 import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50
 import com.adsbynimbus.render.AdController
+import com.adsbynimbus.render.InMobiRenderer
 import com.adsbynimbus.request.*
+import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
 import com.inmobi.sdk.SdkInitializationListener
 import okhttp3.internal.toLongOrDefault
@@ -67,6 +70,31 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
                     })
                 },
             )
+            "Native" -> {
+                InMobiRenderer.delegate = object : InMobiRenderer.Delegate {
+                    override fun customViewForRendering(
+                        container: ViewGroup,
+                        nativeAd: InMobiNative,
+                    ): View {
+                        return InmobiNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                            populateNativeAdView(nativeAd, this)
+                        }.root
+                    }
+                }
+
+                adManager.showAd(
+                    request = NimbusRequest.forNativeAd(item).apply {
+                        companionAds = emptyArray()
+                        removeOtherDemandIds()
+                        withInMobi(INMOBI_NATIVE_PLACEMENT_ID.toLongOrDefault(0))
+                    },
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                        /* Replace the following with your own AdController.Listener implementation */
+                        controller.listeners.add(EmptyAdControllerListenerImplementation)
+                    },
+                )
+            }
             "Interstitial" -> adManager.showBlockingAd(
                 request = NimbusRequest.forInterstitialAd(item).apply {
                     removeOtherDemandIds()
@@ -97,6 +125,7 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
         super.onDestroyView()
         RequestManager.interceptors.remove(this)
         controllers.forEach { it.destroy() }
+        InMobiRenderer.delegate = null
     }
 
     override fun modifyRequest(request: NimbusRequest) {
@@ -106,5 +135,32 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
             unity_buyeruid = null
             vungle_buyeruid = null
         }
+    }
+
+    private fun populateNativeAdView(nativeAd: InMobiNative, binding: InmobiNativeAdBinding) {
+        val assets = nativeAd
+
+        assets.adTitle?.let {
+            binding.adHeadline.text = it
+            binding.adHeadline.visibility = View.VISIBLE
+        } ?: run { binding.adHeadline.visibility = View.INVISIBLE }
+
+        assets.adDescription?.let {
+            binding.adBody.text = it
+            binding.adBody.visibility = View.VISIBLE
+        } ?: run { binding.adBody.visibility = View.INVISIBLE }
+
+        assets.adCtaText?.let {
+            binding.adCallToAction.text = it
+            binding.adCallToAction.visibility = View.VISIBLE
+        } ?: run { binding.adCallToAction.visibility = View.INVISIBLE }
+
+        assets.adRating.takeIf { it > 0 }?.let {
+            binding.adStars.rating = it
+            binding.adStars.visibility = View.VISIBLE
+        } ?: run { binding.adStars.visibility = View.INVISIBLE }
+
+        val view = assets.getPrimaryViewOfWidth(requireContext(), null, binding.mediaContainer, binding.root.width)
+        binding.mediaContainer.addView(view)
     }
 }

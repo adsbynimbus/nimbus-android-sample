@@ -86,6 +86,7 @@ androidComponents.onVariants { variant ->
             "sample_inmobi_banner_placement_id",
             "sample_inmobi_interstitial_placement_id",
             "sample_inmobi_rewarded_placement_id",
+            "sample_inmobi_native_placement_id",
             "sample_mintegral_app_id",
             "sample_mintegral_app_key",
             "sample_mintegral_banner_placement",

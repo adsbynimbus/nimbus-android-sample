@@ -27,7 +27,7 @@ kotlin = "2.2.0"
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.9.0"
 
-nimbus = "2.33.0"
+nimbus = "2.33.1"
 
 okhttp = "5.1.0"
 okio = "3.16.0"

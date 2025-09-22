@@ -2,19 +2,17 @@ package com.adsbynimbus.android.sample.demand
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.UnityDemandProvider
+import com.adsbynimbus.android.sample.rendering.*
+import com.adsbynimbus.openrtb.enumerations.Position
+import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.render.AdController
+import com.adsbynimbus.request.*
 
 /** Initializes the Unity SDK and integrates it with the Nimbus SDK. */
 fun Context.initializeUnity(unityGameId: String) {
@@ -26,6 +24,7 @@ fun Context.initializeUnity(unityGameId: String) {
 class UnityFragment : Fragment() {
 
     val adManager: NimbusAdManager = NimbusAdManager()
+    val controllers = mutableListOf<AdController>()
 
     fun NimbusRequest.removeNonUnityDemand() = apply {
         interceptors.add(NimbusRequest.Interceptor {
@@ -44,8 +43,34 @@ class UnityFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (val item = requireArguments().getString("item")) {
-            "Unity Rewarded Video" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(item).removeNonUnityDemand(),
+            "Banner" -> adManager.showAd(
+                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
+                    removeNonUnityDemand()
+                    withUnityBanner()
+                },
+                viewGroup = adFrame,
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    controllers.add(controller.apply {
+                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                        /* Replace the following with your own AdController.Listener implementation */
+                        listeners.add(EmptyAdControllerListenerImplementation)
+                    })
+                },
+            )
+            "Interstitial" -> adManager.showBlockingAd(
+                request = NimbusRequest.forInterstitialAd(item).apply {
+                    removeNonUnityDemand()
+                    withUnityInterstitial()
+                },
+                activity = requireActivity(),
+                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
+                    /* Replace the following with your own AdController.Listener implementation */
+                    controller.listeners.add(EmptyAdControllerListenerImplementation)
+                },
+            )
+            "Rewarded Video" -> adManager.showRewardedAd(
+                request = NimbusRequest.forRewardedVideo(item).removeNonUnityDemand()
+                    .withUnityRewarded(),
                 closeButtonDelaySeconds = 30,
                 activity = requireActivity(),
                 listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
@@ -56,4 +81,9 @@ class UnityFragment : Fragment() {
         }
         if (BuildConfig.UNITY_GAME_ID.isEmpty()) requireContext().showPropertyMissingDialog("sample_unity_game_id")
     }.root
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        controllers.forEach { it.destroy() }
+    }
 }

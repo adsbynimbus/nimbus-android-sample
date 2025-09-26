@@ -49,6 +49,9 @@ class NimbusInitializer : Initializer<Nimbus> {
 
             /* Vungle samples can be found in the Demand folder*/
             initializeVungle(vungleAppId = BuildConfig.VUNGLE_CONFIG_ID)
+
+            /* InMobi samples can be found in the Demand Folder*/
+            initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
         }
 
         /* The following is used for the sample app only */

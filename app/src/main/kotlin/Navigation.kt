@@ -76,6 +76,12 @@ val screens = mutableMapOf(
             "APS Banner With Refresh",
             "APS Interstitial Hybrid",
         )),
+        NavigationAdapter(destination = "InMobi", header = "InMobi", items = arrayOf(
+            "Banner",
+            "Native",
+            "Interstitial",
+            "Rewarded",
+        )),
         NavigationAdapter(destination = "Meta", header = "Meta Audience Network", items = arrayOf(
             "Meta Banner",
             "Meta Interstitial",
@@ -146,10 +152,11 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
         label = context.getString(R.string.google_admob)
         argument("item") { type = NavType.StringType }
     }
-    fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
-    fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<AdmobFragment>("AdMobGDE/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<InMobiFragment>("InMobi/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MintegralFragment>("Mintegral/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<MolocoFragment>("Moloco/{item}") { argument("item") { type = NavType.StringType } }
     fragment<UnityFragment>("Unity/{item}") { argument("item") { type = NavType.StringType } }
     fragment<VungleFragment>("Vungle/{item}") { argument("item") { type = NavType.StringType } }

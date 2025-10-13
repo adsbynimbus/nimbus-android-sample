@@ -1,10 +1,7 @@
 package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.NimbusError
@@ -12,9 +9,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdEvent
-import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.*
 import com.adsbynimbus.request.*
 import timber.log.Timber
 
@@ -87,6 +82,20 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         identifier = item,
                         logView = logs
                     ) { controller ->
+                        controllers.add(controller.apply {
+                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
+                            /* Replace the following with your own AdController.Listener implementation */
+                            listeners.add(EmptyAdControllerListenerImplementation)
+                        })
+                    }
+                )
+            }
+            "Video With Refresh" -> {
+                adManager.showAd(
+                    request = NimbusRequest.forVideoAd(item),
+                    refreshInterval = 30,
+                    viewGroup = adFrame,
+                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                         controllers.add(controller.apply {
                             align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
                             /* Replace the following with your own AdController.Listener implementation */

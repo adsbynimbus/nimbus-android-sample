@@ -34,6 +34,7 @@ val screens = mutableMapOf(
         "Manually Rendered Ad",
         "Banner",
         "Banner With Refresh",
+        "Video With Refresh",
         "Inline Video",
         "Interstitial Hybrid",
         "Interstitial Static",

@@ -31,7 +31,6 @@ val screens = mutableMapOf(
         "Settings",
     )),
     "Show Ad Demo" to NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
-        "Manually Rendered Ad",
         "Banner",
         "Banner With Refresh",
         "Video With Refresh",
@@ -39,7 +38,6 @@ val screens = mutableMapOf(
         "Interstitial Hybrid",
         "Interstitial Static",
         "Interstitial Video",
-        "Interstitial Video Without UI",
         "Rewarded Video",
         "Ads in ScrollView"
     )),

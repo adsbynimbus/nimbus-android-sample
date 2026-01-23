@@ -5,21 +5,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.adsbynimbus.NimbusAd
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.NimbusError
-import com.adsbynimbus.render.R
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.TextViewHolder
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdEvent
-import com.adsbynimbus.render.Interceptor
+import com.adsbynimbus.render.*
 import com.adsbynimbus.request.NimbusResponse
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
@@ -73,6 +66,25 @@ class NimbusAdManagerTestListener(
             }
         })
         onAdRenderedCallback(controller)
+    }
+}
+
+class ScreenAdLogger(
+    val identifier: String,
+    val logView: RecyclerView,
+) {
+    val adapter = logView.adapter as? LogAdapter ?: LogAdapter().also { logView.useAsLogger(it) }
+    private var hasLoggedRendered = false
+    fun onAdEvent(adEvent: AdEvent) {
+        if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
+            adapter.appendLog("Rendered: $identifier")
+            hasLoggedRendered = true
+        }
+        adapter.appendLog("Event: ${adEvent.name}")
+    }
+
+    fun onError(error: NimbusError) {
+        adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
     }
 }
 

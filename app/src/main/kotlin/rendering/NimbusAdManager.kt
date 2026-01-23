@@ -2,16 +2,21 @@ package com.adsbynimbus.android.sample.rendering
 
 import android.os.Bundle
 import android.view.*
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.NimbusError
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.*
-import com.adsbynimbus.request.*
-import timber.log.Timber
+import com.adsbynimbus.render.AdController
+import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.request.RequestManager
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
@@ -25,167 +30,122 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         RequestManager.interceptors.add(this@AdManagerFragment)
         when (val item = requireArguments().getString("item")) {
-            "Manually Rendered Ad" -> {
-                adManager.makeRequest(
-                    context = root.context,
-                    request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                    listener = object : RequestManager.Listener {
-                        override fun onAdResponse(nimbusResponse: NimbusResponse) {
-                            // Render ad with response
-                            Renderer.loadAd(nimbusResponse, adFrame,
-                                object : Renderer.Listener, NimbusError.Listener {
-                                    override fun onAdRendered(controller: AdController) {
-                                        controllers.add(controller.apply {
-                                            setTestDescription(response = nimbusResponse)
-                                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                                            /* Replace the following with your own AdController.Listener implementation */
-                                            listeners.add(EmptyAdControllerListenerImplementation)
-                                            listeners.add(OnScreenLogger(LogAdapter().also { logs.useAsLogger(it) }, nimbusResponse))
-                                        })
-                                    }
-
-                                    override fun onError(error: NimbusError) {
-                                        Timber.e("Manual Render Ad: %s", error.message)
-                                    }
-                                }
-                            )
-                        }
-
-                        override fun onError(error: NimbusError) {
-                            Timber.e("Manual Render Ad: %s", error.message)
-                        }
-                    })
-            }
             "Banner" -> {
-                adManager.showAd(
-                    request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER),
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        controllers.add(controller.apply {
-                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        })
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.banner(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                        .onEvent {
+                            logger.onAdEvent(it)
+                        }.onError {
+                            logger.onError(it)
+                        }.load(adFrame).showIn(adFrame).let {
+                            it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
+                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                                height = WRAP_CONTENT
+                            }
+                        }
+                }
             }
             "Banner With Refresh" -> {
-                adManager.showAd(
-                    request = NimbusRequest.forBannerAd(
-                        item,
-                        Format.BANNER_320_50,
-                        Position.HEADER
-                    ),
-                    refreshInterval = 30,
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(
-                        identifier = item,
-                        logView = logs
-                    ) { controller ->
-                        controllers.add(controller.apply {
-                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        })
-                    }
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.banner(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER, refreshInterval = 30)
+                        .onEvent {
+                            logger.onAdEvent(it)
+                        }.onError {
+                            logger.onError(it)
+                        }.load(adFrame).showIn(adFrame).let {
+                            it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
+                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                                height = WRAP_CONTENT
+                            }
+                        }
+                }
             }
             "Video With Refresh" -> {
-                adManager.showAd(
-                    request = NimbusRequest.forVideoAd(item),
-                    refreshInterval = 30,
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        controllers.add(controller.apply {
-                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        })
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.inlineAd(position = item, refreshInterval = 30.seconds) {
+                        video()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.load(adFrame).showIn(adFrame).let {
+                        it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
                     }
-                )
+                }
             }
             "Inline Video" -> {
-                adManager.showAd(
-                    request = NimbusRequest.forVideoAd(item),
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        controllers.add(controller.apply {
-                            align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        })
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.inlineAd(position = item) {
+                        video()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.load(adFrame).showIn(adFrame).let {
+                        it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+                }
             }
             "Interstitial Hybrid" -> {
-                adManager.showBlockingAd(
-                    request = NimbusRequest.forInterstitialAd(item),
-                    activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.interstitial(position = item) {
+                        video()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(requireContext())
+                }
             }
             "Interstitial Static" -> {
-                adManager.showBlockingAd(
-                    request = NimbusRequest.forInterstitialAd(item).apply {
-                        request.imp[0].video = null
-                    },
-                    closeButtonDelaySeconds = 0,
-                    activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.fullScreenUnit(position = item) {
+                        banner()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(requireContext())
+                }
             }
             "Interstitial Video" -> {
-                adManager.showBlockingAd(
-                    request = NimbusRequest.forInterstitialAd(item).apply {
-                        request.imp[0].banner = null
-                    },
-                    closeButtonDelaySeconds = 0,
-                    activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
-            }
-            "Interstitial Video Without UI" -> {
-                adManager.showBlockingAd(
-                    request = NimbusRequest.forInterstitialAd(item).apply {
-                        request.imp[0].banner = null
-                    },
-                    closeButtonDelaySeconds = 0,
-                    activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        controller.listeners.add(object : AdController.Listener {
-                            override fun onAdEvent(adEvent: AdEvent) {
-                                if (adEvent == AdEvent.LOADED) controller.view?.alpha = 0f
-                            }
-
-                            override fun onError(error: NimbusError) {}
-                        })
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.fullScreenUnit(position = item) {
+                        video()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(requireContext())
+                }
             }
             "Rewarded Video" -> {
-                adManager.showRewardedAd(
-                    request = NimbusRequest.forRewardedVideo(item),
-                    activity = requireActivity(),
-                    closeButtonDelaySeconds = 60,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    Nimbus.rewardedAd(position = item).onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(requireContext())
+                }
             }
             "Ads in ScrollView" -> {
                 LayoutAdsInListBinding.inflate(inflater, adFrame, true).apply {
                     adManager.showAd(
-                        request =  NimbusRequest.forBannerAd("$item Banner", Format.BANNER_320_50, Position.HEADER),
+                        request = NimbusRequest.forBannerAd("$item Banner", Format.BANNER_320_50, Position.HEADER),
                         refreshInterval = 30,
                         viewGroup = adFrameBanner,
                         listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
@@ -195,7 +155,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         },
                     )
                     adManager.showAd(
-                        request =  NimbusRequest.forBannerAd("$item Inline Interstitial", Format.INTERSTITIAL_PORT),
+                        request = NimbusRequest.forBannerAd("$item Inline Interstitial", Format.INTERSTITIAL_PORT),
                         viewGroup = adFrameImage,
                         listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
                             /* Replace the following with your own AdController.Listener implementation */
@@ -204,7 +164,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         },
                     )
                     adManager.showAd(
-                        request =  NimbusRequest.forVideoAd("$item Video"),
+                        request = NimbusRequest.forVideoAd("$item Video"),
                         refreshInterval = 30,
                         viewGroup = adFrameVideo,
                         listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->

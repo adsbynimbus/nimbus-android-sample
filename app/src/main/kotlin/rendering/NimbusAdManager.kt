@@ -33,12 +33,12 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             "Banner" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    Nimbus.banner(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                    Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
                         .onEvent {
                             logger.onAdEvent(it)
                         }.onError {
                             logger.onError(it)
-                        }.load(adFrame).showIn(adFrame).let {
+                        }.load(adFrame).show(adFrame).let {
                             it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
                                 gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                                 height = WRAP_CONTENT
@@ -49,12 +49,12 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             "Banner With Refresh" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    Nimbus.banner(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER, refreshInterval = 30)
+                    Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER, refreshInterval = 30)
                         .onEvent {
                             logger.onAdEvent(it)
                         }.onError {
                             logger.onError(it)
-                        }.load(adFrame).showIn(adFrame).let {
+                        }.load(adFrame).show(adFrame).let {
                             it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
                                 gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                                 height = WRAP_CONTENT
@@ -71,7 +71,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.load(adFrame).showIn(adFrame).let {
+                    }.load(adFrame).show(adFrame).let {
                         it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                             height = WRAP_CONTENT
@@ -88,7 +88,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.load(adFrame).showIn(adFrame).let {
+                    }.load(adFrame).show(adFrame).let {
                         it.view?.updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                             height = WRAP_CONTENT
@@ -99,7 +99,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             "Interstitial Hybrid" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    Nimbus.interstitial(position = item) {
+                    Nimbus.interstitialAd(position = item) {
                         video()
                     }.onEvent {
                         logger.onAdEvent(it)
@@ -111,7 +111,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             "Interstitial Static" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    Nimbus.fullScreenUnit(position = item) {
+                    Nimbus.fullScreenAd(position = item) {
                         banner()
                     }.onEvent {
                         logger.onAdEvent(it)
@@ -123,7 +123,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
             "Interstitial Video" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    Nimbus.fullScreenUnit(position = item) {
+                    Nimbus.fullScreenAd(position = item) {
                         video()
                     }.onEvent {
                         logger.onAdEvent(it)

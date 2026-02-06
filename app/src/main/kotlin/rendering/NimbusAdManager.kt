@@ -37,7 +37,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                             logger.onAdEvent(it)
                         }.onError {
                             logger.onError(it)
-                        }.load(adFrame).show(adFrame).also {
+                        }.show(adFrame).also {
                             it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
                                 gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                                 height = WRAP_CONTENT
@@ -54,17 +54,16 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         size = Format.BANNER_320_50,
                         adPosition = Position.HEADER,
                         refreshInterval = 30,
-                    )
-                        .onEvent {
-                            logger.onAdEvent(it)
-                        }.onError {
-                            logger.onError(it)
-                        }.load(adFrame).show(adFrame).also {
-                            it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
-                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-                                height = WRAP_CONTENT
-                            }
+                    ).onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
                         }
+                    }
                 }
             }
 
@@ -77,7 +76,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.load(adFrame).show(adFrame).also {
+                    }.show(adFrame).also {
                         it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                             height = WRAP_CONTENT
@@ -95,7 +94,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.load(adFrame).show(adFrame).also {
+                    }.show(adFrame).also {
                         it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                             height = WRAP_CONTENT
@@ -113,7 +112,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(requireContext(), closeButtonDelay = 10.seconds)
+                    }.show(this@AdManagerFragment, closeButtonDelay = 10.seconds)
                 }
             }
 
@@ -126,7 +125,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(requireContext())
+                    }.show(this@AdManagerFragment)
                 }
             }
 
@@ -139,7 +138,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(requireContext())
+                    }.show(this@AdManagerFragment)
                 }
             }
 
@@ -150,7 +149,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(requireContext())
+                    }.show(this@AdManagerFragment)
                 }
             }
 

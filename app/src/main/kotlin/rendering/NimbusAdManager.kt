@@ -113,7 +113,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(requireContext())
+                    }.show(requireContext(), closeButtonDelay = 10.seconds)
                 }
             }
 
@@ -121,7 +121,7 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
                     ads += Nimbus.fullScreenAd(position = item) {
-                        banner()
+                        banner(size = Format.INTERSTITIAL_PORT)
                     }.onEvent {
                         logger.onAdEvent(it)
                     }.onError {

@@ -136,9 +136,6 @@ dependencies {
     api(libs.nimbus.google)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
-    /* Dynamic Adapters for Google/AdMob */
-    api(libs.nimbus.googlemediation)
-
     api(libs.nimbus.inmobi)
 
     /* Mintegral Demand */

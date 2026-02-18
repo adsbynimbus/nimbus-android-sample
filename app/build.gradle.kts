@@ -132,10 +132,6 @@ dependencies {
     api(libs.nimbus.meta)
 //    api("com.facebook.android:audience-network-sdk:6.+")
 
-    /* Google Mediation Adapters and Dynamic Price */
-    api(libs.nimbus.google)
-//    api("com.google.android.gms:play-services-ads:23.+")
-
     api(libs.nimbus.inmobi)
 
     /* Mintegral Demand */

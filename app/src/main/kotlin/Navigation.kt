@@ -100,9 +100,6 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<NavigationFragment>("Show Ad Demo") {
         label = context.getString(R.string.ad_demo_subtitle)
     }
-    fragment<NavigationFragment>("Mediation Platforms") {
-        label = context.getString(R.string.mediation_subtitle)
-    }
     fragment<NavigationFragment>("Third Party Demand") {
         label = context.getString(R.string.third_party_demand_subtitle)
     }

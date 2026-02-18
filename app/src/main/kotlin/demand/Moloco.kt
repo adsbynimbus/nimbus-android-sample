@@ -11,7 +11,6 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.BuildConfig.MOLOCO_BANNER_ADUNITID
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.MolocoNativeAdBinding
-import com.adsbynimbus.android.sample.mediation.removeOtherDemandIds
 import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format

@@ -1,29 +1,18 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.mediation.removeOtherDemandIds
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.align
+import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.AdMobRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
-import com.adsbynimbus.request.withAdMobBanner
-import com.adsbynimbus.request.withAdMobInterstitial
-import com.adsbynimbus.request.withAdMobNative
-import com.adsbynimbus.request.withAdMobRewarded
+import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
 
 class AdmobFragment : Fragment(), NimbusRequest.Interceptor {
@@ -202,5 +191,17 @@ class AdmobFragment : Fragment(), NimbusRequest.Interceptor {
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         nativeAdView.setNativeAd(nativeAd)
+    }
+}
+
+fun NimbusRequest.removeOtherDemandIds() = also {
+    interceptors.add { request ->
+        request.request.imp[0].ext.facebook_app_id = null
+        request.request.user?.ext = request.request.user?.ext?.apply {
+            facebook_buyeruid = null
+            unity_buyeruid = null
+            vungle_buyeruid = null
+            mfx_buyerdata = null
+        }
     }
 }

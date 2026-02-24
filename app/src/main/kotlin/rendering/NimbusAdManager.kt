@@ -10,16 +10,14 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.internal.ThirdPartyDemandNetwork
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
+class AdManagerFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
     val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
@@ -27,23 +25,21 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@AdManagerFragment)
+        ThirdPartyDemandNetwork.entries.toggleDemand(false)
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
-                        .onEvent {
-                            logger.onAdEvent(it)
-                        }.onError {
-                            logger.onError(it)
-                        }.show(adFrame).also {
-                            it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
-                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-                                height = WRAP_CONTENT
-                            }
+            "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
                         }
-                }
+                    }
             }
 
             "Banner With Refresh" -> {
@@ -103,19 +99,16 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
                 }
             }
 
-            "Interstitial Hybrid" -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.interstitialAd(position = item) {
-                        video()
-                    }.onEvent {
-                        logger.onAdEvent(it)
-                    }.onError {
-                        logger.onError(it)
-                    }.show(this@AdManagerFragment, closeButtonDelay = 10.seconds)
-                }
+            "Interstitial Hybrid" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.interstitialAd(position = item) {
+                    video()
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(this@AdManagerFragment, closeButtonDelay = 10.seconds)
             }
-
             "Interstitial Static" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
@@ -192,17 +185,11 @@ class AdManagerFragment : Fragment(), NimbusRequest.Interceptor {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
         ads.forEach { it.destroy() }
+        ThirdPartyDemandNetwork.entries.toggleDemand(true)
     }
 
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            mfx_buyerdata = null
-            vungle_buyeruid = null
-        }
+    fun List<ThirdPartyDemandNetwork>.toggleDemand(enabled: Boolean) {
+        forEach { Nimbus.toggleDemand(enabled, it) }
     }
 }

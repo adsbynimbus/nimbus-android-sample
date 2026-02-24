@@ -2,14 +2,12 @@ package com.adsbynimbus.android.sample.rendering
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.NimbusAd
-import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
+import com.adsbynimbus.openrtb.response.MarkupType
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 
@@ -32,17 +30,17 @@ class TestRenderFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val type = if (vastRegex.containsMatchIn(markup)) "video" else "static"
+            val type = if (vastRegex.containsMatchIn(markup)) MarkupType.VIDEO else MarkupType.BANNER
 
             requireContext().loadBlockingAd(object : NimbusAd {
-                override fun type(): String = type
+                override val type = type
 
-                override fun network(): String = "test_render"
+                override val network: String = "test_render"
 
-                override fun markup(): String = markupText.text.toString().unescape()
+                override val markup: String = markupText.text.toString().unescape()
 
-                override fun companionAds(): Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
-            })?.start()
+                override val companionAds: Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
+            }, isRewarded = false)?.start()
         }
     }.root
 

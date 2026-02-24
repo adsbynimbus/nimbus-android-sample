@@ -2,21 +2,19 @@ package com.adsbynimbus.android.sample.rendering
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.demand.mockMetaNimbusAd
+import com.adsbynimbus.*
+import com.adsbynimbus.android.sample.demand.mockMetaNimbusAdPosition
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.Renderer
 import com.adsbynimbus.request.NimbusRequest
 import com.adsbynimbus.request.RequestManager
+import kotlinx.coroutines.launch
 
 class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
 
@@ -57,7 +55,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
     }
 
     class ViewHolder(val view: FrameLayout) : RecyclerView.ViewHolder(view) {
-        var adController: AdController? = null
+        var ad: Ad? = null
     }
 
     inner class ScrollingAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -71,29 +69,22 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
             })
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            if (holder.adController == null) when (position) {
-                0 -> NimbusRequest.forBannerAd("test_banner_320", Format.BANNER_320_50, 0)
-                1 -> NimbusRequest.forBannerAd("test_banner_300", Format.LETTERBOX, 0)
-                2 -> NimbusRequest.forBannerAd("test_banner_interstitial_port",
-                    Format.INTERSTITIAL_PORT,
-                    0)
-                3 -> NimbusRequest.forBannerAd("test_banner_interstitial_land",
-                    Format.INTERSTITIAL_LAND,
-                    0)
-                4 -> NimbusRequest.forVideoAd("test_video")
-                else -> {
-                    mockMetaNimbusAd("Meta Native").let {
-                        Renderer.loadAd(it, holder.view, object : NimbusAdManager.Listener {
-                            override fun onAdRendered(controller: AdController) {
-                                holder.adController = controller
-                            }
-                        })
-                    }
-                    return
-                }
+            if (holder.ad == null) when (position) {
+                0 -> Nimbus.bannerAd("test_banner_320", Format.BANNER_320_50)
+                1 -> Nimbus.bannerAd("test_banner_300", Format.LETTERBOX)
+                2 -> Nimbus.bannerAd("test_banner_interstitial_port", Format.INTERSTITIAL_PORT)
+                3 -> Nimbus.bannerAd("test_banner_interstitial_land", Format.INTERSTITIAL_LAND,)
+                4 -> Nimbus.inlineAd("test_video") { video() }
+                else -> Nimbus.nativeAd(
+                            mockMetaNimbusAdPosition(
+                                "Meta Native",
+                                { requireActivity().showPropertyMissingDialog(it) },
+                            ),
+                        )
             }.let {
-                adManager.showAd(it, holder.view) { controller ->
-                    holder.adController = controller.apply { volume = 100 }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    holder.ad = it
+                    it.show(holder.view)
                 }
             }
         }
@@ -103,7 +94,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
         override fun getItemViewType(position: Int): Int = if (position == 5) 1 else 0
 
         override fun onViewRecycled(holder: ViewHolder) {
-            holder.adController?.destroy()
+            holder.ad?.destroy()
         }
     }
 }

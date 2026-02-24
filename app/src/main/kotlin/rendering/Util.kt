@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 /** A Debug description of the Nimbus Response used for UI testing */
 inline val NimbusAd.testDescription
-    get() = "${network()} ${type()}" + if (width() != 0 && height() != 0) " ${width()}x${height()}" else ""
+    get() = "$network $type" + if (width != 0 && height != 0) " ${width}x${height}" else ""
 
 /** Sets debug information on the AdController for use with UI testing */
 fun AdController.setTestDescription(response: NimbusAd?) {

@@ -2,24 +2,27 @@ package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
 import android.view.*
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.BuildConfig
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutMintegralNativeAdBinding
-import com.adsbynimbus.android.sample.rendering.*
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
 import com.adsbynimbus.render.MintegralRenderer
-import com.adsbynimbus.request.*
+import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.request.RequestManager
 import com.mbridge.msdk.out.Campaign
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    val controllers = mutableListOf<AdController>()
+    val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,95 +30,72 @@ class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withMintegral(
-                        adUnitId = BuildConfig.MINTEGRAL_BANNER_ADUNIT,
-                        placementId = BuildConfig.MINTEGRAL_BANNER_PLACEMENT
-                    )
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.MREC, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withMintegral(
-                        adUnitId = BuildConfig.MINTEGRAL_BANNER_ADUNIT,
-                        placementId = BuildConfig.MINTEGRAL_BANNER_PLACEMENT
-                    )
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Interstitial" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    removeOtherDemandIds()
-                    withMintegral(
-                        adUnitId = BuildConfig.MINTEGRAL_INTERSTITIAL_ADUNIT,
-                        placementId = BuildConfig.MINTEGRAL_INTERSTITIAL_PLACEMENT
-                    )
-                },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Rewarded" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(item).apply {
-                    companionAds = emptyArray()
-                    removeOtherDemandIds()
-                    withMintegral(
-                        adUnitId = BuildConfig.MINTEGRAL_REWARDED_ADUNIT,
-                        placementId = BuildConfig.MINTEGRAL_REWARDED_PLACEMENT
-                    )
-                },
-                activity = requireActivity(),
-                closeButtonDelaySeconds = 60,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
+            "Banner"  -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
+            "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = Format.MREC, adPosition = Position.HEADER)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
+            "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.interstitialAd(position = item) {
+                    video()
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(this@MintegralFragment, closeButtonDelay = 10.seconds)
+            }
+            "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.rewardedAd(position = item).onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(this@MintegralFragment, closeButtonDelay = 10.seconds)
+            }
             "Native" -> {
-                MintegralRenderer.delegate = object : MintegralRenderer.Delegate {
-                    override fun customViewForRendering(
-                        container: ViewGroup,
-                        campaign: Campaign,
-                    ): ViewGroup =
-                        LayoutMintegralNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                            populateNativeAdView(campaign)
-                        }.root
+                MintegralRenderer.delegate = MintegralRenderer.Delegate { container, campaign ->
+                    LayoutMintegralNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                        populateNativeAdView(campaign)
+                    }.root
                 }
-                adManager.showAd(
-                    request = NimbusRequest.forNativeAd(item, includeVideo = true).apply {
-                        companionAds = emptyArray()
-                        removeOtherDemandIds()
-                        withMintegral(
-                            adUnitId = BuildConfig.MINTEGRAL_NATIVE_ADUNIT,
-                            placementId = BuildConfig.MINTEGRAL_NATIVE_PLACEMENT
-                        )
-                    },
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    ads += Nimbus.nativeAd(position = item, size = Format.MREC)
+                        .onEvent {
+                            logger.onAdEvent(it)
+                        }.onError {
+                            logger.onError(it)
+                        }.show(adFrame).also {
+                            it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                                height = WRAP_CONTENT
+                            }
+                        }
+                }
             }
         }
     }.root
@@ -139,7 +119,7 @@ class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
     override fun onDestroyView() {
         super.onDestroyView()
         RequestManager.interceptors.remove(this)
-        controllers.forEach { it.destroy() }
+        ads.forEach { it.destroy() }
     }
 
     override fun modifyRequest(request: NimbusRequest) {

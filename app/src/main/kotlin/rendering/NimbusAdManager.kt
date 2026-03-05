@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.internal.ThirdPartyDemandNetwork
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ class AdManagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        ThirdPartyDemandNetwork.entries.toggleDemand(false)
+        disableAllExtensions()
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
@@ -186,10 +185,11 @@ class AdManagerFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        ThirdPartyDemandNetwork.entries.toggleDemand(true)
     }
+}
 
-    fun List<ThirdPartyDemandNetwork>.toggleDemand(enabled: Boolean) {
-        forEach { Nimbus.toggleDemand(enabled, it) }
-    }
+/** This is necessary in the sample app to prevent samples returning ads from other demand networks,
+ * production apps should not need to implement something similar */
+fun disableAllExtensions() {
+    Nimbus.extensions.forEach { it.enabled = false }
 }

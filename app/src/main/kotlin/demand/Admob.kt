@@ -3,118 +3,101 @@ package com.adsbynimbus.android.sample.demand
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.*
-import com.adsbynimbus.openrtb.enumerations.Position
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.AdMobRenderer
 import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
+import kotlinx.coroutines.launch
 
-class AdmobFragment : Fragment(), NimbusRequest.Interceptor {
+class AdmobFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    val controllers = mutableListOf<AdController>()
+    val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        when (val item = requireArguments().getString("item")) {
-            "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withAdMobBanner(BuildConfig.ADMOB_BANNER)
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.MREC, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withAdMobBanner(BuildConfig.ADMOB_BANNER)
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Interstitial" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    removeOtherDemandIds()
-                    withAdMobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
-                },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Rewarded" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(item).apply {
-                    companionAds = emptyArray()
-                    removeOtherDemandIds()
-                    withAdMobRewarded(BuildConfig.ADMOB_REWARDED)
-                },
-                activity = requireActivity(),
-                closeButtonDelaySeconds = 60,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Native" -> {
-                AdMobRenderer.delegate = object : AdMobRenderer.Delegate {
-                    override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View {
-                        return GoogleNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                            populateNativeAdView(nativeAd, this)
-                        }.root
+        disableAllExtensions()
+        Nimbus.extensions<AdMobExtension>()?.enabled = true
+        val item = requireArguments().getString("item") ?: ""
+        val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
+        when (item) {
+            "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.bannerAd(item, Format.BANNER_320_50) {
+                    demand {
+                        admobBanner(BuildConfig.ADMOB_BANNER)
                     }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
+            "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.bannerAd(item, Format.MREC) {
+                    demand {
+                        admobBanner(BuildConfig.ADMOB_BANNER)
+                    }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
+            "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.interstitialAd(item) {
+                    demand {
+                        adMobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
+                    }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(this@AdmobFragment)
+            }
+            "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.rewardedAd(item) {
+                    demand {
+                        adMobRewarded(BuildConfig.ADMOB_REWARDED)
+                    }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(this@AdmobFragment)
+            }
+            "Native" -> {
+                Nimbus.extensions<AdMobExtension>()?.delegate = AdMobExtension.Delegate { container, nativeAd ->
+                    GoogleNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                        populateNativeAdView(nativeAd, this)
+                    }.root
                 }
-                adManager.showAd(
-                    request = NimbusRequest.forNativeAd(item).apply {
-                        companionAds = emptyArray()
-                        removeOtherDemandIds()
-                        withAdMobNative(BuildConfig.ADMOB_NATIVE)
-                    },
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    ads += Nimbus.nativeAd(item) {
+                        demand {
+                            adMobNative(BuildConfig.ADMOB_NATIVE)
+                        }
+                    }.onEvent {
+                        screenLogger.onAdEvent(it)
+                    }.onError {
+                        screenLogger.onError(it)
+                    }.show(adFrame)
+                }
             }
         }
     }.root
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
-        controllers.forEach { it.destroy() }
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
+        ads.forEach { it.destroy() }
+        Nimbus.extensions<AdMobExtension>()?.delegate = null
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: GoogleNativeAdBinding) {
@@ -191,17 +174,5 @@ class AdmobFragment : Fragment(), NimbusRequest.Interceptor {
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         nativeAdView.setNativeAd(nativeAd)
-    }
-}
-
-fun NimbusRequest.removeOtherDemandIds() = also {
-    interceptors.add { request ->
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-            mfx_buyerdata = null
-        }
     }
 }

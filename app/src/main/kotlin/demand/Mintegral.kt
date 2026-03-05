@@ -11,16 +11,15 @@ import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutMintegralNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.MintegralRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.MintegralExtension
 import com.mbridge.msdk.out.Campaign
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
+class MintegralFragment  : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
@@ -29,6 +28,9 @@ class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        disableAllExtensions()
+        Nimbus.extensions<MintegralExtension>()?.enabled = true
+
         when (val item = requireArguments().getString("item")) {
             "Banner"  -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
@@ -77,7 +79,7 @@ class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
                 }.show(this@MintegralFragment, closeButtonDelay = 10.seconds)
             }
             "Native" -> {
-                MintegralRenderer.delegate = MintegralRenderer.Delegate { container, campaign ->
+                Nimbus.extensions<MintegralExtension>()?.delegate = MintegralExtension.Delegate { container, campaign ->
                     LayoutMintegralNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(campaign)
                     }.root
@@ -118,16 +120,7 @@ class MintegralFragment  : Fragment(), NimbusRequest.Interceptor {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
         ads.forEach { it.destroy() }
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
+        Nimbus.extensions<MintegralExtension>()?.delegate = null
     }
 }

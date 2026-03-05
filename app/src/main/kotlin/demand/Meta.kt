@@ -8,8 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.request.FANDemandProvider
+import com.adsbynimbus.request.MetaExtension
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSettings.TestAdType
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
  * @see appIdFromMetaPlacementId
  */
 fun Context.initializeMetaAudienceNetwork(appId: String) {
-    FANDemandProvider.initialize(this, appId)
+    MetaExtension.initialize(this, appId)
     //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
 }
 
@@ -45,6 +46,8 @@ class MetaFragment : Fragment() {
 
         // Enabling Meta Ads test mode. Must not be set `true` in production.
         AdSettings.setTestMode(true)
+        disableAllExtensions()
+        Nimbus.extensions<MetaExtension>()?.enabled = true
 
         when (val item = requireArguments().getString("item")) {
             "Meta Banner" -> viewLifecycleOwner.lifecycleScope.launch {

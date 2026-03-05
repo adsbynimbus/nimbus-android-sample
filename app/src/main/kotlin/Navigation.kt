@@ -87,8 +87,7 @@ val screens = mutableMapOf(
             "Vungle MREC",
             "Vungle Interstitial",
             "Vungle Rewarded",
-            "Vungle Native Banner",
-            "Vungle Native Video",
+            "Vungle Native",
         )),
     )
 )

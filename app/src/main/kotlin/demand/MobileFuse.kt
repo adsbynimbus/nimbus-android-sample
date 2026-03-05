@@ -1,110 +1,87 @@
 @file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.TOP
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.android.sample.BuildConfig.MOBILE_FUSE_BANNER
-import com.adsbynimbus.android.sample.BuildConfig.MOBILE_FUSE_INTERSTITIAL
-import com.adsbynimbus.android.sample.BuildConfig.MOBILE_FUSE_MREC
-import com.adsbynimbus.android.sample.BuildConfig.MOBILE_FUSE_REWARDED
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
+import com.adsbynimbus.android.sample.BuildConfig.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.align
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.MobileFuseExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
-class MobileFuseFragment : Fragment(), NimbusRequest.Interceptor {
+class MobileFuseFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    val controllers = mutableListOf<AdController>()
+    val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        RequestManager.interceptors.add(this@MobileFuseFragment)
+        disableAllExtensions()
+        Nimbus.extensions<MobileFuseExtension>()?.enabled = true
+
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50, Position.HEADER),
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Banner With Refresh" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50, Position.HEADER),
-                viewGroup = adFrame,
-                refreshInterval = 30,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
+            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50)
+            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50, refreshable = true)
+            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, Format.BANNER_320_50)
+            "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                Nimbus.interstitialAd(MOBILE_FUSE_INTERSTITIAL) {
+                    banner(size = Format.INTERSTITIAL_PORT)
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
                 }
-            )
-            "MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(MOBILE_FUSE_MREC, Format.MREC, Position.HEADER),
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "Interstitial" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(MOBILE_FUSE_INTERSTITIAL).apply {
-                    request.imp[0].video = null
-                },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-            "Rewarded" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(MOBILE_FUSE_REWARDED).apply {
-                    companionAds = emptyArray()
-                },
-                activity = requireActivity(),
-                closeButtonDelaySeconds = 60,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
+            }
+            "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                Nimbus.rewardedAd(MOBILE_FUSE_REWARDED).onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }
+            }
         }
     }.root
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        RequestManager.interceptors.remove(this)
-        controllers.forEach { it.destroy() }
+    private fun LayoutInlineAdBinding.showBannerAd(item: String, size: Format, refreshable: Boolean = false) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val logger = ScreenAdLogger(identifier = item, logView = logs)
+            ads += Nimbus.bannerAd(
+                position = item,
+                size = size,
+                adPosition = Position.HEADER,
+                refreshInterval = if (refreshable) 30 else 0,
+            ).onEvent {
+                logger.onAdEvent(it)
+            }.onError {
+                logger.onError(it)
+            }.show(adFrame).also {
+                it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                    gravity = TOP or CENTER_HORIZONTAL
+                    height = WRAP_CONTENT
+                }
+            }
+        }
     }
 
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ads.forEach { it.destroy() }
     }
 }

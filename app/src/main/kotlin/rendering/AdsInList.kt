@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.mockMetaNimbusAdPosition
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
 import kotlinx.coroutines.launch
 
-class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
-
-    val adManager: NimbusAdManager = NimbusAdManager()
+class ScrollingDemoFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +23,7 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
     ): View = RecyclerView(requireContext()).apply {
         adapter = ScrollingAdapter()
         layoutManager = LinearLayoutManager(context)
+        disableAllExtensions()
         setItemViewCacheSize(6)
         addItemDecoration(object : RecyclerView.ItemDecoration() {
             val margin: Int = resources.displayMetrics.heightPixels / 10
@@ -34,24 +31,6 @@ class ScrollingDemoFragment : Fragment(), NimbusRequest.Interceptor {
                 outRect.set(0, margin, 0, margin)
             }
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        RequestManager.interceptors.add(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        RequestManager.interceptors.remove(this)
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.user?.apply {
-            buyeruid = null
-            ext?.unity_buyeruid = null
-            ext?.mfx_buyerdata = null
-        }
     }
 
     class ViewHolder(val view: FrameLayout) : RecyclerView.ViewHolder(view) {

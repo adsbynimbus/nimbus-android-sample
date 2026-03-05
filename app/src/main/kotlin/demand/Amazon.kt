@@ -3,19 +3,23 @@ package com.adsbynimbus.android.sample.demand
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.TOP
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.adsbynimbus.Nimbus
-import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.*
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.request.*
+import com.adsbynimbus.request.APSFetcher
+import com.adsbynimbus.request.aps
 import com.amazon.device.ads.*
 import kotlinx.coroutines.*
-import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -39,62 +43,41 @@ fun Context.initializeAmazonPublisherServices(appKey: String) {
 
 class APSFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    private var adController: AdController? = null
-
-    fun NimbusRequest.removeNonAPSDemand() = apply {
-        interceptors.add(NimbusRequest.Interceptor {
-            request.imp[0].ext.facebook_app_id = ""
-            request.user?.ext = request.user?.ext?.apply {
-                facebook_buyeruid = null
-                unity_buyeruid = null
-                mfx_buyerdata = null
-                vungle_buyeruid = null
-            }
-        })
-    }
+    private var ad: Ad? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        val adapter = LogAdapter().apply { logs.useAsLogger(this) }
+        disableAllExtensions()
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
-                val nimbusRequest = NimbusRequest.forBannerAd(item, Format.BANNER_320_50)
                 val apsRequest = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
 
                 /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
 
-                runCatching { apsRequest.loadAd() }
-                    .onSuccess { apsResponse ->
-                        nimbusRequest.addApsResponse(apsResponse)
-                        /* For refreshing banner requests */
-                        nimbusRequest.addApsLoader(apsResponse.adLoader)
-                    }.onFailure {
-                        /* Add the loader from the AdError for refreshing banners */
-                        if (it is DTBException) nimbusRequest.addApsLoader(it.error.adLoader)
-                        adapter.appendLog("APS Request failed: ${it.message}")
-                    }
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                val params = APSFetcher(apsRequest).fetchAds()
 
-                /* Show a Nimbus refreshing banner attached to the adFrame */
-                adManager.showAd(
-                    request = nimbusRequest.removeNonAPSDemand(),
-                    refreshInterval = 30,
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        adController = controller.apply {
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        }
-                    },
-                )
+                ad = Nimbus.bannerAd(item, Format.BANNER_320_50, refreshInterval = 30) {
+                    demand {
+                        aps(params, setOf(apsRequest))
+                    }
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(adFrame).also {
+                    it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                        gravity = TOP or CENTER_HORIZONTAL
+                        height = WRAP_CONTENT
+                    }
+                }
             }
             "APS Interstitial Hybrid" -> lifecycleScope.launch {
-                val nimbusRequest = NimbusRequest.forInterstitialAd(item)
                 val apsInterstitial = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize.DTBInterstitialAdSize(BuildConfig.APS_STATIC))
                 }
@@ -104,29 +87,25 @@ class APSFragment : Fragment() {
                         resources.displayMetrics.heightPixels, BuildConfig.APS_VIDEO))
                 }
 
-                /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-                listOf(apsInterstitial, apsVideo).loadAll { _, error ->
-                    Timber.w(error, "APS Request failed: ${error.message }")
-                }.forEach { apsResponse -> nimbusRequest.addApsResponse(apsResponse) }
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                val params = APSFetcher(apsInterstitial, apsVideo).fetchAds()
 
-                /* Show a Nimbus Interstitial ad with Display and Video in the same auction */
-                adManager.showBlockingAd(
-                    request = nimbusRequest.removeNonAPSDemand(),
-                    activity = requireActivity(),
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        adController = controller.apply {
-                            /* Replace the following with your own AdController.Listener implementation */
-                            listeners.add(EmptyAdControllerListenerImplementation)
-                        }
+                ad = Nimbus.interstitialAd(item) {
+                    demand {
+                        aps(params, setOf(apsVideo, apsInterstitial))
                     }
-                )
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(from = this@APSFragment)
             }
         }
     }.root
 
     override fun onDestroyView() {
-        adController?.destroy()
-        adController = null
+        ad?.destroy()
+        ad = null
         super.onDestroyView()
     }
 }
@@ -179,9 +158,4 @@ suspend fun Collection<DTBAdRequest>.loadAll(
         }
     }
     inFlightRequests.awaitAll().filterNotNull()
-}
-
-/** Loads Amazon requests in parallel and adds the successful responses to the Nimbus request. */
-suspend inline fun NimbusRequest.addAmazonAds(vararg requests: DTBAdRequest) = apply {
-    requests.toList().loadAll().forEach { addApsResponse(it) }
 }

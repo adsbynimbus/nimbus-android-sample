@@ -15,11 +15,10 @@ import com.adsbynimbus.android.sample.BuildConfig.INMOBI_ACCOUNT_ID
 import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position.HEADER
 import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50
-import com.adsbynimbus.render.InMobiRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.InMobiExtension
 import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
 import com.inmobi.sdk.SdkInitializationListener
@@ -51,7 +50,7 @@ fun initializeInMobi(context: Context, accountId: String) {
     )
 }
 
-class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
+class InMobiFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
@@ -61,6 +60,8 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         initializeInMobi(requireContext(), INMOBI_ACCOUNT_ID)
+        disableAllExtensions()
+        Nimbus.extensions<InMobiExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
@@ -76,17 +77,11 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
                         }
                     }
             }
-
             "Native" -> {
-                InMobiRenderer.delegate = object : InMobiRenderer.Delegate {
-                    override fun customViewForRendering(
-                        container: ViewGroup,
-                        nativeAd: InMobiNative,
-                    ): View {
-                        return InmobiNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                            populateNativeAdView(nativeAd, this)
-                        }.root
-                    }
+                Nimbus.extensions<InMobiExtension>()?.delegate = InMobiExtension.Delegate { container, nativeAd ->
+                    InmobiNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                        populateNativeAdView(nativeAd, this)
+                    }.root
                 }
 
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -104,7 +99,6 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
                         }
                 }
             }
-
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.interstitialAd(position = item) {
@@ -128,18 +122,8 @@ class InMobiFragment : Fragment(), NimbusRequest.Interceptor {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
-        InMobiRenderer.delegate = null
+        Nimbus.extensions<InMobiExtension>()?.delegate = null
         ads.forEach { it.destroy() }
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
     }
 
     private fun populateNativeAdView(nativeAd: InMobiNative, binding: InmobiNativeAdBinding) {

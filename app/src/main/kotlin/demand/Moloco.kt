@@ -15,12 +15,11 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.MolocoNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.MolocoRenderer
 import com.adsbynimbus.render.NimbusMolocoNativeAd
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
+import com.adsbynimbus.request.MolocoExtension
 import com.moloco.sdk.internal.MolocoLogger
 import com.moloco.sdk.publisher.MediationInfo
 import com.moloco.sdk.publisher.Moloco
@@ -44,7 +43,7 @@ fun initializeMoloco(context: Context, appKey: String) {
     }
 }
 
-class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
+class MolocoFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
@@ -54,6 +53,8 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY)
+        disableAllExtensions()
+        Nimbus.extensions<MolocoExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
@@ -102,7 +103,7 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
                 }.show(this@MolocoFragment, closeButtonDelay = 10.seconds)
             }
             "Native" -> {
-                MolocoRenderer.delegate = MolocoRenderer.Delegate { container, nimbusMolocoNativeAd ->
+                Nimbus.extensions<MolocoExtension>()?.delegate = MolocoExtension.Delegate { container, nimbusMolocoNativeAd ->
                     MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(nimbusMolocoNativeAd, this)
                     }.root
@@ -127,17 +128,8 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
         ads.forEach { it.destroy() }
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
+        Nimbus.extensions<MolocoExtension>()?.delegate = null
     }
 
     private fun populateNativeAdView(nativeAd: NimbusMolocoNativeAd, binding: MolocoNativeAdBinding) = with(nativeAd) {

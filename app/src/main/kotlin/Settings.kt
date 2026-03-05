@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.NimbusAdManager
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -39,14 +38,16 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
             "test_mode" -> getBoolean(it, false).let { enabled ->
                 Nimbus.testMode = enabled
                 if (!enabled) {
-                    disableTradedeskId()
+                    // TODO replace when reworking extended ids
+//                    disableTradedeskId()
                     edit { putBoolean("send_tradedesk_id", false) }
                 }
             }
             "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
-                if (enabled && Nimbus.testMode)
-                    NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
-                else disableTradedeskId()
+                if (enabled && Nimbus.testMode) {}
+                    // TODO replace when reworking extended ids
+//                    NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
+//                else disableTradedeskId()
             }
             "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
@@ -57,7 +58,5 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
         }
     }
 }
-
-private fun disableTradedeskId() = NimbusAdManager.extendedIds.removeAll { eid -> eid.source == "tradedesk.com" }
 
 val SharedPreferences.forceAdRequestError get() = getBoolean("force_no_fill", false)

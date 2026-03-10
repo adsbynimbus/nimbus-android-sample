@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
-import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.nimbus.R
 import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
@@ -15,14 +14,15 @@ import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.TextViewHolder
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
 import com.adsbynimbus.render.*
+import com.adsbynimbus.request.NimbusResponse
 import java.util.concurrent.CopyOnWriteArrayList
 
 /** A Debug description of the Nimbus Response used for UI testing */
-inline val NimbusAd.testDescription
-    get() = "$network $type" + if (width != 0 && height != 0) " ${width}x${height}" else ""
+inline val NimbusResponse.testDescription
+    get() = "${bid.ext.openMarket?.buyer ?: "none"} ${bid.mtype}" + if (bid.w != 0 && bid.h != 0) " ${bid.w}x${bid.h}" else ""
 
 /** Sets debug information on the AdController for use with UI testing */
-fun AdController.setTestDescription(response: NimbusAd?) {
+fun AdController.setTestDescription(response: NimbusResponse?) {
     view?.apply {
         if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
         contentDescription = response?.testDescription
@@ -48,22 +48,6 @@ class ScreenAdLogger(
     }
 }
 
-class OnScreenLogger(val adapter: LogAdapter, var response: NimbusAd? = null, val identifier: String? = null) :
-    AdController.Listener {
-    private var hasLoggedRendered = false
-    override fun onAdEvent(adEvent: AdEvent) {
-        if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
-            adapter.appendLog("Rendered: ${response?.testDescription}")
-            hasLoggedRendered = true
-        }
-        adapter.appendLog("${identifier ?: "Event"}: ${adEvent.name}")
-    }
-
-    override fun onError(error: NimbusError) {
-        adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
-    }
-}
-
 fun Context.showPropertyMissingDialog(property: String) {
     AlertDialog.Builder(this).setCancelable(false).create().apply {
         setView(CustomDialogBinding.inflate(LayoutInflater.from(context)).apply {
@@ -73,16 +57,10 @@ fun Context.showPropertyMissingDialog(property: String) {
     }.show()
 }
 
-object EmptyAdControllerListenerImplementation : AdController.Listener {
-    override fun onAdEvent(adEvent: AdEvent) {}
-
-    override fun onError(error: NimbusError) {}
-}
-
 object UiTestInterceptor : Interceptor {
-    override fun modifyAd(ad: NimbusAd): NimbusAd = ad
+    override fun modifyAd(ad: NimbusResponse): NimbusResponse = ad
 
-    override fun modifyController(ad: NimbusAd, controller: AdController): AdController =
+    override fun modifyController(ad: NimbusResponse, controller: AdController): AdController =
         controller.apply {
             controller.setTestDescription(ad)
         }

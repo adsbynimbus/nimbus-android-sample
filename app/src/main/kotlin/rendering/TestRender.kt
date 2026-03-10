@@ -4,12 +4,11 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAd
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
-import com.adsbynimbus.openrtb.response.MarkupType
 import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
+import com.adsbynimbus.request.*
 
 class TestRenderFragment : Fragment() {
 
@@ -32,15 +31,9 @@ class TestRenderFragment : Fragment() {
 
             val type = if (vastRegex.containsMatchIn(markup)) MarkupType.VIDEO else MarkupType.BANNER
 
-            requireContext().loadBlockingAd(object : NimbusAd {
-                override val type = type
-
-                override val network: String = "test_render"
-
-                override val markup: String = markupText.text.toString().unescape()
-
-                override val companionAds: Array<CompanionAd> = arrayOf(CompanionAd.end(320, 480))
-            }, isRewarded = false)?.start()
+            val companions = arrayOf(CompanionAd.end(320, 480))
+            requireContext().loadBlockingAd(nimbusResponseFrom(type, markup.toString(), companions), isRewarded = false)
+                ?.start()
         }
     }.root
 
@@ -58,3 +51,28 @@ class TestRenderFragment : Fragment() {
         .replace("""\ """, "")
         .trim()
 }
+
+fun nimbusResponseFrom(
+    type: MarkupType = MarkupType.BANNER,
+    markup: String,
+    companions: Array<CompanionAd>? = null,
+    width: Int = 0,
+    height: Int = 0,
+): NimbusResponse =
+    NimbusResponse(
+        "test",
+        listOf(
+            SeatBid(
+                listOf(
+                    Bid(
+                        mtype = type,
+                        adm = markup,
+                        w = width,
+                        h = height,
+                    ),
+                ),
+            ),
+        ),
+    ).apply {
+        companionAds = companions
+    }

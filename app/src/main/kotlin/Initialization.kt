@@ -5,7 +5,6 @@ import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
-import com.adsbynimbus.nimbus.Configuration
 import com.adsbynimbus.render.Renderer
 import timber.log.Timber
 
@@ -63,9 +62,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             The following line of code demonstrates how to change the endpoint the SDK points to
             for advanced use cases such as using a proxy server.
         */
-        Nimbus.configuration = Configuration(
-            requestUrl = "https://${BuildConfig.PUBLISHER_KEY}.adsbynimbus.com/rta/test"
-        )
+        Nimbus.configuration.requestUrl = "https://${BuildConfig.PUBLISHER_KEY}.adsbynimbus.com/rta/test"
 
         Renderer.interceptors.add(UiTestInterceptor)
     }

@@ -19,7 +19,6 @@ import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.NimbusMolocoNativeAd
-import com.adsbynimbus.request.MolocoExtension
 import com.moloco.sdk.internal.MolocoLogger
 import com.moloco.sdk.publisher.MediationInfo
 import com.moloco.sdk.publisher.Moloco
@@ -103,7 +102,7 @@ class MolocoFragment : Fragment() {
                 }.show(this@MolocoFragment, closeButtonDelay = 10.seconds)
             }
             "Native" -> {
-                Nimbus.extensions<MolocoExtension>()?.delegate = MolocoExtension.Delegate { container, nimbusMolocoNativeAd ->
+                MolocoExtension.nativeAdViewProvider = MolocoExtension.NativeAdViewProvider { container, nimbusMolocoNativeAd ->
                     MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(nimbusMolocoNativeAd, this)
                     }.root
@@ -129,7 +128,7 @@ class MolocoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        Nimbus.extensions<MolocoExtension>()?.delegate = null
+        MolocoExtension.nativeAdViewProvider = null
     }
 
     private fun populateNativeAdView(nativeAd: NimbusMolocoNativeAd, binding: MolocoNativeAdBinding) = with(nativeAd) {

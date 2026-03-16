@@ -14,9 +14,10 @@ import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.MintegralExtension
-import com.mbridge.msdk.out.Campaign
+import com.mbridge.msdk.MBridgeSDK
+import com.mbridge.msdk.out.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 class MintegralFragment  : Fragment() {
@@ -79,7 +80,7 @@ class MintegralFragment  : Fragment() {
                 }.show(this@MintegralFragment, closeButtonDelay = 10.seconds)
             }
             "Native" -> {
-                Nimbus.extensions<MintegralExtension>()?.delegate = MintegralExtension.Delegate { container, campaign ->
+                MintegralExtension.nativeAdViewProvider = MintegralExtension.NativeAdViewProvider { container, campaign ->
                     LayoutMintegralNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(campaign)
                     }.root
@@ -121,6 +122,20 @@ class MintegralFragment  : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        Nimbus.extensions<MintegralExtension>()?.delegate = null
+        MintegralExtension.nativeAdViewProvider = null
+    }
+}
+
+fun initializeMintegral(appId: String, appKey: String) {
+    MBridgeSDKFactory.getMBridgeSDK().takeIf { it.status == MBridgeSDK.PLUGIN_LOAD_STATUS.INITIAL }?.run {
+        initAsync(getMBConfigurationMap(appId, appKey), Nimbus.applicationContext, object : SDKInitStatusListener {
+            override fun onInitFail(p0: String?) {
+                Timber.e("Mintegral SDK failed to initialize")
+            }
+
+            override fun onInitSuccess() {
+                Timber.d("Mintegral SDK initialized")
+            }
+        })
     }
 }

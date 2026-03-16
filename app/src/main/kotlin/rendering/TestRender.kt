@@ -6,7 +6,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
-import com.adsbynimbus.render.CompanionAd
 import com.adsbynimbus.render.Renderer.Companion.loadBlockingAd
 import com.adsbynimbus.request.*
 
@@ -31,8 +30,7 @@ class TestRenderFragment : Fragment() {
 
             val type = if (vastRegex.containsMatchIn(markup)) MarkupType.VIDEO else MarkupType.BANNER
 
-            val companions = arrayOf(CompanionAd.end(320, 480))
-            requireContext().loadBlockingAd(nimbusResponseFrom(type, markup.toString(), companions), isRewarded = false)
+            requireContext().loadBlockingAd(nimbusResponseFrom(type, markup.toString()), isRewarded = false)
                 ?.start()
         }
     }.root
@@ -55,7 +53,6 @@ class TestRenderFragment : Fragment() {
 fun nimbusResponseFrom(
     type: MarkupType = MarkupType.BANNER,
     markup: String,
-    companions: Array<CompanionAd>? = null,
     width: Int = 0,
     height: Int = 0,
 ): NimbusResponse =
@@ -73,6 +70,4 @@ fun nimbusResponseFrom(
                 ),
             ),
         ),
-    ).apply {
-        companionAds = companions
-    }
+    )

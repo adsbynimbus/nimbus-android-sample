@@ -10,7 +10,6 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.request.MetaExtension
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSettings.TestAdType
 import kotlinx.coroutines.launch

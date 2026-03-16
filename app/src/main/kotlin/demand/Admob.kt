@@ -11,7 +11,6 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
 
@@ -74,7 +73,7 @@ class AdmobFragment : Fragment() {
                 }.show(this@AdmobFragment)
             }
             "Native" -> {
-                Nimbus.extensions<AdMobExtension>()?.delegate = AdMobExtension.Delegate { container, nativeAd ->
+                AdMobExtension.nativeAdViewProvider = AdMobExtension.NativeAdViewProvider { container, nativeAd ->
                     GoogleNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(nativeAd, this)
                     }.root
@@ -97,7 +96,7 @@ class AdmobFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        Nimbus.extensions<AdMobExtension>()?.delegate = null
+        AdMobExtension.nativeAdViewProvider = null
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: GoogleNativeAdBinding) {

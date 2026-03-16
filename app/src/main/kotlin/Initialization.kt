@@ -3,6 +3,8 @@ package com.adsbynimbus.android.sample
 import android.content.Context
 import androidx.startup.Initializer
 import com.adsbynimbus.Nimbus
+import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_ID
+import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_KEY
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
 import com.adsbynimbus.render.Renderer
@@ -47,6 +49,8 @@ class NimbusInitializer : Initializer<Nimbus> {
 
             /* InMobi samples can be found in the Demand Folder*/
             initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
+
+            initializeMintegral(MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
         }
 
         /* The following is used for the sample app only */

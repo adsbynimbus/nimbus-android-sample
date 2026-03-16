@@ -18,7 +18,6 @@ import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position.HEADER
 import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50
-import com.adsbynimbus.request.InMobiExtension
 import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
 import com.inmobi.sdk.SdkInitializationListener
@@ -78,7 +77,7 @@ class InMobiFragment : Fragment() {
                     }
             }
             "Native" -> {
-                Nimbus.extensions<InMobiExtension>()?.delegate = InMobiExtension.Delegate { container, nativeAd ->
+                InMobiExtension.nativeAdViewProvider = InMobiExtension.NativeAdViewProvider { container, nativeAd ->
                     InmobiNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
                         populateNativeAdView(nativeAd, this)
                     }.root
@@ -122,7 +121,7 @@ class InMobiFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Nimbus.extensions<InMobiExtension>()?.delegate = null
+        InMobiExtension.nativeAdViewProvider = null
         ads.forEach { it.destroy() }
     }
 

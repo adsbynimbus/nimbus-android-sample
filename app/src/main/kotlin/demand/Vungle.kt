@@ -12,7 +12,6 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.VungleExtension
 import com.vungle.ads.NativeAd
 import com.vungle.ads.internal.ui.view.MediaView
 import kotlinx.coroutines.launch
@@ -32,7 +31,7 @@ class VungleFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         Nimbus.extensions<VungleExtension>()?.enabled = true
-        Nimbus.extensions<VungleExtension>()?.delegate = NativeRenderingDelegate()
+        VungleExtension.nativeAdViewProvider = NativeRenderingNativeAdViewProvider()
         val item = requireArguments().getString("item") ?: ""
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
@@ -82,11 +81,11 @@ class VungleFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        Nimbus.extensions<VungleExtension>()?.delegate = null
+        VungleExtension.nativeAdViewProvider = null
     }
 }
 
-class NativeRenderingDelegate : VungleExtension.Delegate {
+class NativeRenderingNativeAdViewProvider : VungleExtension.NativeAdViewProvider {
     override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View =
         LayoutInflater.from(container.context)
             .inflate(R.layout.vungle_native_ad, container, false).apply {

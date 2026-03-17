@@ -29,7 +29,7 @@ fun Context.initializeMetaAudienceNetwork(appId: String) {
 fun appIdFromMetaPlacementId(placement: String) = placement.substringBefore("_")
 
 /**
- * This Fragment shows what Facebook ads look like when run through the Nimbus renderer but is not
+ * This Fragment shows what Meta ads look like when run through the Nimbus renderer but is not
  * indicative of normal usage as the Nimbus server determines which ad units to request based on the
  * request sent from the client.
  */

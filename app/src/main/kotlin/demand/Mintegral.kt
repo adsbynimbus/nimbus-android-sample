@@ -14,10 +14,8 @@ import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
-import com.mbridge.msdk.MBridgeSDK
-import com.mbridge.msdk.out.*
+import com.mbridge.msdk.out.Campaign
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 class MintegralFragment  : Fragment() {
@@ -123,19 +121,5 @@ class MintegralFragment  : Fragment() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
         MintegralExtension.nativeAdViewProvider = null
-    }
-}
-
-fun initializeMintegral(appId: String, appKey: String) {
-    MBridgeSDKFactory.getMBridgeSDK().takeIf { it.status == MBridgeSDK.PLUGIN_LOAD_STATUS.INITIAL }?.run {
-        initAsync(getMBConfigurationMap(appId, appKey), Nimbus.applicationContext, object : SDKInitStatusListener {
-            override fun onInitFail(p0: String?) {
-                Timber.e("Mintegral SDK failed to initialize")
-            }
-
-            override fun onInitSuccess() {
-                Timber.d("Mintegral SDK initialized")
-            }
-        })
     }
 }

@@ -2,7 +2,7 @@ package com.adsbynimbus.android.sample
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.adsbynimbus.Nimbus
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_ID
 import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_KEY
 import com.adsbynimbus.android.sample.demand.*
@@ -45,12 +45,12 @@ class NimbusInitializer : Initializer<Nimbus> {
             if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(unityGameId = BuildConfig.UNITY_GAME_ID)
 
             /* Vungle samples can be found in the Demand folder*/
-            initializeVungle(vungleAppId = BuildConfig.VUNGLE_CONFIG_ID)
+            VungleExtension.initialize(appId = BuildConfig.VUNGLE_CONFIG_ID)
 
             /* InMobi samples can be found in the Demand Folder*/
             initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
 
-            initializeMintegral(MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
+            MintegralExtension.initialize(MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
         }
 
         /* The following is used for the sample app only */

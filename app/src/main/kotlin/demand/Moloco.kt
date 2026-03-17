@@ -1,6 +1,5 @@
 package com.adsbynimbus.android.sample.demand
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
@@ -20,25 +19,14 @@ import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.render.NimbusMolocoNativeAd
 import com.moloco.sdk.internal.MolocoLogger
-import com.moloco.sdk.publisher.MediationInfo
 import com.moloco.sdk.publisher.Moloco
-import com.moloco.sdk.publisher.init.MolocoInitParams
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
-fun initializeMoloco(context: Context, appKey: String) {
+fun initializeMoloco(appKey: String) {
     if (!Moloco.isInitialized) {
         MolocoLogger.logEnabled = true
-        Moloco.initialize(
-            MolocoInitParams(
-                appContext = context.applicationContext,
-                appKey = appKey,
-                mediationInfo = MediationInfo("none"),
-            ),
-        ) { result ->
-            Timber.v("Moloco initialized with ${result.initialization} - ${result.description}")
-        }
+        MolocoExtension.initialize(appKey = appKey)
     }
 }
 
@@ -51,7 +39,7 @@ class MolocoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY)
+        initializeMoloco(BuildConfig.MOLOCO_APP_KEY)
         disableAllExtensions()
         Nimbus.extensions<MolocoExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {

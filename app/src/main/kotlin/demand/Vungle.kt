@@ -16,11 +16,6 @@ import com.vungle.ads.NativeAd
 import com.vungle.ads.internal.ui.view.MediaView
 import kotlinx.coroutines.launch
 
-/** Initializes the Vungle SDK and integrates it with the Nimbus SDK. */
-fun initializeVungle(vungleAppId: String) {
-    VungleExtension.initialize(appId = vungleAppId)
-}
-
 class VungleFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()

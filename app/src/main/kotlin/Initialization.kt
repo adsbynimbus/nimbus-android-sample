@@ -45,7 +45,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(unityGameId = BuildConfig.UNITY_GAME_ID)
 
             /* Vungle samples can be found in the Demand folder*/
-            VungleExtension.initialize(appId = BuildConfig.VUNGLE_CONFIG_ID)
+            VungleExtension.initialize(context, appId = BuildConfig.VUNGLE_CONFIG_ID)
 
             /* InMobi samples can be found in the Demand Folder*/
             initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)

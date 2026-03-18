@@ -1,5 +1,6 @@
 package com.adsbynimbus.android.sample.demand
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
@@ -23,10 +24,10 @@ import com.moloco.sdk.publisher.Moloco
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-fun initializeMoloco(appKey: String) {
+fun initializeMoloco(context: Context, appKey: String) {
     if (!Moloco.isInitialized) {
         MolocoLogger.logEnabled = true
-        MolocoExtension.initialize(appKey = appKey)
+        MolocoExtension.initialize(context.applicationContext, appKey = appKey)
     }
 }
 
@@ -39,7 +40,7 @@ class MolocoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        initializeMoloco(BuildConfig.MOLOCO_APP_KEY)
+        initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY)
         disableAllExtensions()
         Nimbus.extensions<MolocoExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {

@@ -7,7 +7,7 @@ import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_ID
 import com.adsbynimbus.android.sample.BuildConfig.MINTEGRAL_APP_KEY
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
-import com.adsbynimbus.render.Renderer
+import com.adsbynimbus.render.internal.Renderer
 import timber.log.Timber
 
 @Suppress("unused")

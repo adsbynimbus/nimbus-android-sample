@@ -13,7 +13,9 @@ import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.TextViewHolder
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
-import com.adsbynimbus.render.*
+import com.adsbynimbus.render.AdController
+import com.adsbynimbus.render.AdEvent
+import com.adsbynimbus.render.internal.Interceptor
 import com.adsbynimbus.request.NimbusResponse
 import java.util.concurrent.CopyOnWriteArrayList
 

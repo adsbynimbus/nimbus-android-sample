@@ -19,9 +19,7 @@ import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.request.APSFetcher
 import com.adsbynimbus.request.aps
 import com.amazon.device.ads.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.launch
 
 /** Demonstrates how to initialize the APS SDK for Nimbus */
 fun Context.initializeAmazonPublisherServices(appKey: String) {
@@ -64,7 +62,7 @@ class APSFragment : Fragment() {
 
                 ad = Nimbus.bannerAd(item, Format.BANNER_320_50, refreshInterval = 30) {
                     demand {
-                        aps(params, setOf(apsRequest))
+                        aps(params, listOf(apsRequest))
                     }
                 }.onEvent {
                     logger.onAdEvent(it)
@@ -92,7 +90,7 @@ class APSFragment : Fragment() {
 
                 ad = Nimbus.interstitialAd(item) {
                     demand {
-                        aps(params, setOf(apsVideo, apsInterstitial))
+                        aps(params, listOf(apsVideo, apsInterstitial))
                     }
                 }.onEvent {
                     logger.onAdEvent(it)
@@ -108,54 +106,4 @@ class APSFragment : Fragment() {
         ad = null
         super.onDestroyView()
     }
-}
-
-/** Wraps an [AdError] response from a [DTBAdCallback] */
-class DTBException(val error: AdError) : Exception() {
-    inline val isNoBid: Boolean get() = error.code == AdError.ErrorCode.NO_FILL
-    inline val isNetworkError: Boolean get() = error.code == AdError.ErrorCode.NETWORK_ERROR
-    inline val isRequestError: Boolean get() = error.code == AdError.ErrorCode.REQUEST_ERROR
-    inline val isUnknownError: Boolean get() = error.code == AdError.ErrorCode.INTERNAL_ERROR
-}
-
-/**
- * A cancellable coroutine that wraps [DTBAdRequest.loadAd].
- *
- * @param ttl The timeout in ms the loadAd call must return by
- * @return A bid from Amazon that can be appended directly to a NimbusRequest
- * @throws DTBException Amazon did not bid or an error occurred during the request
- * @throws TimeoutCancellationException Amazon did not return a response in time
- */
-suspend fun DTBAdRequest.loadAd(ttl: Long = 1500): DTBAdResponse = withTimeout(ttl) {
-    suspendCancellableCoroutine { coroutine ->
-        loadAd(object : DTBAdCallback {
-            override fun onFailure(error: AdError) {
-                coroutine.resumeWithException(DTBException(error))
-            }
-
-            override fun onSuccess(response: DTBAdResponse) {
-                coroutine.resume(response)
-            }
-        })
-    }
-}
-
-/**
- * Loads a collection of Amazon requests in parallel and returns a list of successful responses.
- *
- * @param timeout the timeout in milliseconds each request must return by
- * @param onFailedRequest an optional action called on each request failure or timeout
- */
-suspend fun Collection<DTBAdRequest>.loadAll(
-    timeout: Long = 750,
-    onFailedRequest: (DTBAdRequest, Throwable) -> Unit = { _, _ -> },
-): List<DTBAdResponse> = coroutineScope {
-    val inFlightRequests = map { dtbAdRequest ->
-        async(Dispatchers.IO) {
-            runCatching { dtbAdRequest.loadAd(ttl = timeout) }
-                .onFailure { withContext(Dispatchers.Main) { onFailedRequest(dtbAdRequest, it) } }
-                .getOrNull()
-        }
-    }
-    inFlightRequests.awaitAll().filterNotNull()
 }

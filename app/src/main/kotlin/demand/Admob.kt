@@ -11,6 +11,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
 
@@ -53,7 +54,7 @@ class AdmobFragment : Fragment() {
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.interstitialAd(item) {
                     demand {
-                        adMobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
+                        admobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
                     }
                 }.onEvent {
                     screenLogger.onAdEvent(it)
@@ -64,7 +65,7 @@ class AdmobFragment : Fragment() {
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.rewardedAd(item) {
                     demand {
-                        adMobRewarded(BuildConfig.ADMOB_REWARDED)
+                        admobRewarded(BuildConfig.ADMOB_REWARDED)
                     }
                 }.onEvent {
                     screenLogger.onAdEvent(it)
@@ -81,7 +82,7 @@ class AdmobFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     ads += Nimbus.nativeAd(item) {
                         demand {
-                            adMobNative(BuildConfig.ADMOB_NATIVE)
+                            admobNative(BuildConfig.ADMOB_NATIVE)
                         }
                     }.onEvent {
                         screenLogger.onAdEvent(it)

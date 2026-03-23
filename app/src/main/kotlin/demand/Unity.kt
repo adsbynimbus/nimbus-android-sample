@@ -6,16 +6,16 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
+import com.adsbynimbus.UnityExtension.Companion.initialize
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.request.UnityExtension
 import kotlinx.coroutines.launch
 
 /** Initializes the Unity SDK and integrates it with the Nimbus SDK. */
 fun Context.initializeUnity(unityGameId: String) {
-    UnityExtension.initialize(this, gameId = unityGameId, testMode = Nimbus.testMode)
+    initialize(this, gameId = unityGameId, testMode = Nimbus.testMode)
 }
 
 class UnityFragment : Fragment() {

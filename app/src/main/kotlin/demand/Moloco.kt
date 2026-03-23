@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.seconds
 fun initializeMoloco(context: Context, appKey: String) {
     if (!Moloco.isInitialized) {
         MolocoLogger.logEnabled = true
-        MolocoExtension.initialize(context.applicationContext, appKey = appKey)
+        MolocoExtension.initialize(context, appKey = appKey)
     }
 }
 

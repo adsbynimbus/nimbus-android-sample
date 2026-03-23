@@ -50,7 +50,7 @@ class NimbusInitializer : Initializer<Nimbus> {
             /* InMobi samples can be found in the Demand Folder*/
             initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
 
-            MintegralExtension.initialize(MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
+            MintegralExtension.initialize(context,MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
         }
 
         /* The following is used for the sample app only */

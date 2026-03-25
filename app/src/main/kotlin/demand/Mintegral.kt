@@ -13,7 +13,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutMintegralNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
-import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.AdSize
 import com.mbridge.msdk.out.Campaign
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -33,7 +33,7 @@ class MintegralFragment  : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner"  -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER, adPosition = Position.HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -47,7 +47,7 @@ class MintegralFragment  : Fragment() {
             }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = Format.MREC, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.MREC, adPosition = Position.HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -85,17 +85,18 @@ class MintegralFragment  : Fragment() {
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.nativeAd(position = item, size = Format.MREC)
-                        .onEvent {
-                            logger.onAdEvent(it)
-                        }.onError {
-                            logger.onError(it)
-                        }.show(adFrame).also {
-                            it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
-                                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-                                height = WRAP_CONTENT
-                            }
+                    ads += Nimbus.bannerAd(position = item, size = AdSize.MREC) {
+                        native()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
                         }
+                    }
                 }
             }
         }

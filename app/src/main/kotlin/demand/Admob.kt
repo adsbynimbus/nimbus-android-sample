@@ -10,7 +10,6 @@ import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.request.Format
 import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ class AdmobFragment : Fragment() {
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, Format.BANNER_320_50) {
+                ads += Nimbus.bannerAd(item, AdSize.BANNER) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }
@@ -41,7 +40,7 @@ class AdmobFragment : Fragment() {
                 }.show(adFrame)
             }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, Format.MREC) {
+                ads += Nimbus.bannerAd(item, AdSize.MREC) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }
@@ -80,7 +79,8 @@ class AdmobFragment : Fragment() {
                     }.root
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
-                    ads += Nimbus.nativeAd(item) {
+                    ads += Nimbus.bannerAd(item, size = AdSize.BANNER) {
+                        native()
                         demand {
                             admobNative(BuildConfig.ADMOB_NATIVE)
                         }

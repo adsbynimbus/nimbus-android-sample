@@ -15,9 +15,7 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.request.APSFetcher
-import com.adsbynimbus.request.aps
+import com.adsbynimbus.request.*
 import com.amazon.device.ads.*
 import kotlinx.coroutines.launch
 
@@ -55,12 +53,10 @@ class APSFragment : Fragment() {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
 
-                /* See com.adsbynimbus.android.sample.request.Amazon.kt for implementation */
-
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 val params = APSFetcher(apsRequest).fetchAds()
 
-                ad = Nimbus.bannerAd(item, Format.BANNER_320_50, refreshInterval = 30) {
+                ad = Nimbus.bannerAd(item, AdSize.BANNER, refreshInterval = 30) {
                     demand {
                         aps(params, listOf(apsRequest))
                     }

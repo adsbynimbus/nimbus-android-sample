@@ -16,7 +16,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position.HEADER
-import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50
+import com.adsbynimbus.request.AdSize
 import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class InMobiFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = BANNER_320_50, adPosition = HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER, adPosition = HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -65,17 +65,18 @@ class InMobiFragment : Fragment() {
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.nativeAd(position = item, size = BANNER_320_50)
-                        .onEvent {
-                            logger.onAdEvent(it)
-                        }.onError {
-                            logger.onError(it)
-                        }.show(adFrame).also {
-                            it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
-                                gravity = TOP or CENTER_HORIZONTAL
-                                height = WRAP_CONTENT
-                            }
+                    ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER) {
+                        native()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
                         }
+                    }
                 }
             }
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {

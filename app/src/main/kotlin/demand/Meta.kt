@@ -10,6 +10,7 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
+import com.adsbynimbus.request.AdSize
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSettings.TestAdType
 import kotlinx.coroutines.launch
@@ -55,16 +56,22 @@ class MetaFragment : Fragment() {
                         item,
                         { requireActivity().showPropertyMissingDialog(it) },
                     ),
+                    AdSize.BANNER,
                 ).show(adFrame)
             }
+
             "Meta Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.nativeAd(
+                ads += Nimbus.bannerAd(
                     mockMetaNimbusAdPosition(
                         item,
                         { requireActivity().showPropertyMissingDialog(it) },
                     ),
-                ).show(adFrame)
+                    AdSize.BANNER,
+                ) {
+                    native()
+                }.show(adFrame)
             }
+
             "Meta Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.interstitialAd(
                     mockMetaNimbusAdPosition(
@@ -73,6 +80,7 @@ class MetaFragment : Fragment() {
                     ),
                 ).show(this@MetaFragment)
             }
+
             "Meta Rewarded Video" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.rewardedAd(
                     mockMetaNimbusAdPosition(

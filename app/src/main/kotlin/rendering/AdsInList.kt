@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.mockMetaNimbusAdPosition
-import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.launch
 
 class ScrollingDemoFragment : Fragment() {
@@ -49,17 +49,19 @@ class ScrollingDemoFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             if (holder.ad == null) when (position) {
-                0 -> Nimbus.bannerAd("test_banner_320", Format.BANNER_320_50)
-                1 -> Nimbus.bannerAd("test_banner_300", Format.LETTERBOX)
-                2 -> Nimbus.bannerAd("test_banner_interstitial_port", Format.INTERSTITIAL_PORT)
-                3 -> Nimbus.bannerAd("test_banner_interstitial_land", Format.INTERSTITIAL_LAND,)
+                0 -> Nimbus.bannerAd("test_banner_320", AdSize.BANNER)
+                1 -> Nimbus.bannerAd("test_banner_300", AdSize.MREC)
+                2 -> Nimbus.bannerAd("test_banner_interstitial_port", AdSize.INTERSTITIAL_PORTRAIT)
+                3 -> Nimbus.bannerAd("test_banner_interstitial_land", AdSize.INTERSTITIAL_LANDSCAPE,)
                 4 -> Nimbus.inlineAd("test_video") { video() }
-                else -> Nimbus.nativeAd(
+                else -> Nimbus.bannerAd(
                             mockMetaNimbusAdPosition(
                                 "Meta Native",
                                 { requireActivity().showPropertyMissingDialog(it) },
-                            ),
-                        )
+                            ), AdSize.BANNER,
+                        ) {
+                    native()
+                }
             }.let {
                 viewLifecycleOwner.lifecycleScope.launch {
                     holder.ad = it

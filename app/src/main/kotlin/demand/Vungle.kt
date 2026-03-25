@@ -11,7 +11,7 @@ import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.AdSize
 import com.vungle.ads.NativeAd
 import com.vungle.ads.internal.ui.view.MediaView
 import kotlinx.coroutines.launch
@@ -31,7 +31,7 @@ class VungleFragment : Fragment() {
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
             "Vungle Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, Format.BANNER_320_50).onEvent {
+                ads += Nimbus.bannerAd(item, AdSize.BANNER).onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)
@@ -39,7 +39,7 @@ class VungleFragment : Fragment() {
             }
 
             "Vungle MREC" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, Format.MREC).onEvent {
+                ads += Nimbus.bannerAd(item, AdSize.MREC).onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)
@@ -63,7 +63,9 @@ class VungleFragment : Fragment() {
             }
 
             "Vungle Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.nativeAd(item).onEvent {
+                ads += Nimbus.bannerAd(item, AdSize.BANNER) {
+                    native()
+                }.onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)

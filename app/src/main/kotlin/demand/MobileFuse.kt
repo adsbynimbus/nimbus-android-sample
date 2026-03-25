@@ -17,7 +17,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position
-import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
@@ -34,13 +34,13 @@ class MobileFuseFragment : Fragment() {
         Nimbus.extensions<MobileFuseExtension>()?.enabled = true
 
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50)
-            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, Format.BANNER_320_50, refreshable = true)
-            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, Format.BANNER_320_50)
+            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.BANNER)
+            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.BANNER, refreshable = true)
+            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, AdSize.MREC)
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 Nimbus.interstitialAd(MOBILE_FUSE_INTERSTITIAL) {
-                    banner(size = Format.INTERSTITIAL_PORT)
+                    banner(size = AdSize.interstitial)
                 }.onEvent {
                     logger.onAdEvent(it)
                 }.onError {
@@ -58,7 +58,7 @@ class MobileFuseFragment : Fragment() {
         }
     }.root
 
-    private fun LayoutInlineAdBinding.showBannerAd(item: String, size: Format, refreshable: Boolean = false) {
+    private fun LayoutInlineAdBinding.showBannerAd(item: String, size: AdSize, refreshable: Boolean = false) {
         viewLifecycleOwner.lifecycleScope.launch {
             val logger = ScreenAdLogger(identifier = item, logView = logs)
             ads += Nimbus.bannerAd(

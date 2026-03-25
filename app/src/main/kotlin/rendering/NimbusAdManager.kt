@@ -11,7 +11,7 @@ import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.openrtb.enumerations.Position
-import com.adsbynimbus.openrtb.request.Format
+import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -28,7 +28,7 @@ class AdManagerFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = Format.BANNER_320_50, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER, adPosition = Position.HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -46,7 +46,7 @@ class AdManagerFragment : Fragment() {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
                     ads += Nimbus.bannerAd(
                         position = item,
-                        size = Format.BANNER_320_50,
+                        size = AdSize.BANNER,
                         adPosition = Position.HEADER,
                         refreshInterval = 30,
                     ).onEvent {
@@ -112,7 +112,7 @@ class AdManagerFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
                     ads += Nimbus.fullScreenAd(position = item) {
-                        banner(size = Format.INTERSTITIAL_PORT)
+                        banner(size = AdSize.INTERSTITIAL_PORTRAIT)
                     }.onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -152,7 +152,7 @@ class AdManagerFragment : Fragment() {
 
                         ads += Nimbus.bannerAd(
                             position = "$item Banner",
-                            size = Format.BANNER_320_50,
+                            size = AdSize.BANNER,
                             refreshInterval = 30,
                             adPosition = Position.HEADER,
                         ).onEvent {
@@ -162,7 +162,7 @@ class AdManagerFragment : Fragment() {
                         }.show(adFrameBanner)
 
                         ads += Nimbus.inlineAd(position = "$item Banner", refreshInterval = 30.seconds) {
-                            banner(size = Format.INTERSTITIAL_PORT)
+                            banner(size = AdSize.interstitial)
                         }.onEvent {
                             logger.onAdEvent(it)
                         }.onError {

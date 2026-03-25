@@ -1,6 +1,5 @@
 package com.adsbynimbus.android.sample.demand
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
@@ -20,33 +19,14 @@ import com.adsbynimbus.openrtb.enumerations.Position.HEADER
 import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50
 import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
-import com.inmobi.sdk.SdkInitializationListener
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 
-fun initializeInMobi(context: Context, accountId: String) {
-    if (InMobiSdk.isSDKInitialized()) return
-
+fun initializeInMobi(accountId: String) {
     InMobiSdk.setLogLevel(InMobiSdk.LogLevel.DEBUG)
-    val consentObject = JSONObject()
-    // Provide correct consent value to sdk which is obtained by User
-    consentObject.put(InMobiSdk.IM_GDPR_CONSENT_AVAILABLE, true)
-    // Provide 0 if GDPR is not applicable and 1 if applicable
-    consentObject.put("gdpr", "0")
-    // Provide user consent in IAB format
-//        consentObject.put(InMobiSdk.IM_GDPR_CONSENT_IAB, )
-
-    InMobiSdk.init(
-        context, accountId, consentObject,
-        object : SdkInitializationListener {
-            override fun onInitializationComplete(error: Error?) {
-                Timber.w("InMobi SDK initialized with ${error?.message}")
-            }
-        },
-    )
+    if (InMobiSdk.isSDKInitialized()) return
+    InMobiExtension.initialize(accountId = accountId)
 }
 
 class InMobiFragment : Fragment() {
@@ -58,7 +38,7 @@ class InMobiFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        initializeInMobi(requireContext(), INMOBI_ACCOUNT_ID)
+        initializeInMobi(INMOBI_ACCOUNT_ID)
         disableAllExtensions()
         Nimbus.extensions<InMobiExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {

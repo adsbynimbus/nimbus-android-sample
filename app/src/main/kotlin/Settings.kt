@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
+import com.adsbynimbus.internal.addOrReplace
+import com.adsbynimbus.internal.eid
+import com.adsbynimbus.request.USPrivacyString
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -36,27 +39,31 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
     features.forEach {
         when (it) {
             "test_mode" -> getBoolean(it, false).let { enabled ->
-                Nimbus.testMode = enabled
+                Nimbus.configuration.testMode = enabled
                 if (!enabled) {
-                    // TODO replace when reworking extended ids
-//                    disableTradedeskId()
+                    disableTradedeskId()
                     edit { putBoolean("send_tradedesk_id", false) }
                 }
             }
             "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
-                if (enabled && Nimbus.testMode) {}
-                    // TODO replace when reworking extended ids
-//                    NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
-//                else disableTradedeskId()
+                if (enabled && Nimbus.configuration.testMode) {
+                    Nimbus.addOrReplace(eid(source = "tradedesk.com", ids = setOf("TestUID2Token")))
+                } else disableTradedeskId()
             }
-            "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
+            "coppa_on" -> Nimbus.configuration.coppa = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
                 edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
             }
-            "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
+            "ccpa_consent" -> getBoolean(it, false).let { enabled ->
+                USPrivacyString = "1NYN".takeIf { enabled }
+            }
             "enabled_gpp" -> setGppInSharedPrefs(enabled = getBoolean(it, false))
         }
     }
+}
+
+fun disableTradedeskId() {
+    Nimbus.configuration.extendedIds.removeAll { it.source == "tradedesk.com" }
 }
 
 val SharedPreferences.forceAdRequestError get() = getBoolean("force_no_fill", false)

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 /** Initializes the Unity SDK and integrates it with the Nimbus SDK. */
 fun Context.initializeUnity(unityGameId: String) {
-    initialize(this, gameId = unityGameId, testMode = Nimbus.testMode)
+    initialize(this, gameId = unityGameId, testMode = Nimbus.configuration.testMode)
 }
 
 class UnityFragment : Fragment() {

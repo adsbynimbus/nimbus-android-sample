@@ -14,7 +14,7 @@ import timber.log.Timber
 class NimbusInitializer : Initializer<Nimbus> {
     override fun create(context: Context): Nimbus {
         Nimbus.initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY)
-        Nimbus.testMode = true
+        Nimbus.configuration.testMode = true
 
         /* The Timber.DebugTree proxies all calls to Timber.log to the logcat console */
         Timber.plant(Timber.DebugTree())
@@ -44,17 +44,17 @@ class NimbusInitializer : Initializer<Nimbus> {
             /* Unity samples can be found in the Demand folder */
             if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(unityGameId = BuildConfig.UNITY_GAME_ID)
 
-            /* Vungle samples can be found in the Demand folder*/
+            /* Vungle samples can be found in the Demand folder */
             VungleExtension.initialize(context, appId = BuildConfig.VUNGLE_CONFIG_ID)
 
-            /* InMobi samples can be found in the Demand Folder*/
-            initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
+            /* InMobi samples can be found in the Demand Folder */
+            initializeInMobi(accountId = BuildConfig.INMOBI_ACCOUNT_ID)
 
             MintegralExtension.initialize(context,MINTEGRAL_APP_ID, MINTEGRAL_APP_KEY)
         }
 
         /* The following is used for the sample app only */
-        if (Nimbus.testMode) configureSampleAppForTesting(context)
+        if (Nimbus.configuration.testMode) configureSampleAppForTesting(context)
 
         return Nimbus
     }

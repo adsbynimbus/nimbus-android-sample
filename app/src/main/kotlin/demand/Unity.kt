@@ -32,7 +32,7 @@ class UnityFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Unity Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
-                Nimbus.bannerAd(item, AdSize.BANNER).onEvent {
+                Nimbus.bannerAd(item, AdSize.Banner).onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)

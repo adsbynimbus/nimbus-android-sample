@@ -34,8 +34,8 @@ class MobileFuseFragment : Fragment() {
         Nimbus.extensions<MobileFuseExtension>()?.enabled = true
 
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.BANNER)
-            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.BANNER, refreshable = true)
+            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner)
+            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner, refreshable = true)
             "MREC" -> showBannerAd(MOBILE_FUSE_MREC, AdSize.MREC)
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)

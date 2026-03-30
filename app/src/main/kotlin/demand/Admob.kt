@@ -29,7 +29,7 @@ class AdmobFragment : Fragment() {
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.BANNER) {
+                ads += Nimbus.bannerAd(item, AdSize.Banner) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }
@@ -79,7 +79,7 @@ class AdmobFragment : Fragment() {
                     }.root
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
-                    ads += Nimbus.bannerAd(item, size = AdSize.BANNER) {
+                    ads += Nimbus.bannerAd(item, size = AdSize.Banner) {
                         native()
                         demand {
                             admobNative(BuildConfig.ADMOB_NATIVE)

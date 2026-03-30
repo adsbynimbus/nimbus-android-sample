@@ -44,7 +44,7 @@ class InMobiFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER, adPosition = HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -65,7 +65,7 @@ class InMobiFragment : Fragment() {
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER) {
+                    ads += Nimbus.bannerAd(position = item, size = AdSize.Banner) {
                         native()
                     }.onEvent {
                         logger.onAdEvent(it)

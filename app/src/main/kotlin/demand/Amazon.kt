@@ -56,7 +56,7 @@ class APSFragment : Fragment() {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 val params = APSFetcher(apsRequest).fetchAds()
 
-                ad = Nimbus.bannerAd(item, AdSize.BANNER, refreshInterval = 30) {
+                ad = Nimbus.bannerAd(item, AdSize.Banner, refreshInterval = 30) {
                     demand {
                         aps(params, listOf(apsRequest))
                     }

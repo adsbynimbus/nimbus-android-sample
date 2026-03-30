@@ -56,7 +56,7 @@ class MetaFragment : Fragment() {
                         item,
                         { requireActivity().showPropertyMissingDialog(it) },
                     ),
-                    AdSize.BANNER,
+                    AdSize.Banner,
                 ).show(adFrame)
             }
 
@@ -66,7 +66,7 @@ class MetaFragment : Fragment() {
                         item,
                         { requireActivity().showPropertyMissingDialog(it) },
                     ),
-                    AdSize.BANNER,
+                    AdSize.Banner,
                 ) {
                     native()
                 }.show(adFrame)

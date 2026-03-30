@@ -31,7 +31,7 @@ class VungleFragment : Fragment() {
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
             "Vungle Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.BANNER).onEvent {
+                ads += Nimbus.bannerAd(item, AdSize.Banner).onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)
@@ -63,7 +63,7 @@ class VungleFragment : Fragment() {
             }
 
             "Vungle Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.BANNER) {
+                ads += Nimbus.bannerAd(item, AdSize.Banner) {
                     native()
                 }.onEvent {
                     screenLogger.onAdEvent(it)

@@ -28,7 +28,7 @@ class AdManagerFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.BANNER, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.HEADER)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -46,7 +46,7 @@ class AdManagerFragment : Fragment() {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
                     ads += Nimbus.bannerAd(
                         position = item,
-                        size = AdSize.BANNER,
+                        size = AdSize.Banner,
                         adPosition = Position.HEADER,
                         refreshInterval = 30,
                     ).onEvent {
@@ -112,7 +112,7 @@ class AdManagerFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
                     ads += Nimbus.fullScreenAd(position = item) {
-                        banner(size = AdSize.INTERSTITIAL_PORTRAIT)
+                        banner(size = AdSize.InterstitialPortrait)
                     }.onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -152,7 +152,7 @@ class AdManagerFragment : Fragment() {
 
                         ads += Nimbus.bannerAd(
                             position = "$item Banner",
-                            size = AdSize.BANNER,
+                            size = AdSize.Banner,
                             refreshInterval = 30,
                             adPosition = Position.HEADER,
                         ).onEvent {

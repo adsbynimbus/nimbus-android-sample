@@ -33,7 +33,7 @@ class MintegralFragment  : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner"  -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.Header)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -47,7 +47,7 @@ class MintegralFragment  : Fragment() {
             }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.MREC, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.MREC, adPosition = Position.Header)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {

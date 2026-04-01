@@ -64,7 +64,7 @@ class MobileFuseFragment : Fragment() {
             ads += Nimbus.bannerAd(
                 position = item,
                 size = size,
-                adPosition = Position.HEADER,
+                adPosition = Position.Header,
                 refreshInterval = if (refreshable) 30 else 0,
             ).onEvent {
                 logger.onAdEvent(it)

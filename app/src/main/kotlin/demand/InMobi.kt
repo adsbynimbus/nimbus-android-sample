@@ -15,7 +15,7 @@ import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.enumerations.Position.HEADER
+import com.adsbynimbus.openrtb.enumerations.Position.Header
 import com.adsbynimbus.request.AdSize
 import com.inmobi.ads.InMobiNative
 import com.inmobi.sdk.InMobiSdk
@@ -44,7 +44,7 @@ class InMobiFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Header)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {

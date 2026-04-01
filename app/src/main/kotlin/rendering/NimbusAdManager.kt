@@ -28,7 +28,7 @@ class AdManagerFragment : Fragment() {
         when (val item = requireArguments().getString("item")) {
             "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.HEADER)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.Header)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -47,7 +47,7 @@ class AdManagerFragment : Fragment() {
                     ads += Nimbus.bannerAd(
                         position = item,
                         size = AdSize.Banner,
-                        adPosition = Position.HEADER,
+                        adPosition = Position.Header,
                         refreshInterval = 30,
                     ).onEvent {
                         logger.onAdEvent(it)
@@ -98,7 +98,7 @@ class AdManagerFragment : Fragment() {
                 }
             }
 
-            "Interstitial Hybrid" -> viewLifecycleOwner.lifecycleScope.launch {
+            "Interstitial Hybrid" -> lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.interstitialAd(position = item) {
                     video()
@@ -154,7 +154,7 @@ class AdManagerFragment : Fragment() {
                             position = "$item Banner",
                             size = AdSize.Banner,
                             refreshInterval = 30,
-                            adPosition = Position.HEADER,
+                            adPosition = Position.Header,
                         ).onEvent {
                             logger.onAdEvent(it)
                         }.onError {

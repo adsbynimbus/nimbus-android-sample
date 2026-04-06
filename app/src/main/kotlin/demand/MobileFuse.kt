@@ -32,11 +32,12 @@ class MobileFuseFragment : Fragment() {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         disableAllExtensions()
         Nimbus.extensions<MobileFuseExtension>()?.enabled = true
+        Nimbus.configuration.additionalRequestHeaders["Nimbus-Test-EnableMobileFuseSDK"] = "true"
 
         when (val item = requireArguments().getString("item")) {
             "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner)
             "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner, refreshable = true)
-            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, AdSize.MREC)
+            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, AdSize.Mrec)
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 Nimbus.interstitialAd(MOBILE_FUSE_INTERSTITIAL) {
@@ -82,5 +83,6 @@ class MobileFuseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
+        Nimbus.configuration.additionalRequestHeaders["Nimbus-Test-EnableMobileFuseSDK"] = "false"
     }
 }

@@ -50,7 +50,7 @@ class ScrollingDemoFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             if (holder.ad == null) when (position) {
                 0 -> Nimbus.bannerAd("test_banner_320", AdSize.Banner)
-                1 -> Nimbus.bannerAd("test_banner_300", AdSize.MREC)
+                1 -> Nimbus.bannerAd("test_banner_300", AdSize.Mrec)
                 2 -> Nimbus.bannerAd("test_banner_interstitial_port", AdSize.InterstitialPortrait)
                 3 -> Nimbus.bannerAd("test_banner_interstitial_land", AdSize.InterstitialLandscape,)
                 4 -> Nimbus.inlineAd("test_video") { video() }

@@ -49,16 +49,19 @@ class APSFragment : Fragment() {
         disableAllExtensions()
         when (val item = requireArguments().getString("item")) {
             "APS Banner With Refresh" -> lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+
                 val apsRequest = DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
                     setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
                 }
 
-                val logger = ScreenAdLogger(identifier = item, logView = logs)
                 val params = APSFetcher(apsRequest).fetchAds()
 
                 ad = Nimbus.bannerAd(item, AdSize.Banner, refreshInterval = 30) {
                     demand {
-                        aps(params, listOf(apsRequest))
+                        aps(params, listOf(DTBAdRequest(DTBAdNetworkInfo(DTBAdNetwork.NIMBUS)).apply {
+                            setSizes(DTBAdSize(320, 50, BuildConfig.APS_BANNER))
+                        }))
                     }
                 }.onEvent {
                     logger.onAdEvent(it)

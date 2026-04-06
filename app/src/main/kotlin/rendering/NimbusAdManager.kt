@@ -19,6 +19,10 @@ class AdManagerFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,7 +30,7 @@ class AdManagerFragment : Fragment() {
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         disableAllExtensions()
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+            "Banner" -> lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.Header)
                     .onEvent {

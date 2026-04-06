@@ -10,7 +10,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
-import com.adsbynimbus.android.sample.BuildConfig.INMOBI_ACCOUNT_ID
 import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
@@ -18,16 +17,9 @@ import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.openrtb.enumerations.Position.Header
 import com.adsbynimbus.request.AdSize
 import com.inmobi.ads.InMobiNative
-import com.inmobi.sdk.InMobiSdk
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-
-fun initializeInMobi(accountId: String) {
-    InMobiSdk.setLogLevel(InMobiSdk.LogLevel.DEBUG)
-    if (InMobiSdk.isSDKInitialized()) return
-    InMobiExtension.initialize(accountId = accountId)
-}
 
 class InMobiFragment : Fragment() {
 
@@ -38,7 +30,6 @@ class InMobiFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        initializeInMobi(INMOBI_ACCOUNT_ID)
         disableAllExtensions()
         Nimbus.extensions<InMobiExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {

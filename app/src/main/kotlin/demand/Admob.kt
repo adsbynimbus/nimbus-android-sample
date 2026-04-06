@@ -40,7 +40,7 @@ class AdmobFragment : Fragment() {
                 }.show(adFrame)
             }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.MREC) {
+                ads += Nimbus.bannerAd(item, AdSize.Mrec) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }

@@ -9,8 +9,7 @@ import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
-import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
+import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.request.AdSize
 import com.vungle.ads.NativeAd
 import com.vungle.ads.internal.ui.view.MediaView
@@ -25,6 +24,7 @@ class VungleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
+        disableAllExtensions()
         Nimbus.extensions<VungleExtension>()?.enabled = true
         VungleExtension.nativeAdViewProvider = NativeRenderingNativeAdViewProvider()
         val item = requireArguments().getString("item") ?: ""
@@ -39,7 +39,7 @@ class VungleFragment : Fragment() {
             }
 
             "Vungle MREC" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.MREC).onEvent {
+                ads += Nimbus.bannerAd(item, AdSize.Mrec).onEvent {
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)

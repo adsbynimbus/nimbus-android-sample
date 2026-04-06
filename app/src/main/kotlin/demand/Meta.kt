@@ -1,6 +1,5 @@
 package com.adsbynimbus.android.sample.demand
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -14,17 +13,6 @@ import com.adsbynimbus.request.AdSize
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSettings.TestAdType
 import kotlinx.coroutines.launch
-
-/**
- * Initializes the Meta SDK and integrates it with the Nimbus SDK.
- *
- * @param appId the application id provided by Meta; can be derived from a placement id
- * @see appIdFromMetaPlacementId
- */
-fun Context.initializeMetaAudienceNetwork(appId: String) {
-    MetaExtension.initialize(this, appId)
-    //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
-}
 
 /** Returns the app id derived from a placement id */
 fun appIdFromMetaPlacementId(placement: String) = placement.substringBefore("_")

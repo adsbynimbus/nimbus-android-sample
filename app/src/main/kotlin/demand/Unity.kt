@@ -1,22 +1,15 @@
 package com.adsbynimbus.android.sample.demand
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
-import com.adsbynimbus.UnityExtension.Companion.initialize
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.launch
-
-/** Initializes the Unity SDK and integrates it with the Nimbus SDK. */
-fun Context.initializeUnity(unityGameId: String) {
-    initialize(this, gameId = unityGameId, testMode = Nimbus.configuration.testMode)
-}
 
 class UnityFragment : Fragment() {
 

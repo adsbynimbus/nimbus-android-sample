@@ -60,7 +60,7 @@ class MolocoFragment : Fragment() {
             }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.bannerAd(position = item, size = AdSize.MREC, adPosition = Position.Header)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
                     .onEvent {
                         logger.onAdEvent(it)
                     }.onError {
@@ -98,7 +98,7 @@ class MolocoFragment : Fragment() {
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.bannerAd(position = item, size = AdSize.MREC) {
+                    ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec) {
                         native()
                     }.onEvent {
                         logger.onAdEvent(it)

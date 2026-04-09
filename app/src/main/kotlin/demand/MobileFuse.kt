@@ -16,8 +16,8 @@ import com.adsbynimbus.android.sample.BuildConfig.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.request.AdSize
+import com.adsbynimbus.request.openrtb.enumerations.Position
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 

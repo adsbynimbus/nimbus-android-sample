@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
+import com.adsbynimbus.AdEvent
 import com.adsbynimbus.NimbusError
 import com.adsbynimbus.android.nimbus.R
 import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.TextViewHolder
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
-import com.adsbynimbus.render.AdEvent
 import com.adsbynimbus.render.internal.AdController
 import com.adsbynimbus.render.internal.Interceptor
 import com.adsbynimbus.request.NimbusResponse

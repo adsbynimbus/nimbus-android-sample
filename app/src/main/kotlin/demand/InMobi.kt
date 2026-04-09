@@ -14,8 +14,8 @@ import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.enumerations.Position.Header
 import com.adsbynimbus.request.AdSize
+import com.adsbynimbus.request.openrtb.enumerations.Position.Header
 import com.inmobi.ads.InMobiNative
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds

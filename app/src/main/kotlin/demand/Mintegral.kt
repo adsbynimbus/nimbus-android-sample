@@ -12,8 +12,8 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutMintegralNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.openrtb.enumerations.Position
 import com.adsbynimbus.request.AdSize
+import com.adsbynimbus.request.openrtb.enumerations.Position
 import com.mbridge.msdk.out.Campaign
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds

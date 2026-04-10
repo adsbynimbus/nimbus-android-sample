@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.mockMetaNimbusAdPosition
-import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.launch
 
 class ScrollingDemoFragment : Fragment() {

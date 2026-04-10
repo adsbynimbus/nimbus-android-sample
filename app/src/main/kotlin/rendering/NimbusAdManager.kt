@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.request.AdSize
 import com.adsbynimbus.request.openrtb.enumerations.Position
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -115,7 +114,7 @@ class AdManagerFragment : Fragment() {
             "Interstitial Static" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.fullScreenAd(position = item) {
+                    ads += Nimbus.fullscreenAd(position = item) {
                         banner(size = AdSize.InterstitialPortrait)
                     }.onEvent {
                         logger.onAdEvent(it)
@@ -128,7 +127,7 @@ class AdManagerFragment : Fragment() {
             "Interstitial Video" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.fullScreenAd(position = item) {
+                    ads += Nimbus.fullscreenAd(position = item) {
                         video()
                     }.onEvent {
                         logger.onAdEvent(it)

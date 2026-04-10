@@ -9,7 +9,9 @@ import com.adsbynimbus.Nimbus
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
 import com.adsbynimbus.interstitialAd
-import com.adsbynimbus.request.*
+import com.adsbynimbus.request.Bid
+import com.adsbynimbus.request.NimbusResponse
+import com.adsbynimbus.request.internal.MarkupType
 import kotlinx.coroutines.launch
 
 class TestRenderFragment : Fragment() {
@@ -31,7 +33,7 @@ class TestRenderFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val type = if (vastRegex.containsMatchIn(markup)) MarkupType.VIDEO else MarkupType.BANNER
+            val type = if (vastRegex.containsMatchIn(markup)) MarkupType.Video else MarkupType.Banner
 
             val ad = Nimbus.interstitialAd(nimbusResponseFrom(type, markup.toString()))
             lifecycleScope.launch {
@@ -56,7 +58,7 @@ class TestRenderFragment : Fragment() {
 }
 
 fun nimbusResponseFrom(
-    type: MarkupType = MarkupType.BANNER,
+    type: MarkupType = MarkupType.Banner,
     markup: String,
     width: Int = 0,
     height: Int = 0,
@@ -64,7 +66,7 @@ fun nimbusResponseFrom(
     NimbusResponse(
         "test",
         listOf(
-            SeatBid(
+            Bid.SeatBid(
                 listOf(
                     Bid(
                         mtype = type,

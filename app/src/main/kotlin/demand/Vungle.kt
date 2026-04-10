@@ -10,7 +10,6 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.*
-import com.adsbynimbus.request.AdSize
 import com.vungle.ads.NativeAd
 import com.vungle.ads.internal.ui.view.MediaView
 import kotlinx.coroutines.launch

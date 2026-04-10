@@ -8,7 +8,6 @@ import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.*
-import com.adsbynimbus.request.AdSize
 import kotlinx.coroutines.launch
 
 class UnityFragment : Fragment() {

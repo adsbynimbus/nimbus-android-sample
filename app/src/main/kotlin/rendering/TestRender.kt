@@ -10,8 +10,8 @@ import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
 import com.adsbynimbus.interstitialAd
 import com.adsbynimbus.request.Bid
+import com.adsbynimbus.request.Bid.MarkupType
 import com.adsbynimbus.request.NimbusResponse
-import com.adsbynimbus.request.internal.MarkupType
 import kotlinx.coroutines.launch
 
 class TestRenderFragment : Fragment() {
@@ -66,7 +66,7 @@ fun nimbusResponseFrom(
     NimbusResponse(
         "test",
         listOf(
-            Bid.SeatBid(
+            NimbusResponse.SeatBid(
                 listOf(
                     Bid(
                         mtype = type,

@@ -18,10 +18,6 @@ class AdManagerFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

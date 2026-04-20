@@ -6,6 +6,7 @@ import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
 import androidx.fragment.app.Fragment
+import com.adsbynimbus.Nimbus
 import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.BuildConfig.MOLOCO_BANNER_ADUNITID
@@ -30,7 +31,7 @@ fun initializeMoloco(context: Context, appKey: String) {
             MolocoInitParams(
                 appContext = context.applicationContext,
                 appKey = appKey,
-                mediationInfo = MediationInfo("none")
+                mediationInfo = MediationInfo(Nimbus.sdkName)
             )
         ) { result ->
             Timber.v("Moloco initialized with ${result.initialization} - ${result.description}")

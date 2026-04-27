@@ -38,13 +38,6 @@ jobs:
           path: 'nimbus-android/sample'
           lfs: true
 
-      - name: Checkout Nimbus Android Extensions
-        uses: actions/checkout@v4
-        with:
-          repository: 'adsbynimbus/nimbus-android-extensions'
-          path: 'nimbus-android-extensions'
-          ssh-key: ${{ secrets.EXTENSIONS_DEPLOY_KEY }}
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:

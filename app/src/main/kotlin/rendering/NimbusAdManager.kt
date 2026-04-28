@@ -99,7 +99,7 @@ class AdManagerFragment : Fragment() {
 
             "Interstitial Hybrid" -> lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.interstitialAd(position = item) {
+                Nimbus.interstitialAd(position = item) {
                     video()
                 }.onEvent {
                     logger.onAdEvent(it)
@@ -110,7 +110,7 @@ class AdManagerFragment : Fragment() {
             "Interstitial Static" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.fullscreenAd(position = item) {
+                    Nimbus.fullscreenAd(position = item) {
                         banner(size = AdSize.InterstitialPortrait)
                     }.onEvent {
                         logger.onAdEvent(it)
@@ -123,7 +123,7 @@ class AdManagerFragment : Fragment() {
             "Interstitial Video" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.fullscreenAd(position = item) {
+                    Nimbus.fullscreenAd(position = item) {
                         video()
                     }.onEvent {
                         logger.onAdEvent(it)
@@ -136,7 +136,7 @@ class AdManagerFragment : Fragment() {
             "Rewarded Video" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.rewardedAd(position = item).onEvent {
+                    Nimbus.rewardedAd(position = item).onEvent {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)

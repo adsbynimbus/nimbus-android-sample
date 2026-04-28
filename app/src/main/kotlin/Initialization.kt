@@ -2,6 +2,7 @@ package com.adsbynimbus.android.sample
 
 import android.content.Context
 import androidx.startup.Initializer
+import androidx.work.WorkManagerInitializer
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.appIdFromMetaPlacementId
 import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
@@ -84,7 +85,9 @@ class NimbusInitializer : Initializer<Nimbus> {
         return Nimbus
     }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf(
+        WorkManagerInitializer::class.java,
+    )
 
     private fun configureSampleAppForTesting(context: Context) {
         /*

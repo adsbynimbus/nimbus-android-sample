@@ -30,12 +30,8 @@
         </activity>
 
         <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
-
-        <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="${gamAppId}"/>
+            android:value="${admobAppId}"/>
 
         <provider
             android:name="androidx.startup.InitializationProvider"

@@ -5,16 +5,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
-import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
 import com.facebook.ads.AdSettings
-import com.facebook.ads.AdSettings.TestAdType
 import kotlinx.coroutines.launch
-
-/** Returns the app id derived from a placement id */
-fun appIdFromMetaPlacementId(placement: String) = placement.substringBefore("_")
 
 /**
  * This Fragment shows what Meta ads look like when run through the Nimbus renderer but is not
@@ -38,43 +32,21 @@ class MetaFragment : Fragment() {
 
         when (val item = requireArguments().getString("item")) {
             "Meta Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(
-                    mockMetaNimbusAdPosition(
-                        item,
-                        { requireActivity().showPropertyMissingDialog(it) },
-                    ),
-                    AdSize.Banner,
-                ).show(adFrame)
+                ads += Nimbus.bannerAd(item, AdSize.Banner).show(adFrame)
             }
 
             "Meta Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(
-                    mockMetaNimbusAdPosition(
-                        item,
-                        { requireActivity().showPropertyMissingDialog(it) },
-                    ),
-                    AdSize.Banner,
-                ) {
+                ads += Nimbus.bannerAd(item, AdSize.Banner) {
                     native()
                 }.show(adFrame)
             }
 
             "Meta Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.interstitialAd(
-                    mockMetaNimbusAdPosition(
-                        item,
-                        { requireActivity().showPropertyMissingDialog(it) },
-                    ),
-                ).show(this@MetaFragment)
+                ads += Nimbus.interstitialAd(item).show(this@MetaFragment)
             }
 
             "Meta Rewarded Video" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.rewardedAd(
-                    mockMetaNimbusAdPosition(
-                        item,
-                        { requireActivity().showPropertyMissingDialog(it) },
-                    ),
-                ).show(this@MetaFragment)
+                ads += Nimbus.rewardedAd(item).show(this@MetaFragment)
             }
         }
     }.root
@@ -84,50 +56,3 @@ class MetaFragment : Fragment() {
         ads.forEach { it.destroy() }
     }
 }
-
-val bannerTypes = arrayOf(
-    TestAdType.IMG_16_9_APP_INSTALL,
-    TestAdType.IMG_16_9_LINK,
-)
-val interstitialTypes = bannerTypes + arrayOf(
-    TestAdType.CAROUSEL_IMG_SQUARE_APP_INSTALL,
-    TestAdType.CAROUSEL_IMG_SQUARE_LINK,
-)
-
-val rewardedTypes = arrayOf(
-    TestAdType.VIDEO_HD_16_9_46S_APP_INSTALL,
-    TestAdType.VIDEO_HD_16_9_15S_APP_INSTALL,
-    TestAdType.VIDEO_HD_9_16_39S_APP_INSTALL,
-    TestAdType.PLAYABLE,
-)
-
-val nativeTypes = interstitialTypes
-
-fun mockMetaNimbusAdPosition(type: String, onPropertyMissing: (String) -> Unit) =
-    when (type) {
-        "Meta Native" -> nativeTypes.random().let {
-            it.adTypeString + "#" + if (it in bannerTypes) BuildConfig.FAN_NATIVE_320_ID.also { id ->
-                if (id.isEmpty()) onPropertyMissing("sample_fan_native_320_id")
-            } else BuildConfig.FAN_NATIVE_ID.also { id ->
-                if (id.isEmpty()) onPropertyMissing("sample_fan_native_id")
-            }
-        }
-
-        "Meta Interstitial" -> "${interstitialTypes.random().adTypeString}#${
-            BuildConfig.FAN_INTERSTITIAL_ID.also { id ->
-                if (id.isEmpty()) onPropertyMissing("sample_fan_interstitial_id")
-            }
-        }"
-
-        "Meta Rewarded Video" -> "${rewardedTypes.random().adTypeString}#${
-            BuildConfig.FAN_REWARDED_VIDEO_ID.also { id ->
-                if (id.isEmpty()) onPropertyMissing("sample_fan_rewarded_video_id")
-            }
-        }"
-
-        else -> "${bannerTypes.random().adTypeString}#${
-            BuildConfig.FAN_BANNER_320_ID.also { id ->
-                if (id.isEmpty()) onPropertyMissing("sample_fan_banner_320_id")
-            }
-        }"
-    }

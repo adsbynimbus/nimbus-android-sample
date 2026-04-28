@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adsbynimbus.*
-import com.adsbynimbus.android.sample.demand.mockMetaNimbusAdPosition
 import kotlinx.coroutines.launch
 
 class ScrollingDemoFragment : Fragment() {
@@ -53,12 +52,7 @@ class ScrollingDemoFragment : Fragment() {
                 2 -> Nimbus.bannerAd("test_banner_interstitial_port", AdSize.InterstitialPortrait)
                 3 -> Nimbus.bannerAd("test_banner_interstitial_land", AdSize.InterstitialLandscape,)
                 4 -> Nimbus.inlineAd("test_video") { video() }
-                else -> Nimbus.bannerAd(
-                            mockMetaNimbusAdPosition(
-                                "Meta Native",
-                                { requireActivity().showPropertyMissingDialog(it) },
-                            ), AdSize.Banner,
-                        ) {
+                else -> Nimbus.bannerAd("Meta Native", AdSize.Banner) {
                     native()
                 }
             }.let {

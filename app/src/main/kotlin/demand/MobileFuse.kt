@@ -34,12 +34,12 @@ class MobileFuseFragment : Fragment() {
         Nimbus.configuration.additionalRequestHeaders["Nimbus-Test-EnableMobileFuseSDK"] = "true"
 
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner)
-            "Banner With Refresh" -> showBannerAd(MOBILE_FUSE_BANNER, AdSize.Banner, refreshable = true)
-            "MREC" -> showBannerAd(MOBILE_FUSE_MREC, AdSize.Mrec)
+            "Banner" -> showBannerAd(item, AdSize.Banner)
+            "Banner With Refresh" -> showBannerAd(item, AdSize.Banner, refreshable = true)
+            "MREC" -> showBannerAd(item, AdSize.Mrec)
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                Nimbus.interstitialAd(MOBILE_FUSE_INTERSTITIAL) {
+                Nimbus.interstitialAd(item) {
                     banner(size = AdSize.interstitial)
                 }.onEvent {
                     logger.onAdEvent(it)
@@ -49,7 +49,7 @@ class MobileFuseFragment : Fragment() {
             }
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                Nimbus.rewardedAd(MOBILE_FUSE_REWARDED).onEvent {
+                Nimbus.rewardedAd(item).onEvent {
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)

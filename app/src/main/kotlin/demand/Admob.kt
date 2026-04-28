@@ -14,6 +14,14 @@ import com.adsbynimbus.request.*
 import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
 
+val adMobPlacements = listOf(
+    BuildConfig.ADMOB_BANNER,
+    BuildConfig.ADMOB_NATIVE,
+    BuildConfig.ADMOB_INTERSTITIAL,
+    BuildConfig.ADMOB_REWARDED,
+    BuildConfig.ADMOB_REWARDED_INTERSTITIAL,
+)
+
 class AdmobFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()

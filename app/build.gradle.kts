@@ -58,56 +58,26 @@ kotlin {
 }
 
 androidComponents.onVariants { variant ->
-    val gamAppId = providers.gradleProperty("sample_gam_app_id")
-        .orNull
-        .orEmpty()
-        .ifEmpty { "ca-app-pub-3940256099942544~3347511713" }
-    variant.manifestPlaceholders.put("gamAppId", gamAppId)
-
+    variant.manifestPlaceholders.put("admobAppId", providers.gradleProperty("sample_admob_appid"))
     /* Other keys that can be configured in the sample app */
     listOf(
-            "sample_admob_appid",
-            "sample_admob_banner",
-            "sample_admob_interstitial",
-            "sample_admob_native",
-            "sample_admob_rewarded",
-            "sample_admob_rewarded_interstitial",
-            "sample_aps_app_key",
-            "sample_aps_banner",
-            "sample_aps_static",
-            "sample_aps_video",
-            "sample_fan_native_id",
-            "sample_fan_interstitial_id",
-            "sample_fan_rewarded_video_id",
-            "sample_fan_banner_320_id",
-            "sample_fan_native_320_id",
-            "sample_gam_placement_id",
-            "sample_inmobi_account_id",
-            "sample_inmobi_banner_placement_id",
-            "sample_inmobi_interstitial_placement_id",
-            "sample_inmobi_rewarded_placement_id",
-            "sample_inmobi_native_placement_id",
-            "sample_mintegral_app_id",
-            "sample_mintegral_app_key",
-            "sample_mintegral_banner_placement",
-            "sample_mintegral_banner_adunit",
-            "sample_mintegral_interstitial_placement",
-            "sample_mintegral_interstitial_adunit",
-            "sample_mintegral_native_placement",
-            "sample_mintegral_native_adunit",
-            "sample_mintegral_rewarded_placement",
-            "sample_mintegral_rewarded_adunit",
-            "sample_mobile_fuse_banner",
-            "sample_mobile_fuse_mrec",
-            "sample_mobile_fuse_interstitial",
-            "sample_mobile_fuse_rewarded",
-            "sample_moloco_app_key",
-            "sample_moloco_banner_adunitid",
-            "sample_moloco_interstitial_adunitid",
-            "sample_moloco_rewarded_adunitid",
-            "sample_moloco_native_adunitid",
-            "sample_unity_game_id",
-            "sample_vungle_config_id",
+        "sample_admob_banner",
+        "sample_admob_interstitial",
+        "sample_admob_native",
+        "sample_admob_rewarded",
+        "sample_admob_rewarded_interstitial",
+        "sample_aps_app_key",
+        "sample_aps_banner",
+        "sample_aps_static",
+        "sample_aps_video",
+        "sample_inmobi_account_id",
+        "sample_meta_app_id",
+        "sample_mintegral_app_id",
+        "sample_mintegral_app_key",
+        "sample_moloco_app_key",
+        "sample_unity_game_id",
+        "sample_vungle_config_id",
+        "sample_liveramp_config_id",
     ).forEach {
         variant.buildConfigFields?.put(
             it.substringAfter("sample_").uppercase(),

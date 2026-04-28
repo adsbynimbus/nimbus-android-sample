@@ -2,8 +2,9 @@ package com.adsbynimbus.android.sample
 
 import android.content.Context
 import androidx.startup.Initializer
+import androidx.work.WorkManagerInitializer
 import com.adsbynimbus.*
-import com.adsbynimbus.android.sample.demand.appIdFromMetaPlacementId
+import com.adsbynimbus.android.sample.demand.adMobPlacements
 import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
 import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
 import com.adsbynimbus.render.internal.Renderer
@@ -21,18 +22,11 @@ class NimbusInitializer : Initializer<Nimbus> {
         /* Attaches a logger for SDK events that are sent to Timber */
         Nimbus.addLogger { level, message -> Timber.log(level, message) }
 
-        val metaPlacementIds = listOf(
-            BuildConfig.FAN_NATIVE_ID,
-            BuildConfig.FAN_NATIVE_320_ID,
-            BuildConfig.FAN_BANNER_320_ID,
-            BuildConfig.FAN_INTERSTITIAL_ID,
-        )
-
         Nimbus.initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY) {
             /* Initialize additional Demand SDKs */
 
             /* AdMob samples can be found in the Demand folder */
-            if (BuildConfig.ADMOB_APPID.isNotEmpty()) {
+            if (adMobPlacements.any { it.isNotBlank() }) {
                 AdMobExtension()
             }
 
@@ -48,9 +42,9 @@ class NimbusInitializer : Initializer<Nimbus> {
             }
 
             /* Initializes Meta Audience Network if any of the placement ids have been defined */
-            metaPlacementIds.firstOrNull { it.isNotEmpty() }?.let {
+            if (BuildConfig.META_APP_ID.isNotBlank()) {
                 /* Meta samples can be found in the Demand folder */
-                MetaExtension(metaAppId = appIdFromMetaPlacementId(placement = it))
+                MetaExtension(metaAppId = BuildConfig.META_APP_ID)
                 //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
             }
 
@@ -84,7 +78,9 @@ class NimbusInitializer : Initializer<Nimbus> {
         return Nimbus
     }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf(
+        WorkManagerInitializer::class.java,
+    )
 
     private fun configureSampleAppForTesting(context: Context) {
         /*

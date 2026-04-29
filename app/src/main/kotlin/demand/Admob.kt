@@ -87,7 +87,7 @@ class AdmobFragment : Fragment() {
                     }.root
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
-                    ads += Nimbus.bannerAd(item, size = AdSize.Banner) {
+                    ads += Nimbus.inlineAd(item) {
                         native()
                         demand {
                             admobNative(BuildConfig.ADMOB_NATIVE)

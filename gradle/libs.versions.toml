@@ -1,5 +1,5 @@
 [versions]
-android = "8.13.2"
+android = "9.2.0"
 android-jvm = "17"
 android-sdk-compile = "36"
 android-sdk-min = "23"
@@ -27,7 +27,7 @@ kotlin = "2.3.21"
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.11.0"
 
-nimbus = "2.36.0"
+nimbus = "3.0.0"
 
 okhttp = "5.3.2"
 okio = "3.17.0"

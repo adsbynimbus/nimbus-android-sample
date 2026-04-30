@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.app)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.nimbus.app)
 }
 
@@ -50,9 +49,9 @@ android {
     namespace = "com.adsbynimbus.android.sample"
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
+kotlin.target.compilations.configureEach {
+    compileTaskProvider.configure {
+        compilerOptions.jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
     }
 }
 

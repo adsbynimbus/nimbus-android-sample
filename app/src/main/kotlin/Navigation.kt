@@ -51,7 +51,6 @@ val screens = mutableMapOf(
         )),
         NavigationAdapter(destination = "InMobi", header = "InMobi", items = arrayOf(
             "Banner",
-            "Native",
             "Interstitial",
             "Rewarded",
         )),

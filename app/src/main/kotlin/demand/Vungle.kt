@@ -2,16 +2,14 @@ package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
 import android.view.*
-import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.databinding.VungleNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.*
 import com.vungle.ads.NativeAd
-import com.vungle.ads.internal.ui.view.MediaView
 import kotlinx.coroutines.launch
 
 class VungleFragment : Fragment() {
@@ -83,26 +81,18 @@ class VungleFragment : Fragment() {
 
 class NativeRenderingNativeAdViewProvider : VungleExtension.NativeAdViewProvider {
     override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View =
-        LayoutInflater.from(container.context)
-            .inflate(R.layout.vungle_native_ad, container, false).apply {
-                val nativeAdIcon = findViewById<ImageView>(R.id.native_ad_icon)
-                val nativeAdTitle = findViewById<TextView>(R.id.native_ad_title)
-                val nativeAdMedia = findViewById<MediaView>(R.id.native_ad_media)
-                val rateView = findViewById<TextView>(R.id.rateTV)
-                val nativeAdBody = findViewById<TextView>(R.id.native_ad_body)
-                val sponsoredLabel = findViewById<TextView>(R.id.native_ad_sponsored_label)
-                val nativeAdCallToAction = findViewById<Button>(R.id.native_ad_call_to_action)
-
+        VungleNativeAdBinding.inflate(LayoutInflater.from(container.context), container, false)
+            .apply {
                 nativeAdTitle.text = nativeAd.getAdTitle()
                 nativeAdBody.text = nativeAd.getAdBodyText()
-                nativeAd.getAdStarRating()?.let { rateView.text = it.toString() }
+                nativeAd.getAdStarRating()?.let { rateTV.text = it.toString() }
                 nativeAdCallToAction.visibility =
                     if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
                 nativeAdCallToAction.text = nativeAd.getAdCallToActionText()
-                sponsoredLabel.text = nativeAd.getAdSponsoredText()
+                nativeAdSponsoredLabel.text = nativeAd.getAdSponsoredText()
 
                 nativeAd.registerViewForInteraction(
-                    this as FrameLayout, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction),
+                    this.root, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction),
                 )
-            }
+            }.root
 }

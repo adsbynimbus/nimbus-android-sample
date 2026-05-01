@@ -38,7 +38,7 @@ class ScreenAdLogger(
     val adapter = logView.adapter as? LogAdapter ?: LogAdapter().also { logView.useAsLogger(it) }
     private var hasLoggedRendered = false
     fun onAdEvent(adEvent: AdEvent) {
-        if (!hasLoggedRendered && (adEvent == AdEvent.LOADED || adEvent == AdEvent.IMPRESSION)) {
+        if (!hasLoggedRendered && (adEvent == AdEvent.Loaded || adEvent == AdEvent.Impression)) {
             adapter.appendLog("Rendered: $identifier")
             hasLoggedRendered = true
         }

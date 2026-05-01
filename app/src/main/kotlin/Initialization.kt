@@ -6,8 +6,6 @@ import androidx.work.WorkManagerInitializer
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.adMobPlacements
 import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
-import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
-import com.adsbynimbus.render.internal.Renderer
 import com.inmobi.sdk.InMobiSdk
 import timber.log.Timber
 
@@ -88,7 +86,5 @@ class NimbusInitializer : Initializer<Nimbus> {
             for advanced use cases such as using a proxy server.
         */
         Nimbus.configuration.requestUrl = "https://${BuildConfig.PUBLISHER_KEY}.adsbynimbus.com/rta/test"
-
-        Renderer.interceptors.add(UiTestInterceptor)
     }
 }

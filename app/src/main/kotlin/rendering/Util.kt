@@ -9,27 +9,10 @@ import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import com.adsbynimbus.AdEvent
 import com.adsbynimbus.NimbusError
-import com.adsbynimbus.android.nimbus.R
-import com.adsbynimbus.android.sample.R.id.nimbus_ad_view
 import com.adsbynimbus.android.sample.R.string.custom_dialog_message
 import com.adsbynimbus.android.sample.TextViewHolder
 import com.adsbynimbus.android.sample.databinding.CustomDialogBinding
-import com.adsbynimbus.render.internal.AdController
-import com.adsbynimbus.render.internal.Interceptor
-import com.adsbynimbus.request.NimbusResponse
 import java.util.concurrent.CopyOnWriteArrayList
-
-/** A Debug description of the Nimbus Response used for UI testing */
-inline val NimbusResponse.testDescription
-    get() = "${bid.ext.omp?.buyer ?: "none"} ${bid.mtype}" + if (bid.w != 0 && bid.h != 0) " ${bid.w}x${bid.h}" else ""
-
-/** Sets debug information on the AdController for use with UI testing */
-fun AdController.setTestDescription(response: NimbusResponse?) {
-    view?.apply {
-        if (id != R.id.nimbus_refreshing_controller) id = nimbus_ad_view
-        contentDescription = response?.testDescription
-    }
-}
 
 class ScreenAdLogger(
     val identifier: String,
@@ -57,15 +40,6 @@ fun Context.showPropertyMissingDialog(property: String) {
             button.setOnClickListener { dismiss() }
         }.root)
     }.show()
-}
-
-object UiTestInterceptor : Interceptor {
-    override fun modifyAd(ad: NimbusResponse): NimbusResponse = ad
-
-    override fun modifyController(ad: NimbusResponse, controller: AdController): AdController =
-        controller.apply {
-            controller.setTestDescription(ad)
-        }
 }
 
 class LogAdapter : ListAdapter<String, TextViewHolder>(object : ItemCallback<String>() {

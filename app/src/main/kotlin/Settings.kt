@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.internal.addOrReplace
-import com.adsbynimbus.internal.eid
 import com.adsbynimbus.request.USPrivacyString
+import com.adsbynimbus.request.openrtb.EID
+import com.adsbynimbus.request.openrtb.UID
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -47,7 +47,14 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
             }
             "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
                 if (enabled && Nimbus.configuration.testMode) {
-                    Nimbus.addOrReplace(eid(source = "tradedesk.com", ids = setOf("TestUID2Token")))
+                    Nimbus.configuration.extendedIds.add(
+                        EID(
+                            source = "tradedesk.com",
+                            uids = setOf(UID(
+                                id = "TestUID2Token",
+                            )),
+                        )
+                    )
                 } else disableTradedeskId()
             }
             "coppa_on" -> Nimbus.configuration.coppa = getBoolean(it, false)

@@ -9,6 +9,7 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.VungleNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.*
+import com.adsbynimbus.extension.VungleExtension
 import com.vungle.ads.NativeAd
 import kotlinx.coroutines.launch
 

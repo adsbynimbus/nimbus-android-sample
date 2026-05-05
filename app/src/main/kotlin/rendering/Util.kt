@@ -29,7 +29,7 @@ class ScreenAdLogger(
     }
 
     fun onError(error: NimbusError) {
-        adapter.appendLog("Error: ${error.errorType.name}" + error.message?.let { " - $it" })
+        adapter.appendLog(error.detail)
     }
 }
 

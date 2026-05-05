@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
+import com.adsbynimbus.extension.MetaExtension
 import com.facebook.ads.AdSettings
 import kotlinx.coroutines.launch
 

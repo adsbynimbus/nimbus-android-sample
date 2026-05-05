@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.request.openrtb.enumerations.Position
+import com.adsbynimbus.rtb.Position
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 

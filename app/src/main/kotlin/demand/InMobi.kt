@@ -13,7 +13,8 @@ import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.request.openrtb.enumerations.Position.Header
+import com.adsbynimbus.extension.InMobiExtension
+import com.adsbynimbus.rtb.Position.Header
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 

@@ -127,7 +127,7 @@ var appGraph: NavController.() -> NavGraph = { createGraph(startDestination = "M
 
 class NavigationActivity : AppCompatActivity() {
 
-    inline val inputMethodManager get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inline val inputMethodManager get() = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     inline val title get() = getString(R.string.main_title)
 
     override fun onCreate(savedInstanceState: Bundle?) {

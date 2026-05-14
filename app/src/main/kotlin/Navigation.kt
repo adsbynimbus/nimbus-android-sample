@@ -16,7 +16,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
-import com.adsbynimbus.android.sample.rendering.AdManagerFragment
+import com.adsbynimbus.android.sample.rendering.AdFormatsFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 
 val screens = mutableMapOf(
@@ -111,7 +111,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<SettingsFragment>("Settings") {
         label = context.getString(R.string.settings_subtitle)
     }
-    fragment<AdManagerFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<AdFormatsFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }
     fragment<AdmobFragment>("AdMobGDE/{item}") { argument("item") { type = NavType.StringType } }
     fragment<InMobiFragment>("InMobi/{item}") { argument("item") { type = NavType.StringType } }

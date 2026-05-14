@@ -14,7 +14,7 @@ import com.adsbynimbus.rtb.Position
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class AdManagerFragment : Fragment() {
+class AdFormatsFragment : Fragment() {
 
     val ads = mutableListOf<Ad>()
 
@@ -105,7 +105,7 @@ class AdManagerFragment : Fragment() {
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)
-                }.show(this@AdManagerFragment, closeButtonDelay = 10.seconds)
+                }.show(this@AdFormatsFragment, closeButtonDelay = 10.seconds)
             }
             "Interstitial Static" -> {
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -116,7 +116,7 @@ class AdManagerFragment : Fragment() {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(this@AdManagerFragment)
+                    }.show(this@AdFormatsFragment)
                 }
             }
 
@@ -129,7 +129,7 @@ class AdManagerFragment : Fragment() {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(this@AdManagerFragment)
+                    }.show(this@AdFormatsFragment)
                 }
             }
 
@@ -140,7 +140,7 @@ class AdManagerFragment : Fragment() {
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
-                    }.show(this@AdManagerFragment)
+                    }.show(this@AdFormatsFragment)
                 }
             }
 

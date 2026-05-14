@@ -10,7 +10,7 @@ import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
-import com.adsbynimbus.request.*
+import com.adsbynimbus.extension.AdMobExtension
 import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
 

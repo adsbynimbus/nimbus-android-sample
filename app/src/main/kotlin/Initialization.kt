@@ -6,6 +6,7 @@ import androidx.work.WorkManagerInitializer
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.demand.adMobPlacements
 import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
+import com.adsbynimbus.extension.*
 import com.inmobi.sdk.InMobiSdk
 import timber.log.Timber
 
@@ -18,7 +19,7 @@ class NimbusInitializer : Initializer<Nimbus> {
         Timber.plant(Timber.DebugTree())
 
         /* Attaches a logger for SDK events that are sent to Timber */
-        Nimbus.addLogger { level, message -> Timber.log(level, message) }
+        Nimbus.Logger.add { level, message -> Timber.log(level, message) }
 
         Nimbus.initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY) {
             /* Initialize additional Demand SDKs */
@@ -61,7 +62,10 @@ class NimbusInitializer : Initializer<Nimbus> {
 
             /* Unity samples can be found in the Demand folder */
             if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
-                UnityExtension(gameId = BuildConfig.UNITY_GAME_ID, testMode = Nimbus.configuration.testMode)
+                UnityExtension(
+                    gameId = BuildConfig.UNITY_GAME_ID,
+                    testMode = Nimbus.configuration.testMode
+                )
             }
 
             /* Vungle samples can be found in the Demand folder */

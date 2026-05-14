@@ -8,10 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.Nimbus
 import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutTestBinding
-import com.adsbynimbus.interstitialAd
-import com.adsbynimbus.request.Bid
-import com.adsbynimbus.request.Bid.MarkupType
-import com.adsbynimbus.request.NimbusResponse
+import com.adsbynimbus.NimbusResponse
+import com.adsbynimbus.NimbusResponse.Bid
+import com.adsbynimbus.NimbusResponse.Bid.MarkupType
 import kotlinx.coroutines.launch
 
 class TestRenderFragment : Fragment() {
@@ -62,19 +61,4 @@ fun nimbusResponseFrom(
     markup: String,
     width: Int = 0,
     height: Int = 0,
-): NimbusResponse =
-    NimbusResponse(
-        "test",
-        listOf(
-            NimbusResponse.SeatBid(
-                listOf(
-                    Bid(
-                        mtype = type,
-                        adm = markup,
-                        w = width,
-                        h = height,
-                    ),
-                ),
-            ),
-        ),
-    )
+) = NimbusResponse("test",  Bid(mtype = type, adm = markup, w = width, h = height))

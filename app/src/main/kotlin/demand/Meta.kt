@@ -1,6 +1,7 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -33,21 +34,29 @@ class MetaFragment : Fragment() {
 
         when (val item = requireArguments().getString("item")) {
             "Meta Banner" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.Banner).show(adFrame)
+                ads += Nimbus.bannerAd(item, AdSize.Banner).onEvent {
+                    Log.i("Test3.0", "Event $it")
+                }.show(adFrame)
             }
 
             "Meta Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.Banner) {
+                ads += Nimbus.inlineAd(item) {
                     native()
+                }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                 }.show(adFrame)
             }
 
             "Meta Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.interstitialAd(item).show(this@MetaFragment)
+                Nimbus.interstitialAd(item).onEvent {
+                    Log.i("Test3.0", "Event $it")
+                }.show(this@MetaFragment)
             }
 
             "Meta Rewarded Video" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.rewardedAd(item).show(this@MetaFragment)
+                 Nimbus.rewardedAd(item).onEvent {
+                    Log.i("Test3.0", "Event $it")
+                }.show(this@MetaFragment)
             }
         }
     }.root

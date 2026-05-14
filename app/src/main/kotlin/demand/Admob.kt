@@ -1,6 +1,7 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -42,8 +43,10 @@ class AdmobFragment : Fragment() {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }
                 }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                     screenLogger.onAdEvent(it)
                 }.onError {
+                    Log.i("Test3.0", "Error $it")
                     screenLogger.onError(it)
                 }.show(adFrame)
             }
@@ -53,30 +56,35 @@ class AdmobFragment : Fragment() {
                         admobBanner(BuildConfig.ADMOB_BANNER)
                     }
                 }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                     screenLogger.onAdEvent(it)
                 }.onError {
                     screenLogger.onError(it)
                 }.show(adFrame)
             }
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.interstitialAd(item) {
+                Nimbus.interstitialAd(item) {
                     demand {
                         admobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
                     }
                 }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                     screenLogger.onAdEvent(it)
                 }.onError {
+                    Log.i("Test3.0", "Error $it")
                     screenLogger.onError(it)
                 }.show(this@AdmobFragment)
             }
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.rewardedAd(item) {
+                Nimbus.rewardedAd(item) {
                     demand {
                         admobRewarded(BuildConfig.ADMOB_REWARDED)
                     }
                 }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                     screenLogger.onAdEvent(it)
                 }.onError {
+                    Log.i("Test3.0", "Error $it")
                     screenLogger.onError(it)
                 }.show(this@AdmobFragment)
             }
@@ -93,8 +101,10 @@ class AdmobFragment : Fragment() {
                             admobNative(BuildConfig.ADMOB_NATIVE)
                         }
                     }.onEvent {
+                        Log.i("Test3.0", "Event $it")
                         screenLogger.onAdEvent(it)
                     }.onError {
+                        Log.i("Test3.0", "ERror $it")
                         screenLogger.onError(it)
                     }.show(adFrame)
                 }

@@ -1,6 +1,7 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
@@ -35,6 +36,7 @@ class MintegralFragment  : Fragment() {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.Header)
                     .onEvent {
+                        Log.i("Test3.0", "Event $it")
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
@@ -49,6 +51,7 @@ class MintegralFragment  : Fragment() {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
                     .onEvent {
+                        Log.i("Test3.0", "Event $it")
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
@@ -61,9 +64,8 @@ class MintegralFragment  : Fragment() {
             }
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.interstitialAd(position = item) {
-                    video()
-                }.onEvent {
+                Nimbus.interstitialAd(position = item).onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)
@@ -71,7 +73,8 @@ class MintegralFragment  : Fragment() {
             }
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.rewardedAd(position = item).onEvent {
+                Nimbus.rewardedAd(position = item).onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)
@@ -88,6 +91,7 @@ class MintegralFragment  : Fragment() {
                     ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec) {
                         native()
                     }.onEvent {
+                        Log.i("Test3.0", "Event $it")
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)

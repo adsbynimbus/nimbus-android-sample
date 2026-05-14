@@ -67,5 +67,3 @@ fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
 fun disableTradedeskId() {
     Nimbus.configuration.identity.clear("tradedesk.com")
 }
-
-val SharedPreferences.forceAdRequestError get() = getBoolean("force_no_fill", false)

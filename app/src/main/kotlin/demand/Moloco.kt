@@ -2,6 +2,7 @@ package com.adsbynimbus.android.sample.demand
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
@@ -62,6 +63,7 @@ class MolocoFragment : Fragment() {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
                     .onEvent {
+                        Log.i("Test3.0", "Event $it")
                         logger.onAdEvent(it)
                     }.onError {
                         logger.onError(it)
@@ -74,9 +76,10 @@ class MolocoFragment : Fragment() {
             }
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.interstitialAd(position = item) {
+                Nimbus.interstitialAd(position = item) {
                     video()
                 }.onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)
@@ -84,7 +87,8 @@ class MolocoFragment : Fragment() {
             }
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.rewardedAd(position = item).onEvent {
+                Nimbus.rewardedAd(position = item).onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
                     logger.onError(it)

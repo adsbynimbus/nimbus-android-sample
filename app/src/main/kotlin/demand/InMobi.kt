@@ -1,6 +1,7 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
@@ -34,8 +35,10 @@ class InMobiFragment : Fragment() {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Header)
                     .onEvent {
+                        Log.i("Test3.0", "Event $it")
                         logger.onAdEvent(it)
                     }.onError {
+                        Log.i("Test3.0", "Error $it")
                         logger.onError(it)
                     }.show(adFrame).also {
                         it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
@@ -46,19 +49,21 @@ class InMobiFragment : Fragment() {
             }
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.interstitialAd(position = item) {
-                    video()
-                }.onEvent {
+                Nimbus.interstitialAd(position = item).onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
+                    Log.i("Test3.0", "Error $it")
                     logger.onError(it)
                 }.show(this@InMobiFragment, closeButtonDelay = 10.seconds)
             }
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
-                ads += Nimbus.rewardedAd(position = item).onEvent {
+                Nimbus.rewardedAd(position = item).onEvent {
+                    Log.i("Test3.0", "Event $it")
                     logger.onAdEvent(it)
                 }.onError {
+                    Log.i("Test3.0", "Error $it")
                     logger.onError(it)
                 }.show(this@InMobiFragment, closeButtonDelay = 10.seconds)
             }

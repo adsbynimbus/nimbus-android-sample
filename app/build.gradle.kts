@@ -17,6 +17,40 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
         }
+
+        create("legacy-admob") {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("debug")
+        }
+    }
+
+    applicationVariants.all {
+        if (name != "legacy-admob") {
+            // This is necessary if your project including 3rd party libraries that also include admob dependencies
+            // and might not have migrated to next gen sdk
+            // for details on how to apply this to your project see see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
+            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
+            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
+            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+        }
+    }
+
+    sourceSets {
+        getByName("debug") {
+            java.srcDir("src/admob/kotlin")
+            res.srcDir("src/admob/res")
+        }
+
+        getByName("release") {
+            java.srcDir("src/admob/kotlin")
+            res.srcDir("src/admob/res")
+        }
+
+        getByName("legacy-admob") {
+            java.srcDir("src/legacy-admob/kotlin")
+            res.srcDir("src/legacy-admob/res")
+        }
     }
 
     compileOptions {
@@ -47,27 +81,6 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
-
-    flavorDimensions += "admob-ver"
-
-    productFlavors {
-        create("admob") {
-            dimension = "admob-ver"
-        }
-
-        create("admob-nextgen") {
-            dimension = "admob-ver"
-        }
-    }
-}
-
-configurations.configureEach {
-    if (name.startsWith("admobNextgen")) {
-        // this is required if you are using admob-nextgen, play-service-ads can be called by a transitive dependency
-        // for more info see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
-        exclude(group = "com.google.android.gms", module = "play-services-ads")
-        exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-    }
 }
 
 kotlin.target.compilations.configureEach {
@@ -111,9 +124,9 @@ dependencies {
     api(libs.nimbus)
 
     /* Admob Demand */
-    /* to run this sample make sure to select the flavor admob */
-    "admobApi"(libs.nimbus.admob)
-//    api("com.google.android.gms:play-services-ads:23.+")
+    debugApi(libs.nimbus.admobnextgen)
+    releaseApi(libs.nimbus.admobnextgen)
+//    api("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.+")
 
     /* APS Demand */
     api(libs.nimbus.aps)
@@ -126,10 +139,9 @@ dependencies {
     api(libs.nimbus.meta)
 //    api("com.facebook.android:audience-network-sdk:6.+")
 
-    /* GMA Next Gen SDK Demand */
-    /* to run this sample make sure to select the flavor admob-nextgen */
-    "admob-nextgenApi"(libs.nimbus.admobnextgen)
-//    api("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.+")
+    /* AdMob legacy implementation, run this sample make sure to select the build variant legacy-admob */
+    "legacy-admobApi"(libs.nimbus.admob)
+//    api("com.google.android.gms:play-services-ads:23.+")
 
     api(libs.nimbus.inmobi)
 

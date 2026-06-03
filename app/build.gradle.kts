@@ -49,6 +49,27 @@ android {
     }
 
     namespace = "com.adsbynimbus.android.sample"
+
+    flavorDimensions += "admob-ver"
+
+    productFlavors {
+        create("admob") {
+            dimension = "admob-ver"
+        }
+
+        create("admob-nextgen") {
+            dimension = "admob-ver"
+        }
+    }
+}
+
+configurations.configureEach {
+    if (name.startsWith("admobNextgen")) {
+        // this is required if you are using admob-nextgen, play-service-ads can be called by a transitive dependency
+        // for more info see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
+        exclude(group = "com.google.android.gms", module = "play-services-ads")
+        exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+    }
 }
 
 kotlin {
@@ -63,6 +84,7 @@ androidComponents.onVariants { variant ->
         .orEmpty()
         .ifEmpty { "ca-app-pub-3940256099942544~3347511713" }
     variant.manifestPlaceholders.put("gamAppId", gamAppId)
+    BuildConfigField("String", "GAM_APP_ID", "")
 
     /* Other keys that can be configured in the sample app */
     listOf(
@@ -121,7 +143,8 @@ dependencies {
     api(libs.nimbus)
 
     /* Admob Demand */
-    api(libs.nimbus.admob)
+    /* to run this sample make sure to select the flavor admob */
+    "admobApi"(libs.nimbus.admob)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* APS Demand */
@@ -135,6 +158,11 @@ dependencies {
     /* Google Mediation Adapters and Dynamic Price */
     api(libs.nimbus.google)
 //    api("com.google.android.gms:play-services-ads:23.+")
+
+    /* GMA Next Gen SDK Demand */
+    /* to run this sample make sure to select the flavor admob-nextgen */
+    "admob-nextgenApi"(libs.nimbus.admobnextgen)
+//    api("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.+")
 
     /* Dynamic Adapters for Google/AdMob */
     api(libs.nimbus.googlemediation)

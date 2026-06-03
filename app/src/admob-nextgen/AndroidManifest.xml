@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <!-- Admob next gen requires min SDK 24, overriding here to avoid bumping the sample app minSdk. Not recommended for production apps. -->
+    <uses-sdk tools:overrideLibrary="com.google.android.libraries.ads.mobile.sdk,com.google.android.ads.consent,com.google.android.gms.common,androidx.webkit,org.chromium.net.cronet_fallback,org.chromium.net.httpengine_native_provider,org.chromium.net.cronet_common,org.chromium.net.cronet_api,org.chromium.net.cronet_shared"/>
+</manifest>

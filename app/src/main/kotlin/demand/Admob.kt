@@ -6,12 +6,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.databinding.GoogleNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.extension.AdMobExtension
-import com.google.android.gms.ads.nativead.NativeAd
 import kotlinx.coroutines.launch
 
 val adMobPlacements = listOf(
@@ -47,6 +45,7 @@ class AdmobFragment : Fragment() {
                     screenLogger.onError(it)
                 }.show(adFrame)
             }
+
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Mrec) {
                     demand {
@@ -58,6 +57,7 @@ class AdmobFragment : Fragment() {
                     screenLogger.onError(it)
                 }.show(adFrame)
             }
+
             "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.interstitialAd(item) {
                     demand {
@@ -69,6 +69,7 @@ class AdmobFragment : Fragment() {
                     screenLogger.onError(it)
                 }.show(this@AdmobFragment)
             }
+
             "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.rewardedAd(item) {
                     demand {
@@ -80,24 +81,15 @@ class AdmobFragment : Fragment() {
                     screenLogger.onError(it)
                 }.show(this@AdmobFragment)
             }
+
             "Native" -> {
-                AdMobExtension.nativeAdViewProvider = AdMobExtension.NativeAdViewProvider { container, nativeAd ->
-                    GoogleNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                        populateNativeAdView(nativeAd, this)
-                    }.root
-                }
-                viewLifecycleOwner.lifecycleScope.launch {
-                    ads += Nimbus.inlineAd(item) {
-                        native()
-                        demand {
-                            admobNative(BuildConfig.ADMOB_NATIVE)
-                        }
-                    }.onEvent {
-                        screenLogger.onAdEvent(it)
-                    }.onError {
-                        screenLogger.onError(it)
-                    }.show(adFrame)
-                }
+                // implementation for AdMob native differs slightly whether using admob or admob-nextgen,
+                // see files on other build flavors for details on implementation
+                AdMobNative.show(
+                    adFrame = adFrame,
+                    logs = logs,
+                    item = item,
+                )
             }
         }
     }.root
@@ -105,82 +97,5 @@ class AdmobFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
-        AdMobExtension.nativeAdViewProvider = null
-    }
-
-    private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: GoogleNativeAdBinding) {
-        val nativeAdView = unifiedAdBinding.root
-
-        // Set the media view.
-        nativeAdView.mediaView = unifiedAdBinding.adMedia
-
-        // Set other ad assets.
-        nativeAdView.headlineView = unifiedAdBinding.adHeadline
-        nativeAdView.bodyView = unifiedAdBinding.adBody
-        nativeAdView.callToActionView = unifiedAdBinding.adCallToAction
-        nativeAdView.iconView = unifiedAdBinding.adAppIcon
-        nativeAdView.priceView = unifiedAdBinding.adPrice
-        nativeAdView.starRatingView = unifiedAdBinding.adStars
-        nativeAdView.storeView = unifiedAdBinding.adStore
-        nativeAdView.advertiserView = unifiedAdBinding.adAdvertiser
-
-        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
-        unifiedAdBinding.adHeadline.text = nativeAd.headline
-        nativeAd.mediaContent?.let { unifiedAdBinding.adMedia.mediaContent = it }
-
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
-        if (nativeAd.body == null) {
-            unifiedAdBinding.adBody.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adBody.visibility = View.VISIBLE
-            unifiedAdBinding.adBody.text = nativeAd.body
-        }
-
-        if (nativeAd.callToAction == null) {
-            unifiedAdBinding.adCallToAction.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adCallToAction.visibility = View.VISIBLE
-            unifiedAdBinding.adCallToAction.text = nativeAd.callToAction
-        }
-
-        if (nativeAd.icon == null) {
-            unifiedAdBinding.adAppIcon.visibility = View.GONE
-        } else {
-            unifiedAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
-            unifiedAdBinding.adAppIcon.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.price == null) {
-            unifiedAdBinding.adPrice.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adPrice.visibility = View.VISIBLE
-            unifiedAdBinding.adPrice.text = nativeAd.price
-        }
-
-        if (nativeAd.store == null) {
-            unifiedAdBinding.adStore.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adStore.visibility = View.VISIBLE
-            unifiedAdBinding.adStore.text = nativeAd.store
-        }
-
-        if (nativeAd.starRating == null) {
-            unifiedAdBinding.adStars.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
-            unifiedAdBinding.adStars.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.advertiser == null) {
-            unifiedAdBinding.adAdvertiser.visibility = View.INVISIBLE
-        } else {
-            unifiedAdBinding.adAdvertiser.text = nativeAd.advertiser
-            unifiedAdBinding.adAdvertiser.visibility = View.VISIBLE
-        }
-
-        // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad.
-        nativeAdView.setNativeAd(nativeAd)
     }
 }

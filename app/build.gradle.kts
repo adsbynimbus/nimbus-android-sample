@@ -68,6 +68,7 @@ androidComponents.onVariants { variant ->
         "sample_aps_banner",
         "sample_aps_static",
         "sample_aps_video",
+        "sample_digital_turbine_app_id",
         "sample_inmobi_account_id",
         "sample_meta_app_id",
         "sample_mintegral_app_id",
@@ -95,6 +96,9 @@ dependencies {
     /* APS Demand */
     api(libs.nimbus.aps)
 //    api("com.amazon.android:aps-sdk:9.+")
+
+    api(libs.nimbus.digitalturbine)
+//    api("com.fyber:marketplace-sdk:8.+")
 
     /* Meta Audience Network Demand */
     api(libs.nimbus.meta)

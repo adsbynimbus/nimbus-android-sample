@@ -3,7 +3,7 @@ package com.adsbynimbus.android.sample
 import android.content.Context
 import androidx.startup.Initializer
 import androidx.work.WorkManagerInitializer
-import com.adsbynimbus.*
+import com.adsbynimbus.Nimbus
 import com.adsbynimbus.android.sample.demand.adMobPlacements
 import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
 import com.adsbynimbus.extension.*
@@ -32,6 +32,10 @@ class NimbusInitializer : Initializer<Nimbus> {
             /* APS samples can be found in the Demand folder */
             if (BuildConfig.APS_APP_KEY.isNotEmpty()) {
                 context.initializeAmazonPublisherServices(appKey = BuildConfig.APS_APP_KEY)
+            }
+
+            if (BuildConfig.DIGITAL_TURBINE_APP_ID.isNotEmpty()) {
+                DigitalTurbineExtension(appId = BuildConfig.DIGITAL_TURBINE_APP_ID)
             }
 
             /* InMobi samples can be found in the Demand Folder */

@@ -49,6 +49,13 @@ val screens = mutableMapOf(
             "APS Banner With Refresh",
             "APS Interstitial Hybrid",
         )),
+        NavigationAdapter(destination = "DigitalTurbine", header = "Digital Turbine", items = arrayOf(
+            "Banner",
+            "MREC",
+            "Interstitial",
+            "Rewarded",
+            "Native",
+        )),
         NavigationAdapter(destination = "InMobi", header = "InMobi", items = arrayOf(
             "Banner",
             "Interstitial",
@@ -114,6 +121,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<AdFormatsFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }
     fragment<AdmobFragment>("AdMobGDE/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<DigitalTurbineFragment>("DigitalTurbine/{item}") { argument("item") { type = NavType.StringType } }
     fragment<InMobiFragment>("InMobi/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MintegralFragment>("Mintegral/{item}") { argument("item") { type = NavType.StringType } }

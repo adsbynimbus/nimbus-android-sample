@@ -63,6 +63,7 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 nimbus = { module = "com.adsbynimbus.android:nimbus", version.ref = "nimbus" }
 nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref = "nimbus" }
+nimbus-admobnextgen = { module = "com.adsbynimbus.android:extension-admobnextgen", version.ref = "nimbus" }
 nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus" }
 nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus" }
 nimbus-google = { module = "com.adsbynimbus.android:extension-google", version.ref = "nimbus" }

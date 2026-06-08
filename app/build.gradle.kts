@@ -28,9 +28,9 @@ android {
 
     applicationVariants.all {
         if (name != "legacy-admob") {
-            // This is necessary if your project including 3rd party libraries that also include admob dependencies
+            // This is necessary if your project includes 3rd party libraries that also include admob dependencies
             // and might not have migrated to next gen sdk
-            // for details on how to apply this to your project see see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
+            // for details on how to apply this to your project see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
             compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
             compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
             runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")

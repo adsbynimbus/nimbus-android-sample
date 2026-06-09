@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-    <!--  overrides minSdk set by moloco sdk to allow us to build with minSdk 21. -->
-    <uses-sdk tools:overrideLibrary="com.moloco.sdk,com.moloco.sdk.acm,com.moloco.sdk.protobuf,com.adsbynimbus.moloco"/>
+    <!--  overrides minSdk set by moloco sdk and admob to allow us to build with minSdk 21. -->
+    <uses-sdk tools:overrideLibrary="com.moloco.sdk,com.moloco.sdk.acm,com.moloco.sdk.protobuf,com.adsbynimbus.moloco,androidx.browser,com.google.android.libraries.ads.mobile.sdk,com.google.android.ads.consent,com.google.android.gms.common,androidx.webkit,org.chromium.net.cronet_fallback,org.chromium.net.httpengine_native_provider,org.chromium.net.cronet_common,org.chromium.net.cronet_api,org.chromium.net.cronet_shared,com.adsbynimbus.admobnextgen"/>
 
     <application
         android:icon="@mipmap/ic_launcher"

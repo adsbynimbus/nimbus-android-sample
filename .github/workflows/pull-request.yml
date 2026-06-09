@@ -11,9 +11,3 @@ jobs:
   sample:
     name: Build Sample App
     uses: ./.github/workflows/build.yml
-
-  internal:
-    name: Build Internal App
-    if: ${{ !startsWith(github.head_ref, 'arch') }}
-    uses: ./.github/workflows/internal.yml
-    secrets: inherit

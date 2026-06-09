@@ -35,6 +35,9 @@ class NimbusInitializer : Initializer<Nimbus> {
 
         /* Initialize additional Demand SDKs */
         with(context) {
+            /* Admob samples can be found in the Demand folder */
+            AdMobInitializer.initialize(this)
+
             /* APS samples can be found in the Demand folder */
             initializeAmazonPublisherServices(appKey = BuildConfig.APS_APP_KEY)
 

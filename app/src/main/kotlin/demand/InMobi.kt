@@ -10,7 +10,6 @@ import com.adsbynimbus.NimbusAdManager
 import com.adsbynimbus.android.sample.BuildConfig.*
 import com.adsbynimbus.android.sample.databinding.InmobiNativeAdBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.mediation.removeOtherDemandIds
 import com.adsbynimbus.android.sample.rendering.*
 import com.adsbynimbus.openrtb.enumerations.Position.HEADER
 import com.adsbynimbus.openrtb.request.Format.Companion.BANNER_320_50

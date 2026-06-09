@@ -19,6 +19,40 @@ android {
         release {
             isMinifyEnabled = true
         }
+
+        create("legacy-admob") {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("debug")
+        }
+    }
+
+    applicationVariants.all {
+        if (name != "legacy-admob") {
+            // This is necessary if your project includes 3rd party libraries that also include admob dependencies
+            // and might not have migrated to next gen sdk
+            // for details on how to apply this to your project see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
+            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
+            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
+            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+        }
+    }
+
+    sourceSets {
+        getByName("debug") {
+            java.srcDir("src/admob/kotlin")
+            res.srcDir("src/admob/res")
+        }
+
+        getByName("release") {
+            java.srcDir("src/admob/kotlin")
+            res.srcDir("src/admob/res")
+        }
+
+        getByName("legacy-admob") {
+            java.srcDir("src/legacy-admob/kotlin")
+            res.srcDir("src/legacy-admob/res")
+        }
     }
 
     compileOptions {
@@ -63,6 +97,7 @@ androidComponents.onVariants { variant ->
         .orEmpty()
         .ifEmpty { "ca-app-pub-3940256099942544~3347511713" }
     variant.manifestPlaceholders.put("gamAppId", gamAppId)
+    BuildConfigField("String", "GAM_APP_ID", "")
 
     /* Other keys that can be configured in the sample app */
     listOf(
@@ -121,8 +156,9 @@ dependencies {
     api(libs.nimbus)
 
     /* Admob Demand */
-    api(libs.nimbus.admob)
-//    api("com.google.android.gms:play-services-ads:23.+")
+    debugApi(libs.nimbus.admobnextgen)
+    releaseApi(libs.nimbus.admobnextgen)
+//    api("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.+")
 
     /* APS Demand */
     api(libs.nimbus.aps)
@@ -134,6 +170,10 @@ dependencies {
 
     /* Google Mediation Adapters and Dynamic Price */
     api(libs.nimbus.google)
+//    api("com.google.android.gms:play-services-ads:23.+")
+
+    /* AdMob legacy implementation, run this sample make sure to select the build variant legacy-admob */
+    "legacy-admobApi"(libs.nimbus.admob)
 //    api("com.google.android.gms:play-services-ads:23.+")
 
     /* Dynamic Adapters for Google/AdMob */

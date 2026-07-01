@@ -34,7 +34,7 @@ class AdmobFragment : Fragment() {
         val item = requireArguments().getString("item") ?: ""
         val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
         when (item) {
-            "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+            "Banner" -> lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Banner) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
@@ -46,7 +46,7 @@ class AdmobFragment : Fragment() {
                 }.show(adFrame)
             }
 
-            "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+            "MREC" -> lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Mrec) {
                     demand {
                         admobBanner(BuildConfig.ADMOB_BANNER)
@@ -58,7 +58,7 @@ class AdmobFragment : Fragment() {
                 }.show(adFrame)
             }
 
-            "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+            "Interstitial" -> lifecycleScope.launch {
                 ads += Nimbus.interstitialAd(item) {
                     demand {
                         admobInterstitial(BuildConfig.ADMOB_INTERSTITIAL)
@@ -70,7 +70,7 @@ class AdmobFragment : Fragment() {
                 }.show(this@AdmobFragment)
             }
 
-            "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+            "Rewarded" -> lifecycleScope.launch {
                 ads += Nimbus.rewardedAd(item) {
                     demand {
                         admobRewarded(BuildConfig.ADMOB_REWARDED)
@@ -89,6 +89,7 @@ class AdmobFragment : Fragment() {
                     adFrame = adFrame,
                     logs = logs,
                     item = item,
+                    scope = lifecycleScope,
                 )
             }
         }
@@ -97,5 +98,6 @@ class AdmobFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
+        AdMobNative.reset()
     }
 }

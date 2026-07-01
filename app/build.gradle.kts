@@ -24,32 +24,20 @@ android {
         }
     }
 
-    applicationVariants.all {
-        if (name != "legacy-admob") {
-            // This is necessary if your project including 3rd party libraries that also include admob dependencies
-            // and might not have migrated to next gen sdk
-            // for details on how to apply this to your project see see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
-            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
-            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
-            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-        }
-    }
-
     sourceSets {
         getByName("debug") {
-            java.srcDir("src/admob/kotlin")
-            res.srcDir("src/admob/res")
+            kotlin.directories.add("src/admob/kotlin")
+            res.directories.add("src/admob/res")
         }
 
         getByName("release") {
-            java.srcDir("src/admob/kotlin")
-            res.srcDir("src/admob/res")
+            kotlin.directories.add("src/admob/kotlin")
+            res.directories.add("src/admob/res")
         }
 
         getByName("legacy-admob") {
-            java.srcDir("src/legacy-admob/kotlin")
-            res.srcDir("src/legacy-admob/res")
+            kotlin.directories.add("src/legacy-admob/kotlin")
+            res.directories.add("src/legacy-admob/res")
         }
     }
 
@@ -93,6 +81,7 @@ androidComponents.onVariants { variant ->
     variant.manifestPlaceholders.put("admobAppId", providers.gradleProperty("sample_admob_appid"))
     /* Other keys that can be configured in the sample app */
     listOf(
+        "sample_admob_appid",
         "sample_admob_banner",
         "sample_admob_interstitial",
         "sample_admob_native",
@@ -116,6 +105,13 @@ androidComponents.onVariants { variant ->
             it.substringAfter("sample_").uppercase(),
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
+    }
+
+    if (variant.name != "legacy-admob") {
+        configurations.matching { it.name.startsWith(variant.name) }.configureEach {
+            exclude(group = "com.google.android.gms", module = "play-services-ads")
+            exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+        }
     }
 }
 

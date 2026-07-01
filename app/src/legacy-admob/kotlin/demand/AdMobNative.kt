@@ -2,46 +2,48 @@ package com.adsbynimbus.android.sample.demand
 
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.AdmobNativeAdBinding
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.render.AdMobRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.withAdMobNative
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.extension.AdMobExtension
 import com.google.android.gms.ads.nativead.NativeAd
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * These only differ by the type of AdMob NativeAd class.
  */
 object AdMobNative {
-    fun show(adManager: NimbusAdManager, adFrame: ViewGroup, logs: RecyclerView, item: String) {
-        AdMobRenderer.delegate = object : AdMobRenderer.Delegate {
-            override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View {
-                return AdmobNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                    populateNativeAdView(nativeAd, this)
-                }.root
-            }
+    var ads = mutableListOf<Ad>()
+
+    fun show(adFrame: ViewGroup, logs: RecyclerView, item: String, scope: CoroutineScope) {
+        AdMobExtension.nativeAdViewProvider = AdMobExtension.NativeAdViewProvider { container, nativeAd ->
+            AdmobNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                populateNativeAdView(nativeAd, this)
+            }.root
         }
-        adManager.showAd(
-            request = NimbusRequest.forNativeAd(item).apply {
-                companionAds = emptyArray()
-                removeOtherDemandIds()
-                withAdMobNative(BuildConfig.ADMOB_NATIVE)
-            },
-            viewGroup = adFrame,
-            listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                /* Replace the following with your own AdController.Listener implementation */
-                controller.listeners.add(EmptyAdControllerListenerImplementation)
-            },
-        )
+
+        scope.launch {
+            val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
+            ads += Nimbus.inlineAd(item) {
+                native()
+                demand {
+                    admobNative(BuildConfig.ADMOB_NATIVE)
+                }
+            }.onEvent {
+                screenLogger.onAdEvent(it)
+            }.onError {
+                screenLogger.onError(it)
+            }.show(adFrame)
+        }
     }
 
     fun reset() {
-        AdMobRenderer.delegate = null
+        AdMobExtension.nativeAdViewProvider = null
+        ads.forEach { it.destroy() }
+        ads.clear()
     }
-
 
     private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: AdmobNativeAdBinding) {
         val nativeAdView = unifiedAdBinding.root

@@ -26,7 +26,7 @@ class NimbusInitializer : Initializer<Nimbus> {
 
             /* AdMob samples can be found in the Demand folder */
             if (adMobPlacements.any { it.isNotBlank() }) {
-                AdMobExtension()
+                AdMobExtension(BuildConfig.ADMOB_APPID)
             }
 
             /* APS samples can be found in the Demand folder */

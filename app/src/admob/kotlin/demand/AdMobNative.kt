@@ -7,6 +7,8 @@ import com.adsbynimbus.android.sample.BuildConfig
 import com.adsbynimbus.android.sample.databinding.AdmobNextGenNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.extension.AdMobExtension
+import com.adsbynimbus.request.AdMobNativeAdOptions
+import com.google.android.libraries.ads.mobile.sdk.common.AdChoicesPlacement
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,7 +31,14 @@ object AdMobNative {
             ads += Nimbus.inlineAd(item) {
                 native()
                 demand {
-                    admobNative(BuildConfig.ADMOB_NATIVE)
+                    admobNative(
+                        adUnitId = BuildConfig.ADMOB_NATIVE,
+                        nativeAdOptions = AdMobNativeAdOptions(
+                            disableImageLoading = false,
+                            mediaAspectRatio = NativeAd.NativeMediaAspectRatio.SQUARE,
+                            preferredAdChoicesPosition = AdChoicesPlacement.TOP_RIGHT,
+                        )
+                    )
                 }
             }.onEvent {
                 screenLogger.onAdEvent(it)

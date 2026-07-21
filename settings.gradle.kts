@@ -32,6 +32,12 @@ dependencyResolutionManagement {
                 includeGroupByRegex(".*\\.adsbynimbus.*")
             }
         }
+        // Provides access to the Display IO SDK
+        maven("https://maven.display.io/") {
+            content {
+                includeGroupByRegex(".*\\.brandio.*")
+            }
+        }
         // Provides access to the LiveRamp SDK
         maven("https://sdk-android-prod.launch.liveramp.com") {
             content {

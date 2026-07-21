@@ -38,6 +38,10 @@ class NimbusInitializer : Initializer<Nimbus> {
                 DigitalTurbineExtension(appId = BuildConfig.DIGITAL_TURBINE_APP_ID)
             }
 
+            if (BuildConfig.DISPLAY_IO_APP_ID.isNotEmpty()) {
+                DisplayIOExtension(appId = BuildConfig.DISPLAY_IO_APP_ID)
+            }
+
             /* InMobi samples can be found in the Demand Folder */
             if (BuildConfig.INMOBI_ACCOUNT_ID.isNotEmpty()) {
                 InMobiSdk.setLogLevel(InMobiSdk.LogLevel.DEBUG)

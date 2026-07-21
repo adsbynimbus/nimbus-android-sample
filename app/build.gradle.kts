@@ -92,6 +92,7 @@ androidComponents.onVariants { variant ->
         "sample_aps_static",
         "sample_aps_video",
         "sample_digital_turbine_app_id",
+        "sample_display_io_app_id",
         "sample_inmobi_account_id",
         "sample_meta_app_id",
         "sample_mintegral_app_id",
@@ -130,6 +131,10 @@ dependencies {
 
     api(libs.nimbus.digitalturbine)
 //    api("com.fyber:marketplace-sdk:8.+")
+
+    /* Display.io Demand */
+    api(libs.nimbus.displayio)
+//    api("com.brandio.ads:sdk:ads-displayio:5.+")
 
     /* Meta Audience Network Demand */
     api(libs.nimbus.meta)

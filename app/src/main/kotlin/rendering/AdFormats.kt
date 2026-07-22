@@ -60,6 +60,20 @@ class AdFormatsFragment : Fragment() {
                     }
                 }
             }
+            "Medium Rectangle (300x250)" -> lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
 
             "Video With Refresh" -> {
                 viewLifecycleOwner.lifecycleScope.launch {

@@ -27,7 +27,18 @@ kotlin = "2.3.21"
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.11.0"
 
-nimbus = "3.0.0"
+nimbus = "3.0.0-rc.2"
+nimbus-admob = "23.0.0"
+nimbus-admobnextgen = "3.0.0-1.2.0"
+nimbus-aps = "10.0.0"
+nimbus-digitalturbine = "8.0.1"
+nimbus-inmobi = "10.0.0"
+nimbus-meta = "6.0.1"
+nimbus-mintegral = "16.0.0"
+nimbus-mobilefuse = "3.0.0-1.9.0"
+nimbus-moloco = "4.0.0"
+nimbus-unity = "4.0.0"
+nimbus-vungle = "7.0.1"
 
 okhttp = "5.3.2"
 okio = "3.17.0"
@@ -62,15 +73,17 @@ androidx-work = { module = "androidx.work:work-runtime-ktx", version.ref = "andr
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 nimbus = { module = "com.adsbynimbus.android:nimbus", version.ref = "nimbus" }
-nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref = "nimbus" }
-nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus" }
-nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus" }
-nimbus-meta = { module = "com.adsbynimbus.android:extension-meta", version.ref = "nimbus" }
-nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus" }
-nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus" }
-nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus" }
-nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus" }
-nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus" }
+nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref = "nimbus-admob" }
+nimbus-admobnextgen = { module = "com.adsbynimbus.android:extension-admobnextgen", version.ref = "nimbus-admobnextgen" }
+nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus-aps" }
+nimbus-digitalturbine = { module = "com.adsbynimbus.android:extension-digitalturbine", version.ref = "nimbus-digitalturbine" }
+nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus-inmobi" }
+nimbus-meta = { module = "com.adsbynimbus.android:extension-meta", version.ref = "nimbus-meta" }
+nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus-mintegral" }
+nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus-mobilefuse" }
+nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus-moloco" }
+nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus-unity" }
+nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus-vungle" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }

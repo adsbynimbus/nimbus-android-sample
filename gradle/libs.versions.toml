@@ -12,9 +12,9 @@ androidx-browser = "1.10.0"
 androidx-collection = "1.6.0"
 androidx-constraintlayout = "2.2.2"
 androidx-coordinatorlayout = "1.3.0"
-androidx-core = "1.19.0"
+androidx-core = "1.18.0"
 androidx-fragment = "1.8.9"
-androidx-lifecycle = "2.11.0"
+androidx-lifecycle = "2.10.0"
 androidx-navigation = "2.9.8"
 androidx-preference = "1.2.1"
 androidx-recyclerview = "1.4.0"
@@ -32,13 +32,14 @@ nimbus-admob = "23.0.0"
 nimbus-admobnextgen = "3.0.0-1.2.0"
 nimbus-aps = "10.0.0"
 nimbus-digitalturbine = "8.0.1"
+nimbus-displayio = "5.0.0"
 nimbus-inmobi = "10.0.0"
 nimbus-meta = "6.0.1"
 nimbus-mintegral = "16.0.0"
 nimbus-mobilefuse = "3.0.0-1.9.0"
 nimbus-moloco = "4.0.0"
 nimbus-unity = "4.0.0"
-nimbus-vungle = "7.0.1"
+nimbus-vungle = "7.0.2"
 
 okhttp = "5.4.0"
 okio = "3.18.1"
@@ -77,6 +78,7 @@ nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref
 nimbus-admobnextgen = { module = "com.adsbynimbus.android:extension-admobnextgen", version.ref = "nimbus-admobnextgen" }
 nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus-aps" }
 nimbus-digitalturbine = { module = "com.adsbynimbus.android:extension-digitalturbine", version.ref = "nimbus-digitalturbine" }
+nimbus-displayio = { module = "com.adsbynimbus.android:extension-displayio", version.ref = "nimbus-displayio" }
 nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus-inmobi" }
 nimbus-meta = { module = "com.adsbynimbus.android:extension-meta", version.ref = "nimbus-meta" }
 nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus-mintegral" }

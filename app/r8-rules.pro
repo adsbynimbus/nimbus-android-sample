@@ -1,1 +1,1 @@
--dontwarn com.facebook.infer.annotation.**
+-dontoptimize

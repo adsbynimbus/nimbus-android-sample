@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutAdsInListBinding
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.extension.LiveRampExtension
 import com.adsbynimbus.rtb.Position
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -204,5 +205,5 @@ class AdFormatsFragment : Fragment() {
 /** This is necessary in the sample app to prevent samples returning ads from other demand networks,
  * production apps should not need to implement something similar */
 fun disableAllExtensions() {
-    Nimbus.extensions.forEach { it.enabled = false }
+    Nimbus.extensions.filter { it !is LiveRampExtension }.forEach { it.enabled = false }
 }

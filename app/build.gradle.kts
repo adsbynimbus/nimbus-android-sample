@@ -17,6 +17,12 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
         }
+        debug {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                layout.projectDirectory.file("r8-rules.pro")
+            )
+        }
 
         create("legacy-admob") {
             initWith(getByName("debug"))
@@ -59,8 +65,7 @@ android {
             versionName = it.requiredVersion
         }
         proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            layout.projectDirectory.file("r8-rules.pro")
+            getDefaultProguardFile("proguard-android-optimize.txt")
         )
 
         /* This is one example of adding keys to the application using buildConfigField */

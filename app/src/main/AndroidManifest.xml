@@ -5,17 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-    <!--  overrides minSdk set by moloco sdk and admob to allow us to build with minSdk 21. -->
-    <uses-sdk tools:overrideLibrary="com.moloco.sdk,com.moloco.sdk.acm,com.moloco.sdk.protobuf,com.adsbynimbus.moloco,com.google.android.libraries.ads.mobile.sdk,com.google.android.ads.consent,com.google.android.gms.common,androidx.webkit,org.chromium.net.cronet_fallback,org.chromium.net.httpengine_native_provider,org.chromium.net.cronet_common,org.chromium.net.cronet_api,org.chromium.net.cronet_shared,com.adsbynimbus.admobnextgen"/>
-
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NimbusSample"
-        tools:targetApi="n">
+        android:theme="@style/Theme.NimbusSample">
 
         <activity
             android:name="com.adsbynimbus.android.sample.NavigationActivity"

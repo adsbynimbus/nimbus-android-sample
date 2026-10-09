@@ -30,6 +30,7 @@ jobs:
           repository: 'adsbynimbus/nimbus-android'
           path: 'nimbus-android'
           ssh-key: ${{ secrets.NIMBUS_ANDROID_KEY }}
+          ref: "nimbus-2.x"
           lfs: true
 
       - name: Checkout Sample code

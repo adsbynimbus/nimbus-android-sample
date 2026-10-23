@@ -16,8 +16,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
-import com.adsbynimbus.android.sample.rendering.AdManagerFragment
-import com.adsbynimbus.android.sample.rendering.TestRenderFragment
+import com.adsbynimbus.android.sample.rendering.*
 
 val screens = mutableMapOf(
     "Main" to NavigationAdapter(items = arrayOf(
@@ -37,7 +36,8 @@ val screens = mutableMapOf(
         "Interstitial Video",
         "Interstitial Video Without UI",
         "Rewarded Video",
-        "Ads in ScrollView"
+        "Ads in ScrollView",
+        "Compose Lazy List",
     )),
     "Third Party Demand" to ConcatAdapter(
         NavigationAdapter(destination = "AdMobGDE", header = "AdMob", items = arrayOf(
@@ -114,6 +114,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<SettingsFragment>("Settings") {
         label = context.getString(R.string.settings_subtitle)
     }
+    fragment<LazyListFragment>("Show Ad Demo/Compose Lazy List")
     fragment<AdManagerFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<AdmobFragment>("AdMobGDE/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }

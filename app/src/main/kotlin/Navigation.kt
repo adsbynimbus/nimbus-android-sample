@@ -18,6 +18,7 @@ import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.AdFormatsFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
+import com.adsbynimbus.android.sample.rendering.*
 
 val screens = mutableMapOf(
     "Main" to NavigationAdapter(
@@ -29,7 +30,8 @@ val screens = mutableMapOf(
         )
     ),
     "Show Ad Demo" to NavigationAdapter(
-        destination = "Show Ad Demo", header = null,
+        destination = "Show Ad Demo",
+        header = null,
         items = arrayOf(
             "Banner",
             "Banner With Refresh",
@@ -40,7 +42,8 @@ val screens = mutableMapOf(
             "Interstitial Static",
             "Interstitial Video",
             "Rewarded Video",
-            "Ads in ScrollView"
+            "Ads in ScrollView",
+            "Compose Lazy List",
         )
     ),
     "Third Party Demand" to ConcatAdapter(
@@ -171,6 +174,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<DigitalTurbineFragment>("DigitalTurbine/{item}") { argument("item") { type = NavType.StringType } }
     fragment<DisplayIOFragment>("DisplayIO/{item}") { argument("item") { type = NavType.StringType } }
     fragment<InMobiFragment>("InMobi/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<LazyListFragment>("Show Ad Demo/Compose Lazy List")
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MintegralFragment>("Mintegral/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }

@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.app)
     alias(libs.plugins.nimbus.app)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -122,6 +123,13 @@ androidComponents.onVariants { variant ->
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.fragment)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.runtime)
+
     /* Nimbus (Version is defined by the project version above) */
     api(libs.nimbus)
 

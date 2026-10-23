@@ -8,7 +8,20 @@ Welcome to Nimbus Sample App - ads by publishers, for publishers.
 
 - Android 14 SDK (API Level 34)
 
-### Installation
+## Installation
+
+### Install Git LFS (Large File Storage)
+
+This repository has Git LFS enabled, make sure your git installation supports LFS:
+
+- Open your terminal
+- Run: `brew install git-lfs` (or the corresponding package manager for your OS)
+- Run: `git lfs install`
+
+### Clone the repository
+
+- Open your terminal
+- Run: `git clone https://github.com/adsbynimbus/nimbus-android-sample.git`
 
 After cloning this repo, open it in Android Studio wait for the Gradle sync to finish
 

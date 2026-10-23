@@ -20,94 +20,133 @@ import com.adsbynimbus.android.sample.rendering.AdFormatsFragment
 import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 
 val screens = mutableMapOf(
-    "Main" to NavigationAdapter(items = arrayOf(
-        "Show Ad Demo",
-        "Third Party Demand",
-        "Test Render",
-        "Settings",
-    )),
-    "Show Ad Demo" to NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
-        "Banner",
-        "Banner With Refresh",
-        "Medium Rectangle (300x250)",
-        "Video With Refresh",
-        "Inline Video",
-        "Interstitial Hybrid",
-        "Interstitial Static",
-        "Interstitial Video",
-        "Rewarded Video",
-        "Ads in ScrollView"
-    )),
-    "Third Party Demand" to ConcatAdapter(
-        NavigationAdapter(destination = "AdMobGDE", header = "AdMob", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "APS", header = "APS", items = arrayOf(
-            "APS Banner With Refresh",
-            "APS Interstitial Hybrid",
-        )),
-        NavigationAdapter(destination = "DigitalTurbine", header = "Digital Turbine", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "DisplayIO", header = "Display IO", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "InMobi", header = "InMobi", items = arrayOf(
-            "Banner",
-            "Interstitial",
-            "Rewarded",
-        )),
-        NavigationAdapter(destination = "Meta", header = "Meta Audience Network", items = arrayOf(
-            "Meta Banner",
-            "Meta Interstitial",
-            "Meta Native",
-            "Meta Rewarded Video",
-        )),
-        NavigationAdapter(destination = "Mintegral", header = "Mintegral", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "MobileFuse", header = "MobileFuse", items = arrayOf(
+    "Main" to NavigationAdapter(
+        items = arrayOf(
+            "Show Ad Demo",
+            "Third Party Demand",
+            "Test Render",
+            "Settings",
+        )
+    ),
+    "Show Ad Demo" to NavigationAdapter(
+        destination = "Show Ad Demo", header = null,
+        items = arrayOf(
             "Banner",
             "Banner With Refresh",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-        )),
-        NavigationAdapter(destination = "Moloco", header = "Moloco", items = arrayOf(
-            "Banner",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "Unity", header = "Unity", items = arrayOf(
-            "Unity Banner",
-            "Unity Interstitial",
-            "Unity Rewarded Video",
-        )),
-        NavigationAdapter(destination = "Vungle", header = "Vungle", items = arrayOf(
-            "Vungle Banner",
-            "Vungle MREC",
-            "Vungle Interstitial",
-            "Vungle Rewarded",
-            "Vungle Native",
-        )),
-    )
+            "Medium Rectangle (300x250)",
+            "Video With Refresh",
+            "Inline Video",
+            "Interstitial Hybrid",
+            "Interstitial Static",
+            "Interstitial Video",
+            "Rewarded Video",
+            "Ads in ScrollView"
+        )
+    ),
+    "Third Party Demand" to ConcatAdapter(
+        NavigationAdapter(
+            destination = "AdMobGDE", header = "AdMob",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "APS", header = "APS",
+            items = arrayOf(
+                "APS Banner With Refresh",
+                "APS Interstitial Hybrid",
+            )
+        ),
+        NavigationAdapter(
+            destination = "DigitalTurbine", header = "Digital Turbine",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "DisplayIO", header = "Display IO",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "InMobi", header = "InMobi",
+            items = arrayOf(
+                "Banner",
+                "Interstitial",
+                "Rewarded",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Meta", header = "Meta Audience Network",
+            items = arrayOf(
+                "Meta Banner",
+                "Meta Interstitial",
+                "Meta Native",
+                "Meta Rewarded Video",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Mintegral", header = "Mintegral",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "MobileFuse", header = "MobileFuse",
+            items = arrayOf(
+                "Banner",
+                "Banner With Refresh",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Moloco", header = "Moloco",
+            items = arrayOf(
+                "Banner",
+                "Banner-MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            ),
+        ),
+        NavigationAdapter(
+            destination = "Unity", header = "Unity",
+            items = arrayOf(
+                "Unity Banner",
+                "Unity Interstitial",
+                "Unity Rewarded Video",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Vungle", header = "Vungle",
+            items = arrayOf(
+                "Vungle Banner",
+                "Vungle MREC",
+                "Vungle Interstitial",
+                "Vungle Rewarded",
+                "Vungle Native",
+            )
+        ),
+    ),
 )
 
 fun NavGraphBuilder.nimbusGraph(context: Context) = apply {

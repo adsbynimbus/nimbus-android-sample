@@ -58,6 +58,20 @@ class MolocoFragment : Fragment() {
                         }
                     }
             }
+            "Banner-MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
             "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
                 val logger = ScreenAdLogger(identifier = item, logView = logs)
                 ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)

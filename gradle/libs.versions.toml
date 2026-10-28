@@ -59,7 +59,6 @@ androidx-annotation = { module = "androidx.annotation:annotation", version.ref =
 androidx-annotation-experimental = { module = "androidx.annotation:annotation-experimental", version.ref = "androidx-annotation-experimental" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-fragment = { group = "androidx.fragment", name = "fragment-compose", version.ref = "androidx-fragment"}
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }

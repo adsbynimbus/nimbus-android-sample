@@ -61,7 +61,7 @@ class VungleFragment : Fragment() {
             }
 
             "Vungle Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.Banner) {
+                ads += Nimbus.inlineAd(item) {
                     native()
                 }.onEvent {
                     screenLogger.onAdEvent(it)

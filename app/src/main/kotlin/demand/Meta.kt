@@ -37,7 +37,7 @@ class MetaFragment : Fragment() {
             }
 
             "Meta Native" -> viewLifecycleOwner.lifecycleScope.launch {
-                ads += Nimbus.bannerAd(item, AdSize.Banner) {
+                ads += Nimbus.inlineAd(item) {
                     native()
                 }.show(adFrame)
             }

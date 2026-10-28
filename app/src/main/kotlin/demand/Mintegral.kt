@@ -85,7 +85,7 @@ class MintegralFragment  : Fragment() {
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
                     val logger = ScreenAdLogger(identifier = item, logView = logs)
-                    ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec) {
+                    ads += Nimbus.inlineAd(position = item) {
                         native()
                     }.onEvent {
                         logger.onAdEvent(it)

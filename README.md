@@ -21,7 +21,7 @@ This repository has Git LFS enabled, make sure your git installation supports LF
 ### Clone the repository
 
 - Open your terminal
-- Run: `git clone https://github.com/adsbynimbus/nimbus-android-sample.git` 
+- Run: `git clone https://github.com/adsbynimbus/nimbus-android-sample.git`
 
 After cloning this repo, open it in Android Studio wait for the Gradle sync to finish
 

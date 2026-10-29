@@ -7,16 +7,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
-import com.adsbynimbus.request.NimbusRequest
+import com.adsbynimbus.AdSize
+import com.adsbynimbus.Nimbus
 
 class LazyListFragment : Fragment() {
     override fun onCreateView(
@@ -102,15 +101,12 @@ fun ItemList(
                 is ListEntry.Ad -> {
                     val adContainer = remember(entry.id) {
                         adContainers.getOrPut(entry.id) {
-                            FrameLayout(context).apply {
-                                val request = NimbusRequest.forVideoAd(entry.position)
-                                NimbusAdManager().showAd(request, this
-                                ) { }
-                            }
+                            FrameLayout(context)
                         }
                     }
                     NimbusAdCard(
                         adContainer = adContainer,
+                        position = entry.position,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
@@ -152,8 +148,12 @@ fun ItemRow(
 @Composable
 fun NimbusAdCard(
     adContainer: FrameLayout,
+    position: String,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(position) {
+        Nimbus.bannerAd(position, size = AdSize.Mrec).show(adContainer)
+    }
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)

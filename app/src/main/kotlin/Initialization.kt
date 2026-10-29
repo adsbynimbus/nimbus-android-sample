@@ -1,65 +1,89 @@
 package com.adsbynimbus.android.sample
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
 import androidx.work.WorkManagerInitializer
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.android.sample.demand.*
-import com.adsbynimbus.android.sample.rendering.UiTestInterceptor
-import com.adsbynimbus.render.Renderer
-import com.adsbynimbus.request.OkHttpNimbusClient
-import com.adsbynimbus.request.RequestManager
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.adsbynimbus.android.sample.demand.adMobPlacements
+import com.adsbynimbus.android.sample.demand.initializeAmazonPublisherServices
+import com.adsbynimbus.extension.*
+import com.inmobi.sdk.InMobiSdk
 import timber.log.Timber
 
 @Suppress("unused")
 class NimbusInitializer : Initializer<Nimbus> {
     override fun create(context: Context): Nimbus {
-        Nimbus.initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY)
-        Nimbus.testMode = true
+        Nimbus.configuration.testMode = true
 
         /* The Timber.DebugTree proxies all calls to Timber.log to the logcat console */
         Timber.plant(Timber.DebugTree())
 
         /* Attaches a logger for SDK events that are sent to Timber */
-        Nimbus.addLogger { level, message -> Timber.log(level, message) }
+        Nimbus.Logger.add { level, message -> Timber.log(level, message) }
 
-        val metaPlacementIds = listOf(
-            BuildConfig.FAN_NATIVE_ID,
-            BuildConfig.FAN_NATIVE_320_ID,
-            BuildConfig.FAN_BANNER_320_ID,
-            BuildConfig.FAN_INTERSTITIAL_ID,
-        )
+        Nimbus.initialize(context, BuildConfig.PUBLISHER_KEY, BuildConfig.API_KEY) {
+            /* Initialize additional Demand SDKs */
 
-        /* Initialize additional Demand SDKs */
-        with(context) {
-            /* Admob samples can be found in the Demand folder */
-            AdMobInitializer.initialize(this)
+            /* AdMob samples can be found in the Demand folder */
+            if (adMobPlacements.any { it.isNotBlank() }) {
+                AdMobExtension(BuildConfig.ADMOB_APPID)
+            }
 
             /* APS samples can be found in the Demand folder */
-            initializeAmazonPublisherServices(appKey = BuildConfig.APS_APP_KEY)
+            if (BuildConfig.APS_APP_KEY.isNotEmpty()) {
+                context.initializeAmazonPublisherServices(appKey = BuildConfig.APS_APP_KEY)
+            }
+
+            if (BuildConfig.DIGITAL_TURBINE_APP_ID.isNotEmpty()) {
+                DigitalTurbineExtension(appId = BuildConfig.DIGITAL_TURBINE_APP_ID)
+            }
+
+            if (BuildConfig.DISPLAY_IO_APP_ID.isNotEmpty()) {
+                DisplayIOExtension(appId = BuildConfig.DISPLAY_IO_APP_ID)
+            }
+
+            /* InMobi samples can be found in the Demand Folder */
+            if (BuildConfig.INMOBI_ACCOUNT_ID.isNotEmpty()) {
+                InMobiSdk.setLogLevel(InMobiSdk.LogLevel.DEBUG)
+                InMobiExtension(accountId = BuildConfig.INMOBI_ACCOUNT_ID)
+            }
 
             /* Initializes Meta Audience Network if any of the placement ids have been defined */
-            metaPlacementIds.firstOrNull { it.isNotEmpty() }?.let {
-
+            if (BuildConfig.META_APP_ID.isNotBlank()) {
                 /* Meta samples can be found in the Demand folder */
-                initializeMetaAudienceNetwork(appId = appIdFromMetaPlacementId(placement = it))
+                MetaExtension(metaAppId = BuildConfig.META_APP_ID)
+                //AdSettings.addTestDevice(/* Add Test Device ID From Logcat here if necessary */)
+            }
+
+            /* Mintegral samples can be found in the Demand folder */
+            if (BuildConfig.MINTEGRAL_APP_ID.isNotEmpty()) {
+                MintegralExtension(BuildConfig.MINTEGRAL_APP_ID, BuildConfig.MINTEGRAL_APP_KEY)
+            }
+
+            /* MobileFuse samples can be found in the Demand folder */
+            MobileFuseExtension()
+
+            /* Moloco samples can be found in the Demand folder */
+            if (BuildConfig.MOLOCO_APP_KEY.isNotEmpty()) {
+                MolocoExtension(BuildConfig.MOLOCO_APP_KEY)
             }
 
             /* Unity samples can be found in the Demand folder */
-            if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) initializeUnity(unityGameId = BuildConfig.UNITY_GAME_ID)
+            if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
+                UnityExtension(
+                    gameId = BuildConfig.UNITY_GAME_ID,
+                    testMode = Nimbus.configuration.testMode
+                )
+            }
 
-            /* Vungle samples can be found in the Demand folder*/
-            initializeVungle(vungleAppId = BuildConfig.VUNGLE_CONFIG_ID)
-
-            /* InMobi samples can be found in the Demand Folder*/
-            initializeInMobi(context, accountId = BuildConfig.INMOBI_ACCOUNT_ID)
+            /* Vungle samples can be found in the Demand folder */
+            if (BuildConfig.VUNGLE_CONFIG_ID.isNotEmpty()) {
+                VungleExtension(appId = BuildConfig.VUNGLE_CONFIG_ID)
+            }
         }
 
         /* The following is used for the sample app only */
-        if (Nimbus.testMode) configureSampleAppForTesting(context)
+        if (Nimbus.configuration.testMode) configureSampleAppForTesting(context)
 
         return Nimbus
     }
@@ -73,24 +97,6 @@ class NimbusInitializer : Initializer<Nimbus> {
             The following line of code demonstrates how to change the endpoint the SDK points to
             for advanced use cases such as using a proxy server.
         */
-        RequestManager.setRequestUrl("https://${BuildConfig.PUBLISHER_KEY}.adsbynimbus.com/rta/test")
-
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-        RequestManager.setClient(
-            OkHttpNimbusClient(
-                OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor {
-                    Timber.tag("Nimbus Request")
-                    Timber.v(it)
-                }.setLevel(HttpLoggingInterceptor.Level.BODY))
-                .addInterceptor {
-                    if (preferences.forceAdRequestError) it.proceed(
-                        it.request().newBuilder().addHeader("Nimbus-Test-No-Fill", "true").build()
-                    ) else it.proceed(it.request())
-                })
-        )
-
-        Renderer.interceptors.add(UiTestInterceptor)
+        Nimbus.configuration.requestUrl = "https://${BuildConfig.PUBLISHER_KEY}.adsbynimbus.com/rta/test"
     }
 }

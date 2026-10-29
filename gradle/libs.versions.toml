@@ -1,37 +1,49 @@
 [versions]
-android = "8.13.2"
+android = "9.3.1"
 android-jvm = "17"
 android-sdk-compile = "36"
 android-sdk-min = "24"
 
-androidx-activity = "1.11.0"
+androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
 androidx-annotation = "1.10.0"
-androidx-annotation-experimental = "1.5.0"
+androidx-annotation-experimental = "1.6.0"
 androidx-browser = "1.10.0"
 androidx-compose-bom = "2025.12.01"
 androidx-collection = "1.6.0"
-androidx-constraintlayout = "2.2.1"
+androidx-constraintlayout = "2.2.2"
 androidx-coordinatorlayout = "1.3.0"
-androidx-core = "1.17.0"
+androidx-core = "1.18.0"
 androidx-fragment = "1.8.9"
-androidx-lifecycle = "2.9.4"
+androidx-lifecycle = "2.10.0"
 androidx-navigation = "2.9.8"
 androidx-preference = "1.2.1"
 androidx-recyclerview = "1.4.0"
-androidx-room = "2.7.2"
+androidx-room = "2.8.4"
 androidx-startup = "1.2.0"
-androidx-transition = "1.6.0"
-androidx-work = "2.10.5"
+androidx-transition = "1.7.0"
+androidx-work = "2.11.2"
 
-kotlin = "2.3.21"
-kotlin-coroutines = "1.10.2"
+kotlin = "2.4.10"
+kotlin-coroutines = "1.11.0"
 kotlin-serialization = "1.11.0"
 
-nimbus = "2.37.2"
+nimbus = "3.0.0"
+nimbus-admob = "25.0.0"
+nimbus-admobnextgen = "3.0.0-1.5.0"
+nimbus-aps = "12.0.0"
+nimbus-digitalturbine = "8.1.0"
+nimbus-displayio = "5.1.0"
+nimbus-inmobi = "11.0.0"
+nimbus-meta = "6.1.0"
+nimbus-mintegral = "17.0.0"
+nimbus-mobilefuse = "3.0.0-1.12.0"
+nimbus-moloco = "4.1.0"
+nimbus-unity = "4.1.0"
+nimbus-vungle = "7.1.0"
 
-okhttp = "5.3.2"
-okio = "3.17.0"
+okhttp = "5.4.0"
+okio = "3.18.1"
 timber = "5.0.1"
 
 [plugins]
@@ -47,7 +59,6 @@ androidx-annotation = { module = "androidx.annotation:annotation", version.ref =
 androidx-annotation-experimental = { module = "androidx.annotation:annotation-experimental", version.ref = "androidx-annotation-experimental" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-fragment = { group = "androidx.fragment", name = "fragment-compose", version.ref = "androidx-fragment"}
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -70,18 +81,18 @@ androidx-work = { module = "androidx.work:work-runtime-ktx", version.ref = "andr
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 nimbus = { module = "com.adsbynimbus.android:nimbus", version.ref = "nimbus" }
-nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref = "nimbus" }
-nimbus-admobnextgen = { module = "com.adsbynimbus.android:extension-admobnextgen", version.ref = "nimbus" }
-nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus" }
-nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus" }
-nimbus-google = { module = "com.adsbynimbus.android:extension-google", version.ref = "nimbus" }
-nimbus-googlemediation = { module = "com.adsbynimbus.android:extension-googlemediation", version.ref = "nimbus" }
-nimbus-meta = { module = "com.adsbynimbus.android:extension-facebook", version.ref = "nimbus" }
-nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus" }
-nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus" }
-nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus" }
-nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus" }
-nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus" }
+nimbus-admob = { module = "com.adsbynimbus.android:extension-admob", version.ref = "nimbus-admob" }
+nimbus-admobnextgen = { module = "com.adsbynimbus.android:extension-admobnextgen", version.ref = "nimbus-admobnextgen" }
+nimbus-aps = { module = "com.adsbynimbus.android:extension-aps", version.ref = "nimbus-aps" }
+nimbus-digitalturbine = { module = "com.adsbynimbus.android:extension-digitalturbine", version.ref = "nimbus-digitalturbine" }
+nimbus-displayio = { module = "com.adsbynimbus.android:extension-displayio", version.ref = "nimbus-displayio" }
+nimbus-inmobi = { module = "com.adsbynimbus.android:extension-inmobi", version.ref = "nimbus-inmobi" }
+nimbus-meta = { module = "com.adsbynimbus.android:extension-meta", version.ref = "nimbus-meta" }
+nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus-mintegral" }
+nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus-mobilefuse" }
+nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus-moloco" }
+nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus-unity" }
+nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus-vungle" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }

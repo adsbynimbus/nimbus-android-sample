@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.adsbynimbus.Nimbus
-import com.adsbynimbus.NimbusAdManager
+import com.adsbynimbus.rtb.UID
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -27,37 +27,45 @@ const val gppTestSids = "2"
 const val tcfString =
     "CLcVDxRMWfGmWAVAHCENAXCkAKDAADnAABRgA5mdfCKZuYJez-NQm0TBMYA4oCAAGQYIAAAAAAEAIAEgAA.argAC0gAAAAAAAAAAAA"
 
-fun SharedPreferences.setGppInSharedPrefs(enabled: Boolean) = edit {
-    if (enabled) putString("IABGPP_HDR_GppString", gppTestString) else remove("IABGPP_HDR_GppString")
-    if (enabled) putString("IABGPP_GppSID", gppTestSids) else remove("IABGPP_GppSID")
-}
-
-
 fun SharedPreferences.initNimbusFeatures(features: Set<String> = all.keys) {
     features.forEach {
         when (it) {
             "test_mode" -> getBoolean(it, false).let { enabled ->
-                Nimbus.testMode = enabled
+                Nimbus.configuration.testMode = enabled
                 if (!enabled) {
                     disableTradedeskId()
                     edit { putBoolean("send_tradedesk_id", false) }
                 }
             }
             "send_tradedesk_id" -> getBoolean(it, false).let { enabled ->
-                if (enabled && Nimbus.testMode)
-                    NimbusAdManager.addExtendedId(source = "tradedesk.com", id = "TestUID2Token")
-                else disableTradedeskId()
+                if (enabled && Nimbus.configuration.testMode) {
+                    Nimbus.configuration.identity.add(
+                        source = "tradedesk.com", ids = setOf(UID(id = "TestUID2Token"))
+                    )
+                } else disableTradedeskId()
             }
-            "coppa_on" -> Nimbus.COPPA = getBoolean(it, false)
+            "coppa_on" -> Nimbus.configuration.coppa = getBoolean(it, false)
             "user_did_consent" -> getBoolean(it, false).let { consent ->
-                edit { if (consent) putString("IABTCF_TCString", tcfString) else remove("IABTCF_TCString") }
+                Nimbus.IAB.tcfString = if (consent) tcfString else null
             }
-            "ccpa_consent" -> Nimbus.usPrivacyString = "1NYN".takeIf { _ -> getBoolean(it, false) }
-            "enabled_gpp" -> setGppInSharedPrefs(enabled = getBoolean(it, false))
+            "ccpa_consent" -> getBoolean(it, false).let { enabled ->
+                Nimbus.IAB.usPrivacyString = "1NYN".takeIf { enabled }
+            }
+            "enabled_gpp" -> getBoolean(it, false).let { testGppEnabled ->
+                if (testGppEnabled) {
+                    Nimbus.IAB.gppString = gppTestString
+                    Nimbus.IAB.gppSID = gppTestSids
+                } else {
+                    Nimbus.IAB.gppString = null
+                    Nimbus.IAB.gppSID = null
+                }
+            }
         }
     }
 }
 
-private fun disableTradedeskId() = NimbusAdManager.extendedIds.removeAll { eid -> eid.source == "tradedesk.com" }
+fun disableTradedeskId() {
+    Nimbus.configuration.identity.clear("tradedesk.com")
+}
 
 val SharedPreferences.forceAdRequestError get() = getBoolean("force_no_fill", false)

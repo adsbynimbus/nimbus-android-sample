@@ -1,166 +1,99 @@
 package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.NimbusAdManager
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.R
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
-import com.adsbynimbus.android.sample.rendering.EmptyAdControllerListenerImplementation
-import com.adsbynimbus.android.sample.rendering.NimbusAdManagerTestListener
-import com.adsbynimbus.android.sample.rendering.align
-import com.adsbynimbus.android.sample.rendering.showPropertyMissingDialog
-import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.AdController
-import com.adsbynimbus.render.VungleRenderer
-import com.adsbynimbus.request.NimbusRequest
-import com.adsbynimbus.request.RequestManager
-import com.adsbynimbus.request.VungleDemandProvider
+import com.adsbynimbus.android.sample.databinding.VungleNativeAdBinding
+import com.adsbynimbus.android.sample.rendering.*
+import com.adsbynimbus.extension.VungleExtension
 import com.vungle.ads.NativeAd
-import com.vungle.ads.internal.ui.view.MediaView
-
-/** Initializes the Vungle SDK and integrates it with the Nimbus SDK. */
-fun initializeVungle(vungleAppId: String) {
-    VungleDemandProvider.initialize(appId = vungleAppId)
-    /** Disable Vungle demand until we are on the screen we want to show Vungle test ads */
-    VungleDemandProvider.enabled = false
-}
+import kotlinx.coroutines.launch
 
 class VungleFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    var adController: AdController? = null
-
-    fun NimbusRequest.removeNonVungleDemand() = apply {
-        interceptors.add(NimbusRequest.Interceptor {
-            request.imp[0].ext.facebook_app_id = null
-            request.user?.ext = request.user?.ext?.apply {
-                facebook_buyeruid = null
-                mfx_buyerdata = null
-                unity_buyeruid = null
-            }
-        })
-    }
+    val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
-        VungleDemandProvider.enabled = true
-        VungleRenderer.delegate = NativeRenderingDelegate()
-        when (val item = requireArguments().getString("item")) {
-            "Vungle Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50).apply { removeNonVungleDemand() },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
-            "Vungle MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.MREC).apply { removeNonVungleDemand() },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
-            "Vungle Native Banner" -> adManager.showAd(
-                request = NimbusRequest.forNativeAd(item).apply { removeNonVungleDemand() },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
-            "Vungle Native Video" -> adManager.showAd(
-                request = NimbusRequest.forNativeAd(item, includeVideo = true).apply { removeNonVungleDemand() },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
-            "Vungle Interstitial" -> adManager.showBlockingAd(
-                request =  NimbusRequest.forInterstitialAd(item).apply { removeNonVungleDemand() },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
-            "Vungle Rewarded" -> adManager.showBlockingAd(
-                request = NimbusRequest.forRewardedVideo(item).apply { removeNonVungleDemand() },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    adController = controller.apply {
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    }
-                },
-            )
+        disableAllExtensions()
+        Nimbus.extensions<VungleExtension>()?.enabled = true
+        VungleExtension.nativeAdViewProvider = NativeRenderingNativeAdViewProvider()
+        val item = requireArguments().getString("item") ?: ""
+        val screenLogger = ScreenAdLogger(identifier = item, logView = logs)
+        when (item) {
+            "Vungle Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.bannerAd(item, AdSize.Banner).onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
+
+            "Vungle MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.bannerAd(item, AdSize.Mrec).onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
+
+            "Vungle Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.interstitialAd(item).onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(this@VungleFragment)
+            }
+
+            "Vungle Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.rewardedAd(item).onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(this@VungleFragment)
+            }
+
+            "Vungle Native" -> viewLifecycleOwner.lifecycleScope.launch {
+                ads += Nimbus.inlineAd(item) {
+                    native()
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
         }
         if (BuildConfig.VUNGLE_CONFIG_ID.isEmpty()) context?.showPropertyMissingDialog("sample_vungle_config_id")
     }.root
 
     override fun onDestroyView() {
-        VungleDemandProvider.enabled = false
-        adController?.destroy()
-        adController = null
         super.onDestroyView()
+        ads.forEach { it.destroy() }
+        VungleExtension.nativeAdViewProvider = null
     }
 }
 
-class NativeRenderingDelegate : VungleRenderer.Delegate {
-    override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View = LayoutInflater.from(container.context)
-        .inflate(R.layout.vungle_native_ad, container, false).apply {
-            val nativeAdIcon = findViewById<ImageView>(R.id.native_ad_icon)
-            val nativeAdTitle = findViewById<TextView>(R.id.native_ad_title)
-            val nativeAdMedia = findViewById<MediaView>(R.id.native_ad_media)
-            val rateView = findViewById<TextView>(R.id.rateTV)
-            val nativeAdBody = findViewById<TextView>(R.id.native_ad_body)
-            val sponsoredLabel = findViewById<TextView>(R.id.native_ad_sponsored_label)
-            val nativeAdCallToAction = findViewById<Button>(R.id.native_ad_call_to_action)
+class NativeRenderingNativeAdViewProvider : VungleExtension.NativeAdViewProvider {
+    override fun customViewForRendering(container: ViewGroup, nativeAd: NativeAd): View =
+        VungleNativeAdBinding.inflate(LayoutInflater.from(container.context), container, false)
+            .apply {
+                nativeAdTitle.text = nativeAd.getAdTitle()
+                nativeAdBody.text = nativeAd.getAdBodyText()
+                nativeAd.getAdStarRating()?.let { rateTV.text = it.toString() }
+                nativeAdCallToAction.visibility =
+                    if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
+                nativeAdCallToAction.text = nativeAd.getAdCallToActionText()
+                nativeAdSponsoredLabel.text = nativeAd.getAdSponsoredText()
 
-            nativeAdTitle.text = nativeAd.getAdTitle()
-            nativeAdBody.text = nativeAd.getAdBodyText()
-            nativeAd.getAdStarRating()?.let { rateView.text = it.toString() }
-            nativeAdCallToAction.visibility =
-                if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-            nativeAdCallToAction.text = nativeAd.getAdCallToActionText()
-            sponsoredLabel.text = nativeAd.getAdSponsoredText()
-
-            nativeAd.registerViewForInteraction(
-                this as FrameLayout, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction)
-            )
-        }
+                nativeAd.registerViewForInteraction(
+                    this.root, nativeAdMedia, nativeAdIcon, listOf(nativeAdTitle, nativeAdCallToAction),
+                )
+            }.root
 }
-
-var VungleDemandProvider.enabled: Boolean
-    get() = RequestManager.interceptors.contains(this)
-    set(enabled) = with(RequestManager.interceptors) {
-        if (enabled) add(VungleDemandProvider) else remove(VungleDemandProvider)
-    }

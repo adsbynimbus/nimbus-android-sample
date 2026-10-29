@@ -5,43 +5,35 @@ import android.os.Bundle
 import android.view.*
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.TOP
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import com.adsbynimbus.Nimbus
-import com.adsbynimbus.NimbusAdManager
+import androidx.lifecycle.lifecycleScope
+import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.BuildConfig
-import com.adsbynimbus.android.sample.BuildConfig.MOLOCO_BANNER_ADUNITID
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.databinding.MolocoNativeAdBinding
-import com.adsbynimbus.android.sample.rendering.*
-import com.adsbynimbus.openrtb.enumerations.Position
-import com.adsbynimbus.openrtb.request.Format
-import com.adsbynimbus.render.*
-import com.adsbynimbus.request.*
+import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
+import com.adsbynimbus.android.sample.rendering.disableAllExtensions
+import com.adsbynimbus.extension.MolocoExtension
+import com.adsbynimbus.extension.NimbusMolocoNativeAd
+import com.adsbynimbus.rtb.Position
 import com.moloco.sdk.internal.MolocoLogger
-import com.moloco.sdk.publisher.MediationInfo
 import com.moloco.sdk.publisher.Moloco
-import com.moloco.sdk.publisher.init.MolocoInitParams
-import timber.log.Timber
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 fun initializeMoloco(context: Context, appKey: String) {
     if (!Moloco.isInitialized) {
         MolocoLogger.logEnabled = true
-        Moloco.initialize(
-            MolocoInitParams(
-                appContext = context.applicationContext,
-                appKey = appKey,
-                mediationInfo = MediationInfo(Nimbus.sdkName)
-            )
-        ) { result ->
-            Timber.v("Moloco initialized with ${result.initialization} - ${result.description}")
-        }
+        MolocoExtension.initialize(context, appKey = appKey)
     }
 }
 
-class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
+class MolocoFragment : Fragment() {
 
-    val adManager: NimbusAdManager = NimbusAdManager()
-    val controllers = mutableListOf<AdController>()
+    val ads = mutableListOf<Ad>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,96 +41,98 @@ class MolocoFragment : Fragment(), NimbusRequest.Interceptor {
         savedInstanceState: Bundle?,
     ): View = LayoutInlineAdBinding.inflate(inflater, container, false).apply {
         initializeMoloco(requireContext(), BuildConfig.MOLOCO_APP_KEY)
+        disableAllExtensions()
+        Nimbus.extensions<MolocoExtension>()?.enabled = true
         when (val item = requireArguments().getString("item")) {
-            "Banner" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.BANNER_320_50, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withMoloco(MOLOCO_BANNER_ADUNITID)
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { TOP or CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-            "MREC" -> adManager.showAd(
-                request = NimbusRequest.forBannerAd(item, Format.MREC, Position.HEADER).apply {
-                    removeOtherDemandIds()
-                    withMoloco(BuildConfig.MOLOCO_BANNER_ADUNITID)
-                },
-                viewGroup = adFrame,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    controllers.add(controller.apply {
-                        align { Gravity.TOP or Gravity.CENTER_HORIZONTAL }
-                        /* Replace the following with your own AdController.Listener implementation */
-                        listeners.add(EmptyAdControllerListenerImplementation)
-                    })
-                },
-            )
-
-            "Interstitial" -> adManager.showBlockingAd(
-                request = NimbusRequest.forInterstitialAd(item).apply {
-                    removeOtherDemandIds()
-                    withMoloco(BuildConfig.MOLOCO_INTERSTITIAL_ADUNITID)
-                },
-                activity = requireActivity(),
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-
-            "Rewarded" -> adManager.showRewardedAd(
-                request = NimbusRequest.forRewardedVideo(item).apply {
-                    removeOtherDemandIds()
-                    withMoloco(BuildConfig.MOLOCO_REWARDED_ADUNITID)
-                },
-                activity = requireActivity(),
-                closeButtonDelaySeconds = 60,
-                listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                    /* Replace the following with your own AdController.Listener implementation */
-                    controller.listeners.add(EmptyAdControllerListenerImplementation)
-                },
-            )
-
+            "Banner" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Banner, adPosition = Position.Header)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
+            "Banner-MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
+            "MREC" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.bannerAd(position = item, size = AdSize.Mrec, adPosition = Position.Header)
+                    .onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+            }
+            "Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.interstitialAd(position = item) {
+                    video()
+                }.onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(this@MolocoFragment, closeButtonDelay = 10.seconds)
+            }
+            "Rewarded" -> viewLifecycleOwner.lifecycleScope.launch {
+                val logger = ScreenAdLogger(identifier = item, logView = logs)
+                ads += Nimbus.rewardedAd(position = item).onEvent {
+                    logger.onAdEvent(it)
+                }.onError {
+                    logger.onError(it)
+                }.show(this@MolocoFragment, closeButtonDelay = 10.seconds)
+            }
             "Native" -> {
-                MolocoRenderer.delegate = object : MolocoRenderer.Delegate {
-                    override fun customViewForRendering(container: ViewGroup, nimbusMolocoNativeAd: NimbusMolocoNativeAd): View =
-                        MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
-                            populateNativeAdView(nimbusMolocoNativeAd, this)
-                        }.root
+                MolocoExtension.nativeAdViewProvider = MolocoExtension.NativeAdViewProvider { container, nimbusMolocoNativeAd ->
+                    MolocoNativeAdBinding.inflate(LayoutInflater.from(container.context)).apply {
+                        populateNativeAdView(nimbusMolocoNativeAd, this)
+                    }.root
                 }
-                adManager.showAd(
-                    request = NimbusRequest.forNativeAd(item).apply {
-                        removeOtherDemandIds()
-                        withMoloco(BuildConfig.MOLOCO_NATIVE_ADUNITID)
-                    },
-                    viewGroup = adFrame,
-                    listener = NimbusAdManagerTestListener(identifier = item, logView = logs) { controller ->
-                        /* Replace the following with your own AdController.Listener implementation */
-                        controller.listeners.add(EmptyAdControllerListenerImplementation)
-                    },
-                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val logger = ScreenAdLogger(identifier = item, logView = logs)
+                    ads += Nimbus.inlineAd(position = item) {
+                        native()
+                    }.onEvent {
+                        logger.onAdEvent(it)
+                    }.onError {
+                        logger.onError(it)
+                    }.show(adFrame).also {
+                        it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = TOP or CENTER_HORIZONTAL
+                            height = WRAP_CONTENT
+                        }
+                    }
+                }
             }
         }
     }.root
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RequestManager.interceptors.remove(this)
-        controllers.forEach { it.destroy() }
-    }
-
-    override fun modifyRequest(request: NimbusRequest) {
-        request.request.imp[0].ext.facebook_app_id = null
-        request.request.user?.ext = request.request.user?.ext?.apply {
-            facebook_buyeruid = null
-            unity_buyeruid = null
-            vungle_buyeruid = null
-        }
+        ads.forEach { it.destroy() }
+        MolocoExtension.nativeAdViewProvider = null
     }
 
     private fun populateNativeAdView(nativeAd: NimbusMolocoNativeAd, binding: MolocoNativeAdBinding) = with(nativeAd) {

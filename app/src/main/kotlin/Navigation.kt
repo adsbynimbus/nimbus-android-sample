@@ -19,80 +19,135 @@ import com.adsbynimbus.android.sample.demand.*
 import com.adsbynimbus.android.sample.rendering.*
 
 val screens = mutableMapOf(
-    "Main" to NavigationAdapter(items = arrayOf(
-        "Show Ad Demo",
-        "Third Party Demand",
-        "Test Render",
-        "Settings",
-    )),
-    "Show Ad Demo" to NavigationAdapter(destination = "Show Ad Demo", header = null, items = arrayOf(
-        "Manually Rendered Ad",
-        "Banner",
-        "Banner With Refresh",
-        "Video With Refresh",
-        "Inline Video",
-        "Interstitial Hybrid",
-        "Interstitial Static",
-        "Interstitial Video",
-        "Interstitial Video Without UI",
-        "Rewarded Video",
-        "Ads in ScrollView",
-        "Compose Lazy List",
-    )),
-    "Third Party Demand" to ConcatAdapter(
-        NavigationAdapter(destination = "AdMobGDE", header = "AdMob", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "APS", header = "APS", items = arrayOf(
-            "APS Banner With Refresh",
-            "APS Interstitial Hybrid",
-        )),
-        NavigationAdapter(destination = "InMobi", header = "InMobi", items = arrayOf(
-            "Banner",
-            "Native",
-            "Interstitial",
-            "Rewarded",
-        )),
-        NavigationAdapter(destination = "Meta", header = "Meta Audience Network", items = arrayOf(
-            "Meta Banner",
-            "Meta Interstitial",
-            "Meta Native",
-            "Meta Rewarded Video",
-        )),
-        NavigationAdapter(destination = "Mintegral", header = "Mintegral", items = arrayOf(
-            "Banner",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "MobileFuse", header = "MobileFuse", items = arrayOf(
+    "Main" to NavigationAdapter(
+        items = arrayOf(
+            "Show Ad Demo",
+            "Third Party Demand",
+            "Test Render",
+            "Settings",
+        )
+    ),
+    "Show Ad Demo" to NavigationAdapter(
+        destination = "Show Ad Demo",
+        header = null,
+        items = arrayOf(
             "Banner",
             "Banner With Refresh",
-            "MREC",
-            "Interstitial",
-            "Rewarded",
-        )),
-        NavigationAdapter(destination = "Moloco", header = "Moloco", items = arrayOf(
-            "Banner",
-            "Interstitial",
-            "Rewarded",
-            "Native",
-        )),
-        NavigationAdapter(destination = "Unity", header = "Unity", items = arrayOf("Unity Rewarded Video")),
-        NavigationAdapter(destination = "Vungle", header = "Vungle", items = arrayOf(
-            "Vungle Banner",
-            "Vungle MREC",
-            "Vungle Interstitial",
-            "Vungle Rewarded",
-            "Vungle Native Banner",
-            "Vungle Native Video",
-        )),
-    )
+            "Medium Rectangle (300x250)",
+            "Video With Refresh",
+            "Inline Video",
+            "Interstitial Hybrid",
+            "Interstitial Static",
+            "Interstitial Video",
+            "Rewarded Video",
+            "Ads in ScrollView",
+            "Compose Lazy List",
+        )
+    ),
+    "Third Party Demand" to ConcatAdapter(
+        NavigationAdapter(
+            destination = "AdMobGDE", header = "AdMob",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "APS", header = "APS",
+            items = arrayOf(
+                "APS Banner With Refresh",
+                "APS Interstitial Hybrid",
+            )
+        ),
+        NavigationAdapter(
+            destination = "DigitalTurbine", header = "Digital Turbine",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "DisplayIO", header = "Display IO",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "InMobi", header = "InMobi",
+            items = arrayOf(
+                "Banner",
+                "Interstitial",
+                "Rewarded",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Meta", header = "Meta Audience Network",
+            items = arrayOf(
+                "Meta Banner",
+                "Meta Interstitial",
+                "Meta Native",
+                "Meta Rewarded Video",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Mintegral", header = "Mintegral",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            )
+        ),
+        NavigationAdapter(
+            destination = "MobileFuse", header = "MobileFuse",
+            items = arrayOf(
+                "Banner",
+                "Banner With Refresh",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Moloco", header = "Moloco",
+            items = arrayOf(
+                "Banner",
+                "Banner-MREC",
+                "Interstitial",
+                "Rewarded",
+                "Native",
+            ),
+        ),
+        NavigationAdapter(
+            destination = "Unity", header = "Unity",
+            items = arrayOf(
+                "Unity Banner",
+                "Unity Interstitial",
+                "Unity Rewarded Video",
+            )
+        ),
+        NavigationAdapter(
+            destination = "Vungle", header = "Vungle",
+            items = arrayOf(
+                "Vungle Banner",
+                "Vungle MREC",
+                "Vungle Interstitial",
+                "Vungle Rewarded",
+                "Vungle Native",
+            )
+        ),
+    ),
 )
 
 fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
@@ -101,9 +156,6 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     }
     fragment<NavigationFragment>("Show Ad Demo") {
         label = context.getString(R.string.ad_demo_subtitle)
-    }
-    fragment<NavigationFragment>("Mediation Platforms") {
-        label = context.getString(R.string.mediation_subtitle)
     }
     fragment<NavigationFragment>("Third Party Demand") {
         label = context.getString(R.string.third_party_demand_subtitle)
@@ -114,11 +166,13 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<SettingsFragment>("Settings") {
         label = context.getString(R.string.settings_subtitle)
     }
-    fragment<LazyListFragment>("Show Ad Demo/Compose Lazy List")
-    fragment<AdManagerFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<AdFormatsFragment>("Show Ad Demo/{item}") { argument("item") { type = NavType.StringType } }
     fragment<AdmobFragment>("AdMobGDE/{item}") { argument("item") { type = NavType.StringType } }
     fragment<APSFragment>("APS/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<DigitalTurbineFragment>("DigitalTurbine/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<DisplayIOFragment>("DisplayIO/{item}") { argument("item") { type = NavType.StringType } }
     fragment<InMobiFragment>("InMobi/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<LazyListFragment>("Show Ad Demo/Compose Lazy List")
     fragment<MetaFragment>("Meta/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MintegralFragment>("Mintegral/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
@@ -131,7 +185,7 @@ var appGraph: NavController.() -> NavGraph = { createGraph(startDestination = "M
 
 class NavigationActivity : AppCompatActivity() {
 
-    inline val inputMethodManager get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inline val inputMethodManager get() = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     inline val title get() = getString(R.string.main_title)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,7 +201,7 @@ class NavigationActivity : AppCompatActivity() {
                     headerTitle.apply {
                         text = when {
                             isMainNavDestination -> title
-                            isAdDemo -> args?.getString("item")
+                            isAdDemo -> args.getString("item")
                             else -> dest.route
                         }
                         gravity = if (isMainNavDestination) Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL else Gravity.BOTTOM
@@ -188,6 +242,7 @@ class NavigationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = RecyclerView(requireContext()).apply {
+        id = R.id.navigation_recycle_view
         adapter = screens[navController.currentDestination?.route]
         layoutManager = LinearLayoutManager(context)
         addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
@@ -206,6 +261,10 @@ class NavigationAdapter(
     val header: String? = null,
     val items: Array<String>,
 ) : RecyclerView.Adapter<TextViewHolder>() {
+
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
 
     val offset = if (header == null) 0 else 1
 

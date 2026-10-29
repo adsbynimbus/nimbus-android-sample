@@ -1,11 +1,8 @@
-@file:Suppress("UnstableApiUsage")
-
 import com.android.build.api.variant.BuildConfigField
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.app)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.nimbus.app)
     alias(libs.plugins.compose.compiler)
 }
@@ -19,6 +16,13 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
+        }
+        debug {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                layout.projectDirectory.file("r8-rules.pro")
+            )
         }
 
         create("legacy-admob") {
@@ -27,32 +31,20 @@ android {
         }
     }
 
-    applicationVariants.all {
-        if (name != "legacy-admob") {
-            // This is necessary if your project includes 3rd party libraries that also include admob dependencies
-            // and might not have migrated to next gen sdk
-            // for details on how to apply this to your project see https://developers.google.com/admob/android/next-gen/migration#exclude_comgoogleandroidgms_modules_in_mediation_integrations
-            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
-            compileConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads")
-            runtimeConfiguration.exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-        }
-    }
-
     sourceSets {
         getByName("debug") {
-            java.srcDir("src/admob/kotlin")
-            res.srcDir("src/admob/res")
+            kotlin.directories.add("src/admob/kotlin")
+            res.directories.add("src/admob/res")
         }
 
         getByName("release") {
-            java.srcDir("src/admob/kotlin")
-            res.srcDir("src/admob/res")
+            kotlin.directories.add("src/admob/kotlin")
+            res.directories.add("src/admob/res")
         }
 
         getByName("legacy-admob") {
-            java.srcDir("src/legacy-admob/kotlin")
-            res.srcDir("src/legacy-admob/res")
+            kotlin.directories.add("src/legacy-admob/kotlin")
+            res.directories.add("src/legacy-admob/res")
         }
     }
 
@@ -64,7 +56,7 @@ android {
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.android.sdk.min.get().toInt()
+        minSdk = 24
         targetSdk = libs.versions.android.sdk.compile.get().toInt()
         applicationId = "com.adsbynimbus.android.sample"
         multiDexEnabled = true
@@ -74,8 +66,7 @@ android {
             versionName = it.requiredVersion
         }
         proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            layout.projectDirectory.file("r8-rules.pro")
+            getDefaultProguardFile("proguard-android-optimize.txt")
         )
 
         /* This is one example of adding keys to the application using buildConfigField */
@@ -86,75 +77,53 @@ android {
     namespace = "com.adsbynimbus.android.sample"
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
+kotlin.target.compilations.configureEach {
+    compileTaskProvider.configure {
+        compilerOptions.jvmTarget = JvmTarget.fromTarget(libs.versions.android.jvm.get())
     }
 }
 
 androidComponents.onVariants { variant ->
-    val gamAppId = providers.gradleProperty("sample_gam_app_id")
-        .orNull
-        .orEmpty()
-        .ifEmpty { "ca-app-pub-3940256099942544~3347511713" }
-    variant.manifestPlaceholders.put("gamAppId", gamAppId)
-    BuildConfigField("String", "GAM_APP_ID", "")
-
+    variant.manifestPlaceholders.put("admobAppId", providers.gradleProperty("sample_admob_appid"))
     /* Other keys that can be configured in the sample app */
     listOf(
-            "sample_admob_appid",
-            "sample_admob_banner",
-            "sample_admob_interstitial",
-            "sample_admob_native",
-            "sample_admob_rewarded",
-            "sample_admob_rewarded_interstitial",
-            "sample_aps_app_key",
-            "sample_aps_banner",
-            "sample_aps_static",
-            "sample_aps_video",
-            "sample_fan_native_id",
-            "sample_fan_interstitial_id",
-            "sample_fan_rewarded_video_id",
-            "sample_fan_banner_320_id",
-            "sample_fan_native_320_id",
-            "sample_gam_placement_id",
-            "sample_inmobi_account_id",
-            "sample_inmobi_banner_placement_id",
-            "sample_inmobi_interstitial_placement_id",
-            "sample_inmobi_rewarded_placement_id",
-            "sample_inmobi_native_placement_id",
-            "sample_mintegral_app_id",
-            "sample_mintegral_app_key",
-            "sample_mintegral_banner_placement",
-            "sample_mintegral_banner_adunit",
-            "sample_mintegral_interstitial_placement",
-            "sample_mintegral_interstitial_adunit",
-            "sample_mintegral_native_placement",
-            "sample_mintegral_native_adunit",
-            "sample_mintegral_rewarded_placement",
-            "sample_mintegral_rewarded_adunit",
-            "sample_mobile_fuse_banner",
-            "sample_mobile_fuse_mrec",
-            "sample_mobile_fuse_interstitial",
-            "sample_mobile_fuse_rewarded",
-            "sample_moloco_app_key",
-            "sample_moloco_banner_adunitid",
-            "sample_moloco_interstitial_adunitid",
-            "sample_moloco_rewarded_adunitid",
-            "sample_moloco_native_adunitid",
-            "sample_unity_game_id",
-            "sample_vungle_config_id",
+        "sample_admob_appid",
+        "sample_admob_banner",
+        "sample_admob_interstitial",
+        "sample_admob_native",
+        "sample_admob_rewarded",
+        "sample_admob_rewarded_interstitial",
+        "sample_aps_app_key",
+        "sample_aps_banner",
+        "sample_aps_static",
+        "sample_aps_video",
+        "sample_digital_turbine_app_id",
+        "sample_display_io_app_id",
+        "sample_inmobi_account_id",
+        "sample_meta_app_id",
+        "sample_mintegral_app_id",
+        "sample_mintegral_app_key",
+        "sample_moloco_app_key",
+        "sample_unity_game_id",
+        "sample_vungle_config_id",
+        "sample_liveramp_config_id",
     ).forEach {
         variant.buildConfigFields?.put(
             it.substringAfter("sample_").uppercase(),
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
     }
+
+    if (variant.name != "legacy-admob") {
+        configurations.matching { it.name.startsWith(variant.name) }.configureEach {
+            exclude(group = "com.google.android.gms", module = "play-services-ads")
+            exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+        }
+    }
 }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.fragment)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -172,20 +141,20 @@ dependencies {
     api(libs.nimbus.aps)
 //    api("com.amazon.android:aps-sdk:9.+")
 
+    api(libs.nimbus.digitalturbine)
+//    api("com.fyber:marketplace-sdk:8.+")
+
+    /* Display.io Demand */
+    api(libs.nimbus.displayio)
+//    api("com.brandio.ads:sdk:ads-displayio:5.+")
+
     /* Meta Audience Network Demand */
     api(libs.nimbus.meta)
 //    api("com.facebook.android:audience-network-sdk:6.+")
 
-    /* Google Mediation Adapters and Dynamic Price */
-    api(libs.nimbus.google)
-//    api("com.google.android.gms:play-services-ads:23.+")
-
     /* AdMob legacy implementation, run this sample make sure to select the build variant legacy-admob */
     "legacy-admobApi"(libs.nimbus.admob)
 //    api("com.google.android.gms:play-services-ads:23.+")
-
-    /* Dynamic Adapters for Google/AdMob */
-    api(libs.nimbus.googlemediation)
 
     api(libs.nimbus.inmobi)
 

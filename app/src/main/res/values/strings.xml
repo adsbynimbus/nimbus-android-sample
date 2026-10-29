@@ -9,7 +9,6 @@
     <string name="third_party_demand_subtitle">Select to see Nimbus\' integration with third party demand</string>
 
     <string name="mediation_subtitle">For non-standalone Nimbus integrations</string>
-    <string name="google_ad_manager" translatable="false">Google Ad Manager</string>
     <string name="google_admob" translatable="false">AdMob</string>
 
     <string name="test_render_subtitle">Paste a VAST or HTML Nimbus response</string>
@@ -24,7 +23,6 @@
     <string name="settings_coppa">Set COPPA On</string>
     <string name="settings_force_no_fill">Force No Fill</string>
     <string name="settings_enable_viewability">Send OMID Viewability Flag</string>
-    <string name="settings_show_countdown">Show Countdown in Video Ads</string>
     <string name="settings_user_did_consent">GDPR Consent</string>
     <string name="settings_user_ccpa_consent">CCPA Consent</string>
     <string name="settings_regs_gpp_consent">GPP Consent</string>

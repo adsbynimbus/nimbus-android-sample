@@ -16,8 +16,6 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
 import com.adsbynimbus.android.sample.databinding.ActivityNavigationBinding
 import com.adsbynimbus.android.sample.demand.*
-import com.adsbynimbus.android.sample.rendering.AdFormatsFragment
-import com.adsbynimbus.android.sample.rendering.TestRenderFragment
 import com.adsbynimbus.android.sample.rendering.*
 
 val screens = mutableMapOf(
@@ -244,6 +242,7 @@ class NavigationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View = RecyclerView(requireContext()).apply {
+        id = R.id.navigation_recycle_view
         adapter = screens[navController.currentDestination?.route]
         layoutManager = LinearLayoutManager(context)
         addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
@@ -262,6 +261,10 @@ class NavigationAdapter(
     val header: String? = null,
     val items: Array<String>,
 ) : RecyclerView.Adapter<TextViewHolder>() {
+
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
 
     val offset = if (header == null) 0 else 1
 

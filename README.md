@@ -6,7 +6,7 @@ Welcome to Nimbus Sample App - ads by publishers, for publishers.
 
 ### Requirements
 
-- Android 14 SDK (API Level 34)
+- Android 17 SDK (API Level 37)
 
 ## Installation
 

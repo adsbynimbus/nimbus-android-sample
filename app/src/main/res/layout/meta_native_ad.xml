@@ -1,0 +1,90 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/native_ad_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.ads.NativeAdLayout android:id="@+id/native_ad_container_fb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <com.facebook.ads.MediaView android:id="@+id/native_ad_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView android:id="@+id/native_ad_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/native_ad_icon"
+                app:layout_constraintTop_toTopOf="@id/native_ad_icon" />
+
+            <TextView android:id="@+id/native_ad_sponsored_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/native_ad_icon"
+                app:layout_constraintTop_toBottomOf="@id/native_ad_title" />
+
+            <TextView android:id="@+id/rateTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/native_ad_icon"
+                app:layout_constraintTop_toBottomOf="@id/native_ad_sponsored_label" />
+
+            <com.facebook.ads.MediaView android:id="@+id/native_ad_media"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/native_ad_icon" />
+
+            <TextView android:id="@+id/native_ad_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/native_ad_call_to_action"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/native_ad_media" />
+
+            <Button android:id="@+id/native_ad_call_to_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#4286F4"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/native_ad_media" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.ads.NativeAdLayout>
+
+</FrameLayout>

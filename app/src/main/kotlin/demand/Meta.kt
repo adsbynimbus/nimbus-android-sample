@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
 import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
+import com.adsbynimbus.android.sample.databinding.MetaNativeAdBinding
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.extension.MetaExtension
+import com.adsbynimbus.extension.MetaExtension.NativeAdViewProvider
 import com.facebook.ads.AdSettings
+import com.facebook.ads.NativeAd
 import kotlinx.coroutines.launch
 
 /**
@@ -30,7 +33,7 @@ class MetaFragment : Fragment() {
         AdSettings.setTestMode(true)
         disableAllExtensions()
         Nimbus.extensions<MetaExtension>()?.enabled = true
-
+        MetaExtension.nativeAdViewProvider = SampleMetaNativeAdViewProvider()
         when (val item = requireArguments().getString("item")) {
             "Meta Banner" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Banner).show(adFrame)
@@ -56,4 +59,20 @@ class MetaFragment : Fragment() {
         super.onDestroyView()
         ads.forEach { it.destroy() }
     }
+}
+
+class SampleMetaNativeAdViewProvider : NativeAdViewProvider {
+    override fun viewForNativeAd(
+        container: ViewGroup,
+        nativeAd: NativeAd,
+    ): View =
+        MetaNativeAdBinding.inflate(LayoutInflater.from(container.context), container, false).apply {
+            nativeAdTitle.text = nativeAd.advertiserName
+            nativeAdBody.text = nativeAd.adBodyText
+            nativeAdCallToAction.visibility = if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
+            nativeAdCallToAction.text = nativeAd.adCallToAction
+            nativeAdSponsoredLabel.text = nativeAd.sponsoredTranslation
+            val listClickables = listOf<View>(nativeAdTitle, nativeAdCallToAction)
+            nativeAd.registerViewForInteraction(this.root, nativeAdMedia, nativeAdIcon, listClickables)
+        }.root
 }

@@ -42,7 +42,10 @@ class MetaFragment : Fragment() {
             "Meta Native" -> viewLifecycleOwner.lifecycleScope.launch {
                 ads += Nimbus.inlineAd(item) {
                     native()
-                }.show(adFrame)
+                }.apply {
+                    volume = 100
+                    show(adFrame)
+                }
             }
 
             "Meta Interstitial" -> viewLifecycleOwner.lifecycleScope.launch {
@@ -72,7 +75,7 @@ class SampleMetaNativeAdViewProvider : NativeAdViewProvider {
             nativeAdCallToAction.visibility = if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
             nativeAdCallToAction.text = nativeAd.adCallToAction
             nativeAdSponsoredLabel.text = nativeAd.sponsoredTranslation
-            val listClickables = listOf<View>(nativeAdTitle, nativeAdCallToAction)
-            nativeAd.registerViewForInteraction(this.root, nativeAdMedia, nativeAdIcon, listClickables)
+            val clickableViews = listOf(nativeAdTitle, nativeAdCallToAction)
+            nativeAd.registerViewForInteraction(nativeAdContainer, nativeAdMedia, nativeAdIcon, clickableViews)
         }.root
 }

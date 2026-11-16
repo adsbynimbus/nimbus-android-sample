@@ -28,7 +28,7 @@ kotlin = "2.4.10"
 kotlin-coroutines = "1.11.0"
 kotlin-serialization = "1.11.0"
 
-nimbus = "3.0.0"
+nimbus = "3.1.0"
 nimbus-admob = "25.0.0"
 nimbus-admobnextgen = "3.0.0-1.5.0"
 nimbus-aps = "12.0.0"

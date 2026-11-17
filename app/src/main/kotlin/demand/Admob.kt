@@ -2,6 +2,8 @@ package com.adsbynimbus.android.sample.demand
 
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.adsbynimbus.*
@@ -10,6 +12,7 @@ import com.adsbynimbus.android.sample.databinding.LayoutInlineAdBinding
 import com.adsbynimbus.android.sample.rendering.ScreenAdLogger
 import com.adsbynimbus.android.sample.rendering.disableAllExtensions
 import com.adsbynimbus.extension.AdMobExtension
+import com.mobilefuse.sdk.utils.dpToPx
 import kotlinx.coroutines.launch
 
 val adMobPlacements = listOf(
@@ -45,7 +48,34 @@ class AdmobFragment : Fragment() {
                     screenLogger.onError(it)
                 }.show(adFrame)
             }
-
+            "Small Adaptive Banner" -> lifecycleScope.launch {
+                ads += Nimbus.bannerAd(item, AdSize.Banner) {
+                    demand {
+                        admobAdaptive(BuildConfig.ADMOB_BANNER, width = 350)
+                    }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame).also {
+                    it.adView?.updateLayoutParams<FrameLayout.LayoutParams> {
+                        gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                        height = 500.dpToPx(requireContext())
+                    }
+                }
+            }
+            "Adaptive Banner" -> lifecycleScope.launch {
+                ads += Nimbus.dynamicUnit(item) {
+                    banner(size = AdSize.Banner)
+                    demand {
+                        admobAdaptive(BuildConfig.ADMOB_BANNER)
+                    }
+                }.onEvent {
+                    screenLogger.onAdEvent(it)
+                }.onError {
+                    screenLogger.onError(it)
+                }.show(adFrame)
+            }
             "MREC" -> lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Mrec) {
                     demand {

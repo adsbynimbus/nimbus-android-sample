@@ -49,6 +49,8 @@ val screens = mutableMapOf(
             destination = "AdMobGDE", header = "AdMob",
             items = arrayOf(
                 "Banner",
+                "Small Adaptive Banner",
+                "Adaptive Banner",
                 "MREC",
                 "Interstitial",
                 "Rewarded",

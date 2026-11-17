@@ -51,7 +51,7 @@ class AdmobFragment : Fragment() {
             "Small Adaptive Banner" -> lifecycleScope.launch {
                 ads += Nimbus.bannerAd(item, AdSize.Banner) {
                     demand {
-                        admobAdaptive(BuildConfig.ADMOB_BANNER, width = 350)
+                        admobAdaptiveBanner(BuildConfig.ADMOB_BANNER, width = 350)
                     }
                 }.onEvent {
                     screenLogger.onAdEvent(it)
@@ -68,7 +68,7 @@ class AdmobFragment : Fragment() {
                 ads += Nimbus.dynamicUnit(item) {
                     banner(size = AdSize.Banner)
                     demand {
-                        admobAdaptive(BuildConfig.ADMOB_BANNER)
+                        admobAdaptiveBanner(BuildConfig.ADMOB_BANNER)
                     }
                 }.onEvent {
                     screenLogger.onAdEvent(it)

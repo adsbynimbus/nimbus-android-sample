@@ -68,6 +68,11 @@ class NimbusInitializer : Initializer<Nimbus> {
                 MolocoExtension(BuildConfig.MOLOCO_APP_KEY)
             }
 
+            /* Ogury samples can be found in the Demand folder */
+            if (BuildConfig.OGURY_ASSET_KEY.isNotEmpty()) {
+                OguryExtension(assetKey = BuildConfig.OGURY_ASSET_KEY)
+            }
+
             /* Unity samples can be found in the Demand folder */
             if (BuildConfig.UNITY_GAME_ID.isNotEmpty()) {
                 UnityExtension(

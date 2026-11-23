@@ -39,6 +39,7 @@ nimbus-meta = "6.1.0"
 nimbus-mintegral = "17.0.0"
 nimbus-mobilefuse = "3.0.0-1.12.0"
 nimbus-moloco = "4.1.0"
+nimbus-ogury = "6.4.0"
 nimbus-unity = "4.1.0"
 nimbus-vungle = "7.1.0"
 
@@ -91,6 +92,7 @@ nimbus-meta = { module = "com.adsbynimbus.android:extension-meta", version.ref =
 nimbus-mintegral = { module = "com.adsbynimbus.android:extension-mintegral", version.ref = "nimbus-mintegral" }
 nimbus-mobilefuse = { module = "com.adsbynimbus.android:extension-mobilefuse", version.ref = "nimbus-mobilefuse" }
 nimbus-moloco = { module = "com.adsbynimbus.android:extension-moloco", version.ref = "nimbus-moloco" }
+nimbus-ogury = { module = "com.adsbynimbus.android:extension-ogury", version.ref = "nimbus-ogury" }
 nimbus-unity = { module = "com.adsbynimbus.android:extension-unity", version.ref = "nimbus-unity" }
 nimbus-vungle = { module = "com.adsbynimbus.android:extension-vungle", version.ref = "nimbus-vungle" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }

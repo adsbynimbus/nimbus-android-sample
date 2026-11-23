@@ -130,6 +130,15 @@ val screens = mutableMapOf(
             ),
         ),
         NavigationAdapter(
+            destination = "Ogury", header = "Ogury",
+            items = arrayOf(
+                "Banner",
+                "MREC",
+                "Interstitial",
+                "Rewarded",
+            ),
+        ),
+        NavigationAdapter(
             destination = "Unity", header = "Unity",
             items = arrayOf(
                 "Unity Banner",
@@ -177,6 +186,7 @@ fun NavGraphBuilder.nimbusGraph(context: Context) = apply {
     fragment<MintegralFragment>("Mintegral/{item}") { argument("item") { type = NavType.StringType } }
     fragment<MobileFuseFragment>("MobileFuse/{item}")  { argument("item") { type = NavType.StringType } }
     fragment<MolocoFragment>("Moloco/{item}") { argument("item") { type = NavType.StringType } }
+    fragment<OguryFragment>("Ogury/{item}") { argument("item") { type = NavType.StringType } }
     fragment<UnityFragment>("Unity/{item}") { argument("item") { type = NavType.StringType } }
     fragment<VungleFragment>("Vungle/{item}") { argument("item") { type = NavType.StringType } }
 }

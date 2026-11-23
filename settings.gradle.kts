@@ -50,6 +50,12 @@ dependencyResolutionManagement {
                 includeGroupByRegex(".*\\.mbridge.*")
             }
         }
+        // Provides access to the Ogury SDK
+        maven("https://maven.ogury.co") {
+            content {
+                includeGroupByRegex(".*\\.ogury.*")
+            }
+        }
     }
 }
 

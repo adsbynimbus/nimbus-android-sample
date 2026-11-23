@@ -104,6 +104,7 @@ androidComponents.onVariants { variant ->
         "sample_mintegral_app_id",
         "sample_mintegral_app_key",
         "sample_moloco_app_key",
+        "sample_ogury_asset_key",
         "sample_unity_game_id",
         "sample_vungle_config_id",
         "sample_liveramp_config_id",
@@ -168,6 +169,8 @@ dependencies {
 
     api(libs.nimbus.moloco)
 //    api("com.moloco.sdk:moloco-sdk:3.+")
+
+    api(libs.nimbus.ogury)
 
     /* Unity Demand */
     api(libs.nimbus.unity)
